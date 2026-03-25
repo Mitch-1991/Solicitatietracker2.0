@@ -4,50 +4,21 @@ import {
     Calendar,
     Clock,
 } from "lucide-react";
+import { KPIs } from "../KPI";
+import StatCard from "./StatCard";
 export default function Body() {
 
+    const KPIElements = KPIs.map((kpi) => 
+            <StatCard 
+            label= {kpi.label}
+            waarde= {kpi.value}
+            icoon = {kpi.icon}
+            kleur = {kpi.color}
+            />)
     return (
         <main>
             <div className="kpi-container">
-                <div className="kpi-card">
-                    <div>
-                        <p className="kpi-label">Lopende sollicitatie</p>
-                        <p className="kpi-waarde">12</p>
-                    </div>
-                    <div className="kpi-icon">
-                        <FileText />
-                    </div>
-
-                </div>
-                <div className="kpi-card">
-                    <div>
-                        <p className="kpi-label">Lopende sollicitatie</p>
-                        <p className="kpi-waarde">12</p>
-                    </div>
-                    <div className="kpi-icon">
-                        <FileText />
-                    </div>
-
-                </div>
-                <div className="kpi-card">
-                    <div>
-                        <p className="kpi-label">Lopende sollicitatie</p>
-                        <p className="kpi-waarde">12</p>
-                    </div>
-                    <div className="kpi-icon">
-                        <FileText />
-                    </div>
-
-                </div>
-                <div className="kpi-card">
-                    <div>
-                        <p className="kpi-label">Lopende sollicitatie</p>
-                        <p className="kpi-waarde">12</p>
-                    </div>
-                    <div className="kpi-icon">
-                        <FileText />
-                    </div>
-                </div>
+                {KPIElements}
             </div>
         </main>
     )

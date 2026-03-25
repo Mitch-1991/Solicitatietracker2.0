@@ -1,5 +1,14 @@
-export default function App(){
+import Header from "./Components/Header"
+import Body from "./Components/Body"
+
+
+
+export default function App() {
   return (
-    <h1>this is the App Component</h1>
+    <>
+      <Header />
+      <Body />
+    </>
+
   )
 }

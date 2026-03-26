@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SolicitatieTracker.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+98eacadf7ac5f1923d647b6575d39ea607c7daa0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+37e1beb9550c848b228e929a72ce215e38e2a9f3")]
 [assembly: System.Reflection.AssemblyProductAttribute("SolicitatieTracker.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SolicitatieTracker.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

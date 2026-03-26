@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "jRN58f7S8Jk=",
+  "dgSpecHash": "VPhA8mdAqbw=",
   "success": true,
   "projectFilePath": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Domain\\SolicitatieTracker.Domain.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\User\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\9.0.6\\swashbuckle.aspnetcore.swaggerui.9.0.6.nupkg.sha512"
+  ],
   "logs": []
 }

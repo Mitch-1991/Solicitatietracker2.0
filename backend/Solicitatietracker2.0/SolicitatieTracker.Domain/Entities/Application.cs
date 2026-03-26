@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SolicitatieTracker.Infrastructure.Data.Entities;
+namespace SolicitatieTracker.Domain.Entities;
 
 public partial class Application
 {
@@ -15,7 +15,7 @@ public partial class Application
 
     public string? JobUrl { get; set; }
 
-    public string Status { get; set; } = null!;
+    public Status Status { get; set; }
 
     public string? Priority { get; set; }
 

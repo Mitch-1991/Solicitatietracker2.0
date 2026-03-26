@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SolicitatieTracker.Infrastructure.Data.Entities;
+namespace SolicitatieTracker.Domain.Entities;
 
 public partial class StatusHistory
 {
@@ -9,9 +9,9 @@ public partial class StatusHistory
 
     public int ApplicationId { get; set; }
 
-    public string? OldStatus { get; set; }
+    public Status? OldStatus { get; set; }
 
-    public string NewStatus { get; set; } = null!;
+    public Status NewStatus { get; set; } 
 
     public DateTime ChangedAt { get; set; }
 

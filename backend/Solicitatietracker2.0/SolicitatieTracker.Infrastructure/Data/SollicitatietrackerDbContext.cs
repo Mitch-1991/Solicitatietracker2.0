@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using SolicitatieTracker.Infrastructure.Data.Entities;
-using TaskEntity = SolicitatieTracker.Infrastructure.Data.Entities.Task;
+using SolicitatieTracker.Domain.Entities;
+using TaskEntity = SolicitatieTracker.Domain.Entities.Task;
 
 namespace SolicitatieTracker.Infrastructure.Data;
 

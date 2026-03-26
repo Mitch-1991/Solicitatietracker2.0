@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SolicitatieTracker.Infrastructure.Data.Entities;
+namespace SolicitatieTracker.Domain.Entities;
 
 public partial class ApplicationNote
 {

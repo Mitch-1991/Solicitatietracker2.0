@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SolicitatieTracker.Infrastructure.Data;
 
-namespace SolicitatieTracker.Infrastructure;
+namespace SolicitatieTracker.Dependency;
 
 public static class DependencyInjection
 {

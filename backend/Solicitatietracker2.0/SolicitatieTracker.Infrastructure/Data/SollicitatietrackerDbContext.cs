@@ -71,6 +71,7 @@ public partial class SollicitatietrackerDbContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("source");
             entity.Property(e => e.Status)
+                .HasConversion<string>()
                 .HasMaxLength(50)
                 .HasColumnName("status");
             entity.Property(e => e.UpdatedAt)

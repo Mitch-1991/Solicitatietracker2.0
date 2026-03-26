@@ -1,5 +1,5 @@
 import Header from "./Components/Header"
-import Body from "./Components/Body"
+import Dashboard from "./Components/Dashboard"
 
 
 
@@ -7,7 +7,7 @@ export default function App() {
   return (
     <>
       <Header />
-      <Body />
+      <Dashboard />
     </>
 
   )

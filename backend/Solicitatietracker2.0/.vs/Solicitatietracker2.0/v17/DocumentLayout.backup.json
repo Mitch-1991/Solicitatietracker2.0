@@ -42,8 +42,7 @@
               "RelativeToolTip": "Solicitatietracker_API\\Controllers\\DashboardController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-26T09:33:45.531Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-26T09:33:45.531Z"
             },
             {
               "$type": "Document",
@@ -53,7 +52,7 @@
               "RelativeDocumentMoniker": "Solicitatietracker_API\\Program.cs",
               "ToolTip": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\Solicitatietracker_API\\Program.cs",
               "RelativeToolTip": "Solicitatietracker_API\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-26T09:31:18.209Z",
               "EditorCaption": ""
@@ -68,8 +67,7 @@
               "RelativeToolTip": "SolicitatieTracker.Infrastructure\\Data\\Repos\\DashboardRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-26T09:13:45.84Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-26T09:13:45.84Z"
             },
             {
               "$type": "Document",
@@ -81,8 +79,7 @@
               "RelativeToolTip": "SolicitatieTracker.Infrastructure\\Data\\Repos\\IDashboardRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-26T09:12:48.588Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-26T09:12:48.588Z"
             },
             {
               "$type": "Document",
@@ -94,8 +91,7 @@
               "RelativeToolTip": "SolicitatieTracker.Application\\Services\\DashboardService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-26T09:07:18.543Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-26T09:07:18.543Z"
             }
           ]
         }

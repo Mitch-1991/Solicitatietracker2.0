@@ -17,15 +17,16 @@ export default function Dashboard() {
     }, [])
 
     const KPIElements = kpis.map((kpi) => 
-            <StatCard key={kpi.key}
+            <StatCard key={kpi.id}
             label= {kpi.label}
             waarde= {kpi.value}
             icoon = {kpi.icon}
             kleur = {kpi.color}
             />)
     return (
-        <main>
+        <main className="dashboard-container">
             <h1>Dashboard</h1>
+            <p>Overzicht van je lopende sollicitaties</p>
             <div className="kpi-container">
                 {KPIElements}
             </div>

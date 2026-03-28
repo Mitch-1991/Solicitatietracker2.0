@@ -10,7 +10,9 @@ body,
 }
 
 body {
-    background-color: #E2E8F0;
+    background-color: #f3f6fb;
+    font-family: "Inter", sans-serif;
+    color: #172036;
 }
 
 .header-container{
@@ -46,29 +48,42 @@ body {
 .dashboard-container{
     flex: 1;
     min-width: 0;
-    padding: 24px 32px;
+    padding: 32px 24px 40px;
     overflow-x: hidden;
+}
+
+.dashboard-title{
+    margin: 0;
+    font-size: 3rem;
+    line-height: 1.05;
+    font-weight: 800;
+    color: #16213b;
+}
+
+.dashboard-subtitle{
+    margin: 8px 0 32px;
+    font-size: 1.45rem;
+    color: #52627d;
 }
 
 .kpi-container{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 20px;
     width: 100%;
 }
 
 .kpi-card{
     width: 100%;
-    min-height: 110px;
+    min-height: 108px;
     background-color: #FFFFFF;
-    opacity: 100%;
-    border: none;
-    border-radius: 14px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.10);
+    border: 1px solid #d6dfec;
+    border-radius: 18px;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 24px;
+    padding: 22px 24px;
 }
 
 .kpi-card .kpi-label,
@@ -77,20 +92,23 @@ body {
 }
 
 .kpi-label{
-    color: #45556C;
-    margin-bottom: 2px;
+    color: #52627d;
+    margin: 0 0 6px;
+    font-size: 1.2rem;
 }
 
 .kpi-waarde{
-    font-size: 30px;
-    margin-top: 0;
-    margin-bottom: 0;
+    font-size: 3rem;
+    line-height: 1;
+    margin: 0;
     font-weight: 800;
+    color: #172036;
 }
 
 .kpi-icon{
-    padding: 12px;
-    border-radius: 10px;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
     color: white;
     display: inline-flex;
     align-items: center;
@@ -98,13 +116,120 @@ body {
     flex-shrink: 0;
 }
 
+.kpi-icon svg{
+    width: 22px;
+    height: 22px;
+}
+
+.display-bord{
+    margin-top: 28px;
+}
+
+.applicationsTable-container{
+    background-color: white;
+    width: 100%;
+    border-radius: 20px;
+    border: 1px solid #d6dfec;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+    overflow: hidden;
+}
+
+.applicationsTable-title{
+    margin: 0;
+    padding: 22px 24px 18px;
+    color: #16213b;
+    font-size: 1.2rem;
+    font-weight: 800;
+    border-bottom: 1px solid #dbe4f0;
+}
+
+.applications-table{
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.applications-table thead tr{
+    background-color: #f7f9fc;
+}
+
+.applications-table th{
+    padding: 14px 24px 13px;
+    text-align: left;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #52627d;
+    border-bottom: 1px solid #dbe4f0;
+}
+
+.applications-table td{
+    padding: 18px 24px;
+    font-size: 1.08rem;
+    color: #41506a;
+    border-bottom: 1px solid #dbe4f0;
+    vertical-align: middle;
+}
+
+.applications-table tbody tr:last-child td{
+    border-bottom: none;
+}
+
+.applications-table td:first-child{
+    font-weight: 700;
+    color: #172036;
+}
+
+.status-badge{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 74px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.status-badge.gesprek{
+    background-color: #dff7e7;
+    color: #159447;
+}
+
+.status-badge.verzonden{
+    background-color: #dce9ff;
+    color: #2d6ff7;
+}
+
+.status-badge.afgewezen{
+    background-color: #ffe0df;
+    color: #e5484d;
+}
+
 @media (max-width: 900px) {
     .dashboard-container{
         padding: 20px;
     }
 
+    .dashboard-title{
+        font-size: 2.4rem;
+    }
+
+    .dashboard-subtitle{
+        font-size: 1.1rem;
+        margin-bottom: 24px;
+    }
+
     .kpi-container{
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .applications-table th,
+    .applications-table td{
+        padding-left: 16px;
+        padding-right: 16px;
     }
 }
 
@@ -120,5 +245,13 @@ body {
 
     .dashboard-container{
         width: 100%;
+    }
+
+    .applicationsTable-container{
+        overflow-x: auto;
+    }
+
+    .applications-table{
+        min-width: 720px;
     }
 }

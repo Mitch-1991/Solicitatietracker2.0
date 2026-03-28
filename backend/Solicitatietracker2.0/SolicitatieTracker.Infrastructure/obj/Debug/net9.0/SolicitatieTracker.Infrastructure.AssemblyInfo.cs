@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SolicitatieTracker.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6d30ce2560f682f22029653022368a6cf88bb65c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cbf46e403e02af62f7974fd9eb2dd99b088429be")]
 [assembly: System.Reflection.AssemblyProductAttribute("SolicitatieTracker.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SolicitatieTracker.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

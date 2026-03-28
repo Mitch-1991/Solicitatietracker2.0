@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SolicitatieTracker.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,14 @@ namespace SolicitatieTracker.Infrastructure.Data.Repos
         public async Task<int> GetAfgewezenCountAsync()
         {
             return await _context.Applications.CountAsync(a => a.Status == Status.Afgewezen);
+        }
+
+        public async Task<IEnumerable<Application>> GetAllLopendeSollicitatiesAsync()
+        {
+            return await _context.Applications
+                .Where(a =>  a.Status != Status.Aanbieding)
+                .Include(a => a.Company)
+                .ToListAsync();
         }
 
         public async Task<int> GetGesprekkenGeplandCountAsync()

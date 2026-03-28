@@ -10,5 +10,6 @@ namespace SolicitatieTracker.App.DTOs
     public interface IDashboardService
     {
         Task<DashboardKPIDto> GetKPIAsync();
+        Task<List<DashboardOverviewDto>> GetDashboardOverview();
     }
 }

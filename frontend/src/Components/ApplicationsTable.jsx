@@ -4,11 +4,11 @@ export default function ApplicationsTable(props) {
     const Sollicitatierij = props.applications.map((app) => {
         return (
             <tr key={app.id} className="applications-row">
-                <td>{app.bedrijf}</td>
-                <td>{app.functie}</td>
-                <td><StatusBadge status={app.status} /></td>
-                <td>{app.datum}</td>
-                <td>{app.volgendeStap}</td>
+                <td data-label="Bedrijf">{app.bedrijf}</td>
+                <td data-label="Functie">{app.functie}</td>
+                <td data-label="Status"><StatusBadge status={app.status} /></td>
+                <td data-label="Datum">{app.datum}</td>
+                <td data-label="Volgende stap">{app.volgendeStap}</td>
             </tr>
         )
 

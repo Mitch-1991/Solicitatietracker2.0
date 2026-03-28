@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Solicitatietracker_API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cbf46e403e02af62f7974fd9eb2dd99b088429be")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b811a7afbe0234097db84fb1d3e29fd4e2136919")]
 [assembly: System.Reflection.AssemblyProductAttribute("Solicitatietracker_API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Solicitatietracker_API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

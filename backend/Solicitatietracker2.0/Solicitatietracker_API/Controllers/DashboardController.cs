@@ -18,5 +18,11 @@ namespace Solicitatietracker_API.Controllers
             var kpis = await _dashboardService.GetKPIAsync();
             return Ok(kpis);
         }
+        [HttpGet("overview")]
+        public async Task<ActionResult<List<DashboardOverviewDto>>> GetOverview()
+        {
+            var overview = await _dashboardService.GetDashboardOverview();
+            return Ok(overview);
+        }
     }
 }

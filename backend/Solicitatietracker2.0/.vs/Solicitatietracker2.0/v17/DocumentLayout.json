@@ -3,24 +3,40 @@
   "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{768866FA-C041-4EFC-82D4-65CDBF0708E7}|Solicitatietracker_API\\Solicitatietracker_API.csproj|c:\\users\\user\\desktop\\eigen projecten\\solicitatietracker\\solicitatietracker2.0\\backend\\solicitatietracker2.0\\solicitatietracker_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{768866FA-C041-4EFC-82D4-65CDBF0708E7}|Solicitatietracker_API\\Solicitatietracker_API.csproj|solutionrelative:solicitatietracker_api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7A277AAF-A1E9-4E99-96B7-FDC7332B0F12}|SolicitatieTracker.Application\\SolicitatieTracker.App.csproj|c:\\users\\user\\desktop\\eigen projecten\\solicitatietracker\\solicitatietracker2.0\\backend\\solicitatietracker2.0\\solicitatietracker.application\\dtos\\dashboardoverviewdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A277AAF-A1E9-4E99-96B7-FDC7332B0F12}|SolicitatieTracker.Application\\SolicitatieTracker.App.csproj|solutionrelative:solicitatietracker.application\\dtos\\dashboardoverviewdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{768866FA-C041-4EFC-82D4-65CDBF0708E7}|Solicitatietracker_API\\Solicitatietracker_API.csproj|c:\\users\\user\\desktop\\eigen projecten\\solicitatietracker\\solicitatietracker2.0\\backend\\solicitatietracker2.0\\solicitatietracker_api\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{768866FA-C041-4EFC-82D4-65CDBF0708E7}|Solicitatietracker_API\\Solicitatietracker_API.csproj|solutionrelative:solicitatietracker_api\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7A277AAF-A1E9-4E99-96B7-FDC7332B0F12}|SolicitatieTracker.Application\\SolicitatieTracker.App.csproj|c:\\users\\user\\desktop\\eigen projecten\\solicitatietracker\\solicitatietracker2.0\\backend\\solicitatietracker2.0\\solicitatietracker.application\\services\\dashboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7A277AAF-A1E9-4E99-96B7-FDC7332B0F12}|SolicitatieTracker.Application\\SolicitatieTracker.App.csproj|solutionrelative:solicitatietracker.application\\services\\dashboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{AE82348F-4EA3-496E-8D76-587FC70700CC}|SolicitatieTracker.Tests\\SolicitatieTracker.Tests.csproj|c:\\users\\user\\desktop\\eigen projecten\\solicitatietracker\\solicitatietracker2.0\\backend\\solicitatietracker2.0\\solicitatietracker.tests\\dashboardservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AE82348F-4EA3-496E-8D76-587FC70700CC}|SolicitatieTracker.Tests\\SolicitatieTracker.Tests.csproj|solutionrelative:solicitatietracker.tests\\dashboardservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EAB33C27-D7F2-4185-B275-778DCE922A25}|SolicitatieTracker.Infrastructure\\SolicitatieTracker.Infrastructure.csproj|c:\\users\\user\\desktop\\eigen projecten\\solicitatietracker\\solicitatietracker2.0\\backend\\solicitatietracker2.0\\solicitatietracker.infrastructure\\data\\repos\\dashboardrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EAB33C27-D7F2-4185-B275-778DCE922A25}|SolicitatieTracker.Infrastructure\\SolicitatieTracker.Infrastructure.csproj|solutionrelative:solicitatietracker.infrastructure\\data\\repos\\dashboardrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EAB33C27-D7F2-4185-B275-778DCE922A25}|SolicitatieTracker.Infrastructure\\SolicitatieTracker.Infrastructure.csproj|c:\\users\\user\\desktop\\eigen projecten\\solicitatietracker\\solicitatietracker2.0\\backend\\solicitatietracker2.0\\solicitatietracker.infrastructure\\data\\repos\\idashboardrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EAB33C27-D7F2-4185-B275-778DCE922A25}|SolicitatieTracker.Infrastructure\\SolicitatieTracker.Infrastructure.csproj|solutionrelative:solicitatietracker.infrastructure\\data\\repos\\idashboardrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7A277AAF-A1E9-4E99-96B7-FDC7332B0F12}|SolicitatieTracker.Application\\SolicitatieTracker.App.csproj|c:\\users\\user\\desktop\\eigen projecten\\solicitatietracker\\solicitatietracker2.0\\backend\\solicitatietracker2.0\\solicitatietracker.application\\services\\dashboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A277AAF-A1E9-4E99-96B7-FDC7332B0F12}|SolicitatieTracker.Application\\SolicitatieTracker.App.csproj|solutionrelative:solicitatietracker.application\\services\\dashboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A277AAF-A1E9-4E99-96B7-FDC7332B0F12}|SolicitatieTracker.Application\\SolicitatieTracker.App.csproj|c:\\users\\user\\desktop\\eigen projecten\\solicitatietracker\\solicitatietracker2.0\\backend\\solicitatietracker2.0\\solicitatietracker.application\\services\\idashboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A277AAF-A1E9-4E99-96B7-FDC7332B0F12}|SolicitatieTracker.Application\\SolicitatieTracker.App.csproj|solutionrelative:solicitatietracker.application\\services\\idashboardservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2CA69BC-4989-42FD-8127-FF9A7F4AE615}|SolicitatieTracker.Domain\\SolicitatieTracker.Domain.csproj|c:\\users\\user\\desktop\\eigen projecten\\solicitatietracker\\solicitatietracker2.0\\backend\\solicitatietracker2.0\\solicitatietracker.domain\\entities\\company.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B2CA69BC-4989-42FD-8127-FF9A7F4AE615}|SolicitatieTracker.Domain\\SolicitatieTracker.Domain.csproj|solutionrelative:solicitatietracker.domain\\entities\\company.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2CA69BC-4989-42FD-8127-FF9A7F4AE615}|SolicitatieTracker.Domain\\SolicitatieTracker.Domain.csproj|c:\\users\\user\\desktop\\eigen projecten\\solicitatietracker\\solicitatietracker2.0\\backend\\solicitatietracker2.0\\solicitatietracker.domain\\entities\\application.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B2CA69BC-4989-42FD-8127-FF9A7F4AE615}|SolicitatieTracker.Domain\\SolicitatieTracker.Domain.csproj|solutionrelative:solicitatietracker.domain\\entities\\application.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B2CA69BC-4989-42FD-8127-FF9A7F4AE615}|SolicitatieTracker.Domain\\SolicitatieTracker.Domain.csproj|c:\\users\\user\\desktop\\eigen projecten\\solicitatietracker\\solicitatietracker2.0\\backend\\solicitatietracker2.0\\solicitatietracker.domain\\enums\\enums.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B2CA69BC-4989-42FD-8127-FF9A7F4AE615}|SolicitatieTracker.Domain\\SolicitatieTracker.Domain.csproj|solutionrelative:solicitatietracker.domain\\enums\\enums.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
@@ -40,21 +56,48 @@
               "RelativeDocumentMoniker": "Solicitatietracker_API\\Controllers\\DashboardController.cs",
               "ToolTip": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\Solicitatietracker_API\\Controllers\\DashboardController.cs",
               "RelativeToolTip": "Solicitatietracker_API\\Controllers\\DashboardController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAcAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-26T09:33:45.531Z"
+              "WhenOpened": "2026-03-28T21:52:15.812Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\Solicitatietracker_API\\Program.cs",
-              "RelativeDocumentMoniker": "Solicitatietracker_API\\Program.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\Solicitatietracker_API\\Program.cs",
-              "RelativeToolTip": "Solicitatietracker_API\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAABIAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "DashboardServiceTests.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Tests\\DashboardServiceTests.cs",
+              "RelativeDocumentMoniker": "SolicitatieTracker.Tests\\DashboardServiceTests.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Tests\\DashboardServiceTests.cs",
+              "RelativeToolTip": "SolicitatieTracker.Tests\\DashboardServiceTests.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAgwC4AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-26T09:31:18.209Z",
+              "WhenOpened": "2026-03-28T21:51:58.289Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IDashboardService.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Application\\Services\\IDashboardService.cs",
+              "RelativeDocumentMoniker": "SolicitatieTracker.Application\\Services\\IDashboardService.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Application\\Services\\IDashboardService.cs",
+              "RelativeToolTip": "SolicitatieTracker.Application\\Services\\IDashboardService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T21:48:19.254Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "DashboardService.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Application\\Services\\DashboardService.cs",
+              "RelativeDocumentMoniker": "SolicitatieTracker.Application\\Services\\DashboardService.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Application\\Services\\DashboardService.cs",
+              "RelativeToolTip": "SolicitatieTracker.Application\\Services\\DashboardService.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAQwCAAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T21:41:24.556Z",
               "EditorCaption": ""
             },
             {
@@ -65,33 +108,62 @@
               "RelativeDocumentMoniker": "SolicitatieTracker.Infrastructure\\Data\\Repos\\DashboardRepository.cs",
               "ToolTip": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Infrastructure\\Data\\Repos\\DashboardRepository.cs",
               "RelativeToolTip": "SolicitatieTracker.Infrastructure\\Data\\Repos\\DashboardRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAA/AAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAB8AAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-26T09:13:45.84Z"
+              "WhenOpened": "2026-03-28T21:38:06.698Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "IDashboardRepository.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Infrastructure\\Data\\Repos\\IDashboardRepository.cs",
-              "RelativeDocumentMoniker": "SolicitatieTracker.Infrastructure\\Data\\Repos\\IDashboardRepository.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Infrastructure\\Data\\Repos\\IDashboardRepository.cs",
-              "RelativeToolTip": "SolicitatieTracker.Infrastructure\\Data\\Repos\\IDashboardRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAzAAAAAAAAAA==",
+              "DocumentIndex": 8,
+              "Title": "Enums.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Domain\\Enums\\Enums.cs",
+              "RelativeDocumentMoniker": "SolicitatieTracker.Domain\\Enums\\Enums.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Domain\\Enums\\Enums.cs",
+              "RelativeToolTip": "SolicitatieTracker.Domain\\Enums\\Enums.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-26T09:12:48.588Z"
+              "WhenOpened": "2026-03-28T13:19:25.426Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "DashboardService.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Application\\Services\\DashboardService.cs",
-              "RelativeDocumentMoniker": "SolicitatieTracker.Application\\Services\\DashboardService.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Application\\Services\\DashboardService.cs",
-              "RelativeToolTip": "SolicitatieTracker.Application\\Services\\DashboardService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAJAAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "Company.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Domain\\Entities\\Company.cs",
+              "RelativeDocumentMoniker": "SolicitatieTracker.Domain\\Entities\\Company.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Domain\\Entities\\Company.cs",
+              "RelativeToolTip": "SolicitatieTracker.Domain\\Entities\\Company.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-26T09:07:18.543Z"
+              "WhenOpened": "2026-03-28T13:18:02.949Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Application.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Domain\\Entities\\Application.cs",
+              "RelativeDocumentMoniker": "SolicitatieTracker.Domain\\Entities\\Application.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Domain\\Entities\\Application.cs",
+              "RelativeToolTip": "SolicitatieTracker.Domain\\Entities\\Application.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwAcAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T13:16:37.988Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DashboardOverviewDto.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Application\\DTOs\\DashboardOverviewDto.cs",
+              "RelativeDocumentMoniker": "SolicitatieTracker.Application\\DTOs\\DashboardOverviewDto.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Eigen projecten\\Solicitatietracker\\Solicitatietracker2.0\\backend\\Solicitatietracker2.0\\SolicitatieTracker.Application\\DTOs\\DashboardOverviewDto.cs",
+              "RelativeToolTip": "SolicitatieTracker.Application\\DTOs\\DashboardOverviewDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T13:16:20.666Z",
+              "EditorCaption": ""
             }
           ]
         }

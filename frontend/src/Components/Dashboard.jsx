@@ -1,21 +1,28 @@
 
 import { useState, useEffect } from "react";
-import { getDashboardKpis } from "../Services/dashboardService";
+import { getDashboardKpis, getDashboardOverview } from "../Services/dashboardService";
 import { MapKPIs } from "../mappers/kpiMapper";
+import { MapOverview } from "../mappers/overviewMapper";
 import StatCard from "./StatCard";
 import ApplicationsTable from "./ApplicationsTable";
-import { Solicitaties } from "../dummy";
+
 export default function Dashboard() {
     const [kpis, setKpis] = useState([])
+    const [overview, setOverview] = useState([])
 
     useEffect(() => {
         const fetchKpis = async () => {
             const data = await getDashboardKpis()
-            console.log(data)
             const mappedKpis = MapKPIs(data)
             setKpis(mappedKpis)
         };
+        const fetchOverview = async () => {
+            const data = await getDashboardOverview()
+            const mappedOverview = MapOverview(data)
+            setOverview(mappedOverview)
+        }
         fetchKpis()
+        fetchOverview()
     }, [])
 
     const KPIElements = kpis.map((kpi) =>
@@ -35,7 +42,7 @@ export default function Dashboard() {
             <div className="display-bord">
                 <div className="applicationsTable-container">
                     <h2 className="applicationsTable-title">Lopende sollicitaties</h2>
-                    <ApplicationsTable applications={Solicitaties} />
+                    <ApplicationsTable applications={overview} />
                 </div>
             </div>
         </main>

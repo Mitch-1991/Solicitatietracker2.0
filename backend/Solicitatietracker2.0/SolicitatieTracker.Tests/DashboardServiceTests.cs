@@ -40,5 +40,10 @@ public class DashboardServiceTests
         public Task<int> GetAfgewezenCountAsync() => Task.FromResult(Afgewezen);
 
         public Task<int> GetAanbiedingenCountAsync() => Task.FromResult(Aanbiedingen);
+
+        public Task<IEnumerable<Domain.Entities.Application>> GetAllLopendeSollicitatiesAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

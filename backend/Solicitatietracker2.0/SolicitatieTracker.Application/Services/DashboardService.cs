@@ -17,6 +17,28 @@ namespace SolicitatieTracker.App.DTOs
         {
             _dashboardRepo = dashboardRepository;
         }
+
+        public async Task<List<DashboardOverviewDto>> GetDashboardOverview()
+        {
+            var Sollicitaties = await _dashboardRepo.GetAllLopendeSollicitatiesAsync();
+            var overzicht = new List<DashboardOverviewDto>();
+
+            foreach (var sollicitatie in Sollicitaties)
+            {
+                
+                overzicht.Add(new DashboardOverviewDto
+                {
+                    Id = sollicitatie.Id,
+                    Bedrijf = sollicitatie.Company.Name,
+                    Functie = sollicitatie.JobTitle,
+                    Status = sollicitatie.Status.ToString(),
+                    AppliedDate = (DateOnly)sollicitatie.AppliedDate,
+                    nextStep = sollicitatie.NextStep
+                });
+            }
+            return overzicht;
+        }
+
         public async Task<DashboardKPIDto> GetKPIAsync()
         {
            var afgewezen = await _dashboardRepo.GetAfgewezenCountAsync();

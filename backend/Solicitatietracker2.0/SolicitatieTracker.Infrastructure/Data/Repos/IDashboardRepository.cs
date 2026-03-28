@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SolicitatieTracker.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,6 @@ namespace SolicitatieTracker.Infrastructure.Data.Repos
         Task<int> GetGesprekkenGeplandCountAsync();
         Task<int> GetAfgewezenCountAsync();
         Task<int> GetAanbiedingenCountAsync();
+        Task<IEnumerable<Application>> GetAllLopendeSollicitatiesAsync();
     }
 }

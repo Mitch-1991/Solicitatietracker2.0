@@ -20,6 +20,11 @@ export default function ApplicationsTable(props) {
                 <td data-label="Status"><StatusBadge status={app.status} /></td>
                 <td data-label="Datum">{app.datum}</td>
                 <td data-label="Volgende stap">{app.volgendeStap}</td>
+                {props.opSollicitatiePagina && (
+                    <td data-label="Acties">
+                        <button className="applications-action-button">Bewerken</button>
+                    </td>
+                )}
             </tr>
         )
 
@@ -39,6 +44,7 @@ export default function ApplicationsTable(props) {
                     <th>Status</th>
                     <th>Datum</th>
                     <th>Volgende Stap</th>
+                    {props.opSollicitatiePagina && <th>Acties</th>}
                 </tr>
             </thead>
             <tbody>

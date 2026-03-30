@@ -3,6 +3,7 @@ using SolicitatieTracker.Infrastructure.Data;
 using SolicitatieTracker.Infrastructure.Data.Repos;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,6 +54,26 @@ namespace SolicitatieTracker.App.DTOs
                 Afgewezen = afgewezen,
                 Aanbiedingen = aanbiedingen
             };
+        }
+
+        public async Task<List<UpcomingInterviewDto>> GetUpcomingInterviews()
+        {
+            var interviews = await _dashboardRepo.GetAllIntervieuwApplicationsAsync();
+            var upcomingInterviews = new List<UpcomingInterviewDto>();
+
+            foreach (var interview in interviews)
+            {
+                upcomingInterviews.Add(new UpcomingInterviewDto
+                {
+                    Id = interview.Id,
+                    Bedrijf = interview.Application.Company.Name,
+                    Functie = interview.Application.JobTitle,
+                    Datum = interview.ScheduledStart.ToString("dd MM yyyy", new CultureInfo("nl-BE")),
+                    Tijd = interview.ScheduledStart.ToString("HH:mm")
+                });
+            }
+            return upcomingInterviews;
+
         }
     }
 }

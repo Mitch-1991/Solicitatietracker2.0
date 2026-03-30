@@ -19,3 +19,13 @@ export const getDashboardOverview = async () => {
     const data = await response.json()
     return data
 }
+export const getUpcomingInterviews = async () => {
+    const response = await fetch(`${API_URL}/upcoming-interviews`);
+
+    if (!response.ok) {
+        throw new Error("fout bij het ophalen van aankomende interviews")
+    }
+    const data = await response.json()
+    return data
+
+}

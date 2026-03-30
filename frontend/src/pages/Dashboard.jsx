@@ -1,11 +1,11 @@
 
 import { useState, useEffect } from "react";
-import { getDashboardKpis, getDashboardOverview, getUpcomingInterviews  } from "../Services/dashboardService";
-import { MapKPIs } from "../mappers/kpiMapper";
-import { MapOverview } from "../mappers/overviewMapper";
+import { getDashboardKpis, getDashboardOverview, getUpcomingInterviews  } from "../Services/dashboardService.js";
+import { MapKPIs } from "../mappers/kpiMapper.js";
+import { MapOverview } from "../mappers/overviewMapper.js";
 import { MapUpcomingInterviews } from "../mappers/UpcomingInterviewMapper.js";
-import StatCard from "./StatCard";
-import ApplicationsTable from "./ApplicationsTable";
+import StatCard from "../Components/StatCard.jsx";
+import ApplicationsTable from "../Components/ApplicationsTable.jsx";
 
 export default function Dashboard() {
     const [kpis, setKpis] = useState([])

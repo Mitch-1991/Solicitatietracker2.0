@@ -1,5 +1,5 @@
 import Header from "./Components/Header"
-import Dashboard from "./Components/Dashboard"
+import Dashboard from "./pages/Dashboard"
 import SideBar from "./Components/SideBar"
 
 

@@ -5,16 +5,6 @@ import ApplicationModal from "../Components/ApplicationModal.jsx";
 export default function Sollicitaties(props) {
     const [showModal, setShowModal] = useState(false);
 
-    function renderContent() {
-        if (showModal) {
-            return <ApplicationModal onClose={() => setShowModal(false)} />
-        }
-        return (
-        <div className="applicationsTable-container">
-            <ApplicationsTable applications={props.overview} opSollicitatiePagina={true} />
-        </div>)
-    }
-
     return (
         <section className="dashboard-container sollicitaties-page">
             <div className="page-header">
@@ -27,7 +17,13 @@ export default function Sollicitaties(props) {
                     + Nieuwe sollicitatie
                 </button>
             </div>
-            {renderContent()}
+            <>
+                <div className="applicationsTable-container">
+                    <ApplicationsTable applications={props.overview} opSollicitatiePagina={true} />
+                </div>
+
+                {showModal && <ApplicationModal onClose={() => setShowModal(false)} />}
+            </>
         </section>
     )
 }

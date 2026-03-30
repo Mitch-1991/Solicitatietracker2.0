@@ -388,6 +388,15 @@ body {
 .application-modal-button-primary:hover{
     box-shadow: 0 16px 28px rgba(79, 70, 229, 0.24);
 }
+.input-error {
+  border: 1px solid red;
+}
+
+.field-error {
+  margin-top: 6px;
+  font-size: 13px;
+  color: red;
+}
 
 .kpi-container{
     display: grid;

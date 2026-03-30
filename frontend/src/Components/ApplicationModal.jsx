@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export default function ApplicationModal(props) {
     const initialFormData = {
         bedrijf: "",
         functie: "",
+        jobUrl: "",
         status: "",
         datum: "",
         locatie: "",
@@ -13,8 +14,10 @@ export default function ApplicationModal(props) {
         volgendeStap: "",
         beschrijving: "",
     };
+    const formTopRef = useRef(null);
 
     const [formData, setFormData] = useState(initialFormData);
+    const [errors, setErrors] = useState({});
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -23,16 +26,55 @@ export default function ApplicationModal(props) {
             ...prevData,
             [name]: value,
         }));
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: "",
+        }));
+    }
+    function validateForm() {
+        const newErrors = {};
+
+        if (!formData.bedrijf.trim()) {
+            newErrors.bedrijf = "Bedrijf is verplicht.";
+        }
+
+        if (!formData.functie.trim()) {
+            newErrors.functie = "Functie is verplicht.";
+        }
+
+        if (!formData.status.trim()) {
+            newErrors.status = "Status is verplicht.";
+        }
+
+        if (!formData.datum.trim()) {
+            newErrors.datum = "Datum is verplicht.";
+        }
+        if (formData.jobUrl.trim() && !isValidUrl(formData.jobUrl.trim())) {
+            newErrors.jobUrl = "Voer een geldige URL in.";
+        }
+        if (formData.contactEmail.trim() && !isValidEmail(formData.contactEmail.trim())) {
+            newErrors.contactEmail = "Voer een geldig e-mailadres in.";
+        }
+
+        return newErrors;
     }
 
     function handleSubmit(event) {
         event.preventDefault();
 
-        if (!formData.bedrijf || !formData.functie || !formData.status || !formData.datum) {
-            alert("Vul alle verplichte velden in.");
+        const validationErrors = validateForm();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+
+            formTopRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            })
             return;
         }
 
+        setErrors({});
         console.log(formData);
 
         setFormData(initialFormData);
@@ -44,10 +86,22 @@ export default function ApplicationModal(props) {
         props.onClose();
     }
 
+    function isValidUrl(value) {
+        try {
+            new URL(value);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+    function isValidEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
+
     return (
         <section className="application-modal-overlay">
             <div className="application-modal">
-                <div className="application-modal-header">
+                <div ref={formTopRef} className="application-modal-header">
                     <h2 className="application-modal-title">Nieuwe sollicitatie toevoegen</h2>
                     <button
                         type="button"
@@ -68,7 +122,9 @@ export default function ApplicationModal(props) {
                                 name="bedrijf"
                                 value={formData.bedrijf}
                                 onChange={handleChange}
+                                className={errors.bedrijf ? "input-error" : ""}
                             />
+                            {errors.bedrijf && <p className="field-error">{errors.bedrijf}</p>}
                         </div>
 
                         <div className="application-modal-field">
@@ -78,7 +134,9 @@ export default function ApplicationModal(props) {
                                 name="functie"
                                 value={formData.functie}
                                 onChange={handleChange}
+                                className={errors.functie ? "input-error" : ""}
                             />
+                            {errors.functie && <p className="field-error">{errors.functie}</p>}
                         </div>
 
                         <div className="application-modal-field">
@@ -88,7 +146,9 @@ export default function ApplicationModal(props) {
                                 name="status"
                                 value={formData.status}
                                 onChange={handleChange}
+                                className={errors.status ? "input-error" : ""}
                             />
+                            {errors.status && <p className="field-error">{errors.status}</p>}
                         </div>
 
                         <div className="application-modal-field">
@@ -99,6 +159,19 @@ export default function ApplicationModal(props) {
                                 value={formData.datum}
                                 onChange={handleChange}
                                 placeholder="bijv. 15 mrt 2026"
+                                className={errors.datum ? "input-error" : ""}
+                            />
+                            {errors.datum && <p className="field-error">{errors.datum}</p>}
+                        </div>
+
+                        <div className="application-modal-field">
+                            <label>Job URL</label>
+                            <input
+                                type="text"
+                                name="jobUrl"
+                                value={formData.jobUrl}
+                                onChange={handleChange}
+
                             />
                         </div>
 

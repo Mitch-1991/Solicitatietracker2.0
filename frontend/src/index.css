@@ -304,6 +304,7 @@ body {
 }
 
 .application-modal-field input,
+.application-modal-field select,
 .application-modal-field textarea{
     width: 100%;
     border: 1px solid #cfdae9;
@@ -317,20 +318,37 @@ body {
 }
 
 .application-modal-field input::placeholder,
+.application-modal-field select.application-modal-select-placeholder,
 .application-modal-field textarea::placeholder{
     color: #8a97aa;
 }
 
 .application-modal-field input:hover,
+.application-modal-field select:hover,
 .application-modal-field textarea:hover{
     border-color: #b8c8de;
 }
 
 .application-modal-field input:focus,
+.application-modal-field select:focus,
 .application-modal-field textarea:focus{
     outline: none;
     border-color: #7c74ff;
     box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+}
+
+.application-modal-field select{
+    appearance: none;
+    cursor: pointer;
+    padding-right: 42px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M5 7.5 10 12.5 15 7.5' stroke='%238a97aa' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 18px;
+}
+
+.application-modal-field select option{
+    color: #172036;
 }
 
 .application-modal-field textarea{

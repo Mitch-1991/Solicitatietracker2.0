@@ -28,7 +28,7 @@ export default function App() {
       <section className="main-content">
         <SideBar />
         <Sollicitaties overview={overview} />
-        {/* <Dashboard overview={overview} /> */}
+        {/* <Dashboard overview={overview} />  */}
       </section>
     </>
 

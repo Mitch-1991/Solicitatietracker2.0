@@ -7,8 +7,10 @@ export default function ApplicationModal(props) {
         jobUrl: "",
         status: "",
         datum: "",
+        priority: "",
         locatie: "",
-        salaris: "",
+        salarisMin: "",
+        salarisMax: "",
         contactpersoon: "",
         contactEmail: "",
         volgendeStap: "",
@@ -154,11 +156,11 @@ export default function ApplicationModal(props) {
                         <div className="application-modal-field">
                             <label>Datum *</label>
                             <input
-                                type="text"
+                                type="date"
                                 name="datum"
+                                defaultValue={Date.now}
                                 value={formData.datum}
                                 onChange={handleChange}
-                                placeholder="bijv. 15 mrt 2026"
                                 className={errors.datum ? "input-error" : ""}
                             />
                             {errors.datum && <p className="field-error">{errors.datum}</p>}
@@ -173,6 +175,7 @@ export default function ApplicationModal(props) {
                                 onChange={handleChange}
 
                             />
+                            {errors.jobUrl && <p className="field-error">{errors.jobUrl}</p>}
                         </div>
 
                         <div className="application-modal-field">
@@ -186,17 +189,39 @@ export default function ApplicationModal(props) {
                         </div>
 
                         <div className="application-modal-field">
-                            <label>Salaris</label>
+                            <label>Salaris min</label>
                             <input
                                 type="text"
-                                name="salaris"
-                                value={formData.salaris}
+                                name="salarisMin"
+                                value={formData.salarisMin}
                                 onChange={handleChange}
-                                placeholder="bijv. EUR 40.000 - EUR 50.000"
                             />
                         </div>
-
                         <div className="application-modal-field">
+                            <label>Salaris max</label>
+                            <input
+                                type="text"
+                                name="salarisMax"
+                                value={formData.salarisMax}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="application-modal-field">
+                            <label>Prioriteit</label>
+                            <select
+                                name="priority"
+                                value={formData.priority}
+                                onChange={handleChange}
+                                className={formData.priority ? "" : "application-modal-select-placeholder"}
+                            >
+                                <option value="">Selecteer prioriteit</option>
+                                <option value="hoog">Hoog</option>
+                                <option value="gemiddeld">Gemiddeld</option>
+                                <option value="laag">Laag</option>
+                            </select>
+                        </div>
+
+                        {/* <div className="application-modal-field">
                             <label>Contactpersoon</label>
                             <input
                                 type="text"
@@ -214,7 +239,8 @@ export default function ApplicationModal(props) {
                                 value={formData.contactEmail}
                                 onChange={handleChange}
                             />
-                        </div>
+                            {errors.contactEmail && <p className="field-error">{errors.contactEmail}</p>}
+                        </div> */}
                     </div>
 
                     <div className="application-modal-field application-modal-field-full">

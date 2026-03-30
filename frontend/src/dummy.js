@@ -1,6 +1,11 @@
 export const Solicitaties = [
     {
-
+        id:2,
+        bedrijf: "TechCorp",
+        functie: "Frontend Developer",
+        status: "Verzonden",
+        datum: "18 mrt 2026",
+        uur: "14:00"
     },
     {
         id:2,
@@ -8,6 +13,6 @@ export const Solicitaties = [
         functie: "Junior React Developer",
         status: "Verzonden",
         datum: "18 mrt 2026",
-        volgendeStap: "Wachten op reactie"
+        uur: "10:30"
     }
 ]

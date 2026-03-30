@@ -1,15 +1,16 @@
 
 import { useState, useEffect } from "react";
-import { getDashboardKpis, getDashboardOverview } from "../Services/dashboardService";
+import { getDashboardKpis, getDashboardOverview, getUpcomingInterviews  } from "../Services/dashboardService";
 import { MapKPIs } from "../mappers/kpiMapper";
 import { MapOverview } from "../mappers/overviewMapper";
+import { MapUpcomingInterviews } from "../mappers/UpcomingInterviewMapper.js";
 import StatCard from "./StatCard";
 import ApplicationsTable from "./ApplicationsTable";
-import {Solicitaties} from "../dummy.js"
 
 export default function Dashboard() {
     const [kpis, setKpis] = useState([])
     const [overview, setOverview] = useState([])
+    const [upcomingInterviews, setUpcomingInterviews] = useState([])
 
     useEffect(() => {
         const fetchKpis = async () => {
@@ -22,8 +23,17 @@ export default function Dashboard() {
             const mappedOverview = MapOverview(data)
             setOverview(mappedOverview)
         }
+        const fetchUpcomingInterviews = async () => {
+            const data = await getUpcomingInterviews()
+            console.log(data)
+            const mappedInterviews = MapUpcomingInterviews(data)
+            setUpcomingInterviews(mappedInterviews)
+        }
+
+
         fetchKpis()
         fetchOverview()
+        fetchUpcomingInterviews()
     }, [])
 
     const KPIElements = kpis.map((kpi) =>
@@ -33,7 +43,7 @@ export default function Dashboard() {
             icoon={kpi.icon}
             kleur={kpi.color}
         />)
-    const InterviewElements = Solicitaties.map((interview) => {
+    const InterviewElements = upcomingInterviews.map((interview) => {
         return (
             <li
                 key={`${interview.id}-${interview.datum}-${interview.uur}`}
@@ -67,7 +77,7 @@ export default function Dashboard() {
                 <aside className="upcoming-interviews-panel">
                     <h2 className="upcoming-interviews-title">Komende gesprekken</h2>
                     <ul className="upcoming-interviews-list">
-                        {InterviewElements}
+                        {upcomingInterviews.length > 0 ? InterviewElements : <p>Geen aankomende gesprekken</p>}
                     </ul>
                 </aside>
             </div>

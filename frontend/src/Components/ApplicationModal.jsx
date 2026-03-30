@@ -99,7 +99,7 @@ export default function ApplicationModal(props) {
     }
 
     return (
-        <section className="application-modal-overlay">
+        <section className="application-modal-overlay" onClick={handleClose}>
             <div className="application-modal">
                 <div ref={formTopRef} className="application-modal-header">
                     <h2 className="application-modal-title">Nieuwe sollicitatie toevoegen</h2>

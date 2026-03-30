@@ -11,5 +11,6 @@ namespace SolicitatieTracker.App.DTOs
     {
         Task<DashboardKPIDto> GetKPIAsync();
         Task<List<DashboardOverviewDto>> GetDashboardOverview();
+        Task<List<UpcomingInterviewDto>> GetUpcomingInterviews();
     }
 }

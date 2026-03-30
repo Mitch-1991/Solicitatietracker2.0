@@ -24,5 +24,11 @@ namespace Solicitatietracker_API.Controllers
             var overview = await _dashboardService.GetDashboardOverview();
             return Ok(overview);
         }
+        [HttpGet("upcoming-interviews")]
+        public async Task<ActionResult<List<UpcomingInterviewDto>>> GetUpcomingInterviews()
+        {
+            var interviews = await _dashboardService.GetUpcomingInterviews();
+            return Ok(interviews);
+        }
     }
 }

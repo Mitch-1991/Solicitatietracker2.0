@@ -14,5 +14,6 @@ namespace SolicitatieTracker.Infrastructure.Data.Repos
         Task<int> GetAfgewezenCountAsync();
         Task<int> GetAanbiedingenCountAsync();
         Task<IEnumerable<Application>> GetAllLopendeSollicitatiesAsync();
+        Task<IEnumerable<Interview>> GetAllIntervieuwApplicationsAsync();
     }
 }

@@ -24,6 +24,17 @@ namespace SolicitatieTracker.Infrastructure.Data.Repos
             return await _context.Applications.CountAsync(a => a.Status == Status.Afgewezen);
         }
 
+        public async Task<IEnumerable<Interview>> GetAllIntervieuwApplicationsAsync()
+        {
+            return await _context.Interviews
+                .Where(i => i.ScheduledStart > DateTime.Now)
+                .Include(i => i.Application)
+                    .ThenInclude(a => a.Company)
+                .ToListAsync();
+
+
+        }
+
         public async Task<IEnumerable<Application>> GetAllLopendeSollicitatiesAsync()
         {
             return await _context.Applications

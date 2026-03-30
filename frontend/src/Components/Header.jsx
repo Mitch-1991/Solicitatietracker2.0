@@ -1,7 +1,11 @@
+import { Briefcase } from "lucide-react"
 export default function Header(){
     return(
         <div className="header-container">
-            <h1>This is the Header</h1>
+            <span className="header-logo">
+                <Briefcase />
+            </span>
+            <h1>SollicitatieTracker</h1>
         </div>
         
     )

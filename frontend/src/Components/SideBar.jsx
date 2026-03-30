@@ -1,8 +1,40 @@
-export default  function SideBar(){
-    return(
-        <div className="sidebar-container">
-            <h1>This is the sidebar</h1>
-        </div>
-        
-    )
+import { LayoutDashboard } from "lucide-react";
+
+const navigationItems = [
+    {
+        id: "dashboard",
+        label: "Dashboard",
+        icon: LayoutDashboard,
+        active: true,
+    },
+];
+
+export default function SideBar() {
+    const navigationElements = navigationItems.map((item) => {
+        const Icon = item.icon;
+
+        return (
+            <li key={item.id} className="sidebar-nav-item">
+                <button
+                    type="button"
+                    className={`sidebar-nav-link${item.active ? " active" : ""}`}
+                >
+                    <span className="sidebar-nav-icon">
+                        <Icon />
+                    </span>
+                    <span className="sidebar-nav-label">{item.label}</span>
+                </button>
+            </li>
+        );
+    });
+
+    return (
+        <aside className="sidebar-container">
+            <nav className="sidebar-nav" aria-label="Hoofdnavigatie">
+                <ul className="sidebar-nav-list">
+                    {navigationElements}
+                </ul>
+            </nav>
+        </aside>
+    );
 }

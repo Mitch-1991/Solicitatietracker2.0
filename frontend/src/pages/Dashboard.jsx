@@ -1,15 +1,13 @@
 
 import { useState, useEffect } from "react";
-import { getDashboardKpis, getDashboardOverview, getUpcomingInterviews  } from "../Services/dashboardService.js";
+import { getDashboardKpis, getUpcomingInterviews } from "../Services/dashboardService.js";
 import { MapKPIs } from "../mappers/kpiMapper.js";
-import { MapOverview } from "../mappers/overviewMapper.js";
 import { MapUpcomingInterviews } from "../mappers/UpcomingInterviewMapper.js";
 import StatCard from "../Components/StatCard.jsx";
 import ApplicationsTable from "../Components/ApplicationsTable.jsx";
 
-export default function Dashboard() {
+export default function Dashboard(props) {
     const [kpis, setKpis] = useState([])
-    const [overview, setOverview] = useState([])
     const [upcomingInterviews, setUpcomingInterviews] = useState([])
 
     useEffect(() => {
@@ -18,21 +16,14 @@ export default function Dashboard() {
             const mappedKpis = MapKPIs(data)
             setKpis(mappedKpis)
         };
-        const fetchOverview = async () => {
-            const data = await getDashboardOverview()
-            const mappedOverview = MapOverview(data)
-            setOverview(mappedOverview)
-        }
+
         const fetchUpcomingInterviews = async () => {
             const data = await getUpcomingInterviews()
-            console.log(data)
             const mappedInterviews = MapUpcomingInterviews(data)
             setUpcomingInterviews(mappedInterviews)
         }
 
-
         fetchKpis()
-        fetchOverview()
         fetchUpcomingInterviews()
     }, [])
 
@@ -63,7 +54,7 @@ export default function Dashboard() {
         )
     })
     return (
-        <main className="dashboard-container">
+        <section className="dashboard-container">
             <h1 className="dashboard-title">Dashboard</h1>
             <p className="dashboard-subtitle">Overzicht van je lopende sollicitaties</p>
             <div className="kpi-container">
@@ -72,7 +63,7 @@ export default function Dashboard() {
             <div className="display-bord">
                 <div className="applicationsTable-container">
                     <h2 className="applicationsTable-title">Lopende sollicitaties</h2>
-                    <ApplicationsTable applications={overview} />
+                    <ApplicationsTable applications={props.overview} opSollicitatiePagina={false} />
                 </div>
                 <aside className="upcoming-interviews-panel">
                     <h2 className="upcoming-interviews-title">Komende gesprekken</h2>
@@ -81,6 +72,6 @@ export default function Dashboard() {
                     </ul>
                 </aside>
             </div>
-        </main>
+        </section>
     )
 }

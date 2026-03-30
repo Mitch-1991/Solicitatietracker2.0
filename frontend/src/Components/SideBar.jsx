@@ -1,4 +1,8 @@
-import { LayoutDashboard } from "lucide-react";
+import { 
+    LayoutDashboard,
+    FileText
+
+} from "lucide-react";
 
 const navigationItems = [
     {
@@ -7,6 +11,12 @@ const navigationItems = [
         icon: LayoutDashboard,
         active: true,
     },
+    {
+        id: "sollicitaties",
+        label: "Sollicitaties",
+        icon: FileText,
+        active: true,
+    }
 ];
 
 export default function SideBar() {

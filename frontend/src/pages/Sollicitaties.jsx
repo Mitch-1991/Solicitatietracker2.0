@@ -22,7 +22,11 @@ export default function Sollicitaties(props) {
                     <ApplicationsTable applications={props.overview} opSollicitatiePagina={true} />
                 </div>
 
-                {showModal && <ApplicationModal onClose={() => setShowModal(false)} />}
+                {showModal && <ApplicationModal
+                    onClose={() => setShowModal(false)}
+                    onCreated={(createdApplication) => {setOverview(prev => [createdApplication, ...prev]);
+                    }}
+                />}
             </>
         </section>
     )

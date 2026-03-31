@@ -1,9 +1,9 @@
 import Header from "./Components/Header"
-import Dashboard from "./pages/Dashboard"
+// import Dashboard from "./pages/Dashboard"
 import SideBar from "./Components/SideBar"
 import Sollicitaties from "./pages/Sollicitaties"
 import { useState, useEffect } from "react"
-import { MapOverview } from "./mappers/overviewMapper.js"
+import { MapOverview } from "./mappers/dashboardMappers.js"
 import { getDashboardOverview } from "./Services/dashboardService.js";
 
 

@@ -1,4 +1,6 @@
 import { useState, useRef } from "react";
+import { createApplication } from "../Services/SollicitatieService";
+import { mapFormDataToCreateDto } from "../mappers/SolicitatieMappers";
 
 export default function ApplicationModal(props) {
     const initialFormData = {
@@ -20,6 +22,9 @@ export default function ApplicationModal(props) {
 
     const [formData, setFormData] = useState(initialFormData);
     const [errors, setErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [serverError, setServerError] = useState("");
+    const [createdApplication, setCreatedApplication] = useState(null);
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -62,7 +67,7 @@ export default function ApplicationModal(props) {
         return newErrors;
     }
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
 
         const validationErrors = validateForm();
@@ -76,15 +81,37 @@ export default function ApplicationModal(props) {
             return;
         }
 
-        setErrors({});
-        console.log(formData);
+        try {
+            setIsSubmitting(true)
+            setServerError("")
+            setErrors({});
 
-        setFormData(initialFormData);
-        props.onClose();
+            const dto = mapFormDataToCreateDto(formData)
+            const createdResult = await createApplication(dto)
+
+            setCreatedApplication(createdResult)
+
+            if (props.onCreated) {
+                props.onCreated(createdResult)
+            }
+        } catch (error) {
+            setServerError(error.message || "Er is een fout opgetreden bij het aanmaken van de sollicitatie.")
+
+            formTopRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            })
+        } finally {
+            setIsSubmitting(false)
+        }
+
     }
 
     function handleClose() {
         setFormData(initialFormData);
+        setServerError("")
+        setErrors({});
+        setCreatedApplication(null)
         props.onClose();
     }
 
@@ -98,6 +125,52 @@ export default function ApplicationModal(props) {
     }
     function isValidEmail(value) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
+
+    if (createdApplication) {
+        return (
+            <section
+                className="application-modal-overlay"
+                onClick={(e) => e.target === e.currentTarget && handleClose()}
+            >
+                <div className="application-modal">
+                    <div className="application-modal-header">
+                        <h2 className="application-modal-title">Sollicitatie succesvol aangemaakt</h2>
+                        <button
+                            type="button"
+                            className="application-modal-close"
+                            onClick={handleClose}
+                            aria-label="Sluit modal"
+                        >
+                            x
+                        </button>
+                    </div>
+
+                    <div className="application-modal-form">
+                        <div className="application-modal-field application-modal-field-full">
+                            <p><strong>Bedrijf:</strong> {createdApplication.bedrijf}</p>
+                            <p><strong>Jobtitel:</strong> {createdApplication.jobTitle}</p>
+                            <p><strong>Status:</strong> {createdApplication.status}</p>
+                            <p><strong>Prioriteit:</strong> {createdApplication.priority || "-"}</p>
+                            <p><strong>Applied date:</strong> {createdApplication.appliedDate || "-"}</p>
+                            <p><strong>Volgende stap:</strong> {createdApplication.nextStep || "-"}</p>
+                            <p><strong>Aangemaakt op:</strong> {createdApplication.createdAt}</p>
+                            <p><strong>Updated op:</strong> {createdApplication.updatedAt}</p>
+                        </div>
+
+                        <div className="application-modal-footer">
+                            <button
+                                type="button"
+                                className="application-modal-button application-modal-button-primary"
+                                onClick={handleClose}
+                            >
+                                Sluiten
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
     }
 
     return (
@@ -114,6 +187,11 @@ export default function ApplicationModal(props) {
                         x
                     </button>
                 </div>
+                {serverError && (
+                    <div className="field-error" style={{ marginBottom: "1rem" }}>
+                        {serverError}
+                    </div>
+                )}
 
                 <form className="application-modal-form" onSubmit={handleSubmit}>
                     <div className="application-modal-grid">
@@ -128,7 +206,6 @@ export default function ApplicationModal(props) {
                             />
                             {errors.bedrijf && <p className="field-error">{errors.bedrijf}</p>}
                         </div>
-
                         <div className="application-modal-field">
                             <label>Functie *</label>
                             <input
@@ -143,15 +220,22 @@ export default function ApplicationModal(props) {
 
                         <div className="application-modal-field">
                             <label>Status *</label>
-                            <input
-                                type="text"
+                            <select
                                 name="status"
                                 value={formData.status}
                                 onChange={handleChange}
                                 className={errors.status ? "input-error" : ""}
-                            />
+                            >
+                                <option value="">Selecteer status</option>
+                                <option value="Verzonden">Verzonden</option>
+                                <option value="Gesprek">Gesprek</option>
+                                <option value="Afgewezen">Afgewezen</option>
+                                <option value="Aanbieding">Aanbieding</option>
+                            </select>
                             {errors.status && <p className="field-error">{errors.status}</p>}
                         </div>
+
+
 
                         <div className="application-modal-field">
                             <label>Datum *</label>
@@ -275,8 +359,9 @@ export default function ApplicationModal(props) {
                         <button
                             type="submit"
                             className="application-modal-button application-modal-button-primary"
+                            disabled={isSubmitting}
                         >
-                            Toevoegen
+                            {isSubmitting ? "Verwerken..." : "Opslaan"}
                         </button>
                     </div>
                 </form>

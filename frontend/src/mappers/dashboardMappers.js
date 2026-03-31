@@ -35,3 +35,22 @@ export const MapKPIs = (data) => [
       color: "#AD46FF",
     },
 ]
+
+export const MapOverview = (data = []) =>
+    data.map((item) => ({
+        id: item.id,
+        bedrijf: item.bedrijf,
+        functie: item.functie,
+        status: item.status,
+        datum: item.appliedDate,
+        volgendeStap: item.nextStep,
+    }))
+
+export const MapUpcomingInterviews = (data = []) =>
+    data.map((item) => ({
+        id:2,
+        bedrijf: item.bedrijf,
+        functie: item.functie,
+        datum: item.datum,
+        uur: item.uur,
+    }))

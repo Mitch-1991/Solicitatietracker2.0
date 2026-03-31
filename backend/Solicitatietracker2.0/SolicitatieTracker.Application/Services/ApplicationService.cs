@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SystemTask = System.Threading.Tasks.Task;
+using System.Threading.Tasks;
 
 namespace SollicitatieTracker.App.Services
 {
@@ -22,40 +22,40 @@ namespace SollicitatieTracker.App.Services
             _applicationNoteRepository = applicationNoteRepository;
         }
 
-        public async Task<ApplicationDto> CreateAsync(CreateApplicationDto Dto)
+        public async Task<ApplicationDto> CreateAsync(CreateApplicationDto dto)
         {
-            if (string.IsNullOrWhiteSpace(Dto.Bedrijf)){
+            if (string.IsNullOrWhiteSpace(dto.Bedrijf)){
                 throw new ArgumentException("Bedrijf is verplicht");
             }
-            if(string.IsNullOrWhiteSpace(Dto.JobTitle))
+            if(string.IsNullOrWhiteSpace(dto.JobTitle))
             {
                 throw new ArgumentException("JobTitle is verplicht");
             }
-            Company? company = await FindMatchingCompanyAsync(Dto.Bedrijf);
+            Company? company = await FindMatchingCompanyAsync(dto.Bedrijf);
 
             if (company == null)
             {
                 company = new Company
                 {
-                    Name = Dto.Bedrijf.Trim(),
-                    Location = Dto.Location,
+                    Name = dto.Bedrijf.Trim(),
+                    Location = dto.Location,
                     CreatedAt = DateTime.UtcNow,
-                    UserId = Dto.UserId
+                    UserId = dto.UserId
                 };
                 company = await _companyRepository.AddAsync(company);
             }
             var application = new Application
             {
                 CompanyId = company.Id,
-                UserId = Dto.UserId,
-                JobTitle = Dto.JobTitle,
-                JobUrl = Dto.JobUrl,
-                Status = Dto.Status,
-                Priority = Dto.Priority,
-                AppliedDate = Dto.AppliedDate,
-                NextStep = Dto.NextStep,
-                SalaryMin = Dto.SalaryMin,
-                SalaryMax = Dto.SalaryMax,
+                UserId = dto.UserId,
+                JobTitle = dto.JobTitle,
+                JobUrl = dto.JobUrl,
+                Status = dto.Status,
+                Priority = dto.Priority,
+                AppliedDate = dto.AppliedDate,
+                NextStep = dto.NextStep,
+                SalaryMin = dto.SalaryMin,
+                SalaryMax = dto.SalaryMax,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
@@ -63,54 +63,36 @@ namespace SollicitatieTracker.App.Services
             var createdApplication = await _applicationRepository.AddApplicationAsync(application);
 
             ApplicationNote? createdNote = null;
-            if (!string.IsNullOrWhiteSpace(Dto.Omschrijving))
+            if (!string.IsNullOrWhiteSpace(dto.Omschrijving))
             {
                 var note = new ApplicationNote
                 {
                     ApplicationId = createdApplication.Id,
-                    NoteText = Dto.Omschrijving.Trim(),
+                    NoteText = dto.Omschrijving.Trim(),
                     CreatedAt = DateTime.UtcNow
                 };
                 createdNote = await _applicationNoteRepository.AddApplicationNoteAsync(note);
             }
+            var newApplication = await _applicationRepository.GetApplicationByIdWithDetailsAsync(createdApplication.Id);
 
-            return new ApplicationDto
+            if (newApplication == null)
             {
-                Id = createdApplication.Id,
-                CompanyId = createdApplication.CompanyId,
-                UserId = createdApplication.UserId,
-                JobTitle = createdApplication.JobTitle,
-                Status = createdApplication.Status.ToString(),
-                Priority = createdApplication.Priority,
-                AppliedDate = createdApplication.AppliedDate,
-                NextStep = createdApplication.NextStep,
-                CreatedAt = createdApplication.CreatedAt,
-                UpdatedAt = createdApplication.UpdatedAt
-            };
+                throw new InvalidOperationException("De aangemaakte sollicitatie kon niet opnieuw opgehaald worden.");
+            }
 
+            return MapToDto(newApplication);
         }
 
         public async Task<ApplicationDto?> FindByIdAsync(int id)
         {
-            var application = await _applicationRepository.GetApplicationByIdAsync(id);
+            var application = await _applicationRepository.GetApplicationByIdWithDetailsAsync(id);
 
             if (application == null)
             {
                 return null;
             }
-            return new ApplicationDto
-            {
-                Id = application.Id,
-                CompanyId = application.CompanyId,
-                UserId = application.UserId,
-                JobTitle = application.JobTitle,
-                Status = application.Status.ToString(),
-                Priority = application.Priority,
-                AppliedDate = application.AppliedDate,
-                NextStep = application.NextStep,
-                CreatedAt = application.CreatedAt,
-                UpdatedAt = application.UpdatedAt
-            };
+
+            return MapToDto(application);
         }
 
         private async Task<Company?> FindMatchingCompanyAsync(string companyName)
@@ -183,6 +165,10 @@ namespace SollicitatieTracker.App.Services
             {
                 return null;
             }
+            if (application.Company == null)
+            {
+                throw new InvalidOperationException("De gekoppelde company werd niet gevonden.");
+            }
 
             application.JobTitle = dto.JobTitle.Trim();
             application.JobUrl = string.IsNullOrWhiteSpace(dto.JobUrl) ? null : dto.JobUrl.Trim();
@@ -197,7 +183,7 @@ namespace SollicitatieTracker.App.Services
             application.Company.Name = dto.Bedrijf.Trim();
             application.Company.Location = string.IsNullOrWhiteSpace(dto.Location) ? null : dto.Location.Trim();
 
-            var existingNote = application.ApplicationNotes
+            var existingNote = application.ApplicationNotes?
                 .OrderByDescending(n => n.CreatedAt)
                 .FirstOrDefault();
 
@@ -227,21 +213,36 @@ namespace SollicitatieTracker.App.Services
 
             var updatedApplication = await _applicationRepository.UpdateApplicationAsync(application);
 
+           return MapToDto(updatedApplication);
+        }
+        private static ApplicationDto MapToDto(Application application)
+        {
+            var latestNote = application.ApplicationNotes?
+                .OrderByDescending(n => n.CreatedAt)
+                .FirstOrDefault();
+
             return new ApplicationDto
             {
-                Id = updatedApplication.Id,
-                CompanyId = updatedApplication.CompanyId,
-                UserId = updatedApplication.UserId,
-                JobTitle = updatedApplication.JobTitle,
-                Status = updatedApplication.Status.ToString(),
-                Priority = updatedApplication.Priority,
-                AppliedDate = updatedApplication.AppliedDate,
-                NextStep = updatedApplication.NextStep,
-                CreatedAt = updatedApplication.CreatedAt,
-                UpdatedAt = updatedApplication.UpdatedAt
+                Id = application.Id,
+                CompanyId = application.CompanyId,
+                UserId = application.UserId,
+                Bedrijf = application.Company?.Name ?? string.Empty,
+                JobTitle = application.JobTitle,
+                JobUrl = application.JobUrl,
+                Location = application.Company?.Location,
+                Status = application.Status.ToString(),
+                Priority = application.Priority,
+                AppliedDate = application.AppliedDate,
+                NextStep = application.NextStep,
+                SalaryMin = application.SalaryMin,
+                SalaryMax = application.SalaryMax,
+                Omschrijving = latestNote?.NoteText,
+                CreatedAt = application.CreatedAt,
+                UpdatedAt = application.UpdatedAt
             };
         }
     }
+
 }
 
 

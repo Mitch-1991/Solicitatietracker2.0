@@ -1,6 +1,9 @@
 import { useState, useRef } from "react";
 import { createApplication } from "../Services/SollicitatieService";
-import { mapFormDataToCreateDto } from "../mappers/SolicitatieMappers";
+import {
+    mapCreatedApplicationToOverviewItem,
+    mapFormDataToCreateDto,
+} from "../mappers/SolicitatieMappers";
 
 export default function ApplicationModal(props) {
     const initialFormData = {
@@ -88,11 +91,19 @@ export default function ApplicationModal(props) {
 
             const dto = mapFormDataToCreateDto(formData)
             const createdResult = await createApplication(dto)
+            const createdApplicationWithCompany = {
+                ...createdResult,
+                bedrijf: dto.bedrijf,
+                appliedDate: createdResult.appliedDate ?? dto.appliedDate,
+                nextStep: createdResult.nextStep ?? dto.nextStep,
+            };
 
-            setCreatedApplication(createdResult)
+            setCreatedApplication(createdApplicationWithCompany)
 
             if (props.onCreated) {
-                props.onCreated(createdResult)
+                props.onCreated(
+                    mapCreatedApplicationToOverviewItem(createdApplicationWithCompany, dto.bedrijf)
+                )
             }
         } catch (error) {
             setServerError(error.message || "Er is een fout opgetreden bij het aanmaken van de sollicitatie.")

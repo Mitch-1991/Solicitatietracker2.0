@@ -19,12 +19,16 @@ export default function Sollicitaties(props) {
             </div>
             <>
                 <div className="applicationsTable-container">
-                    <ApplicationsTable applications={props.overview} opSollicitatiePagina={true} />
+                    <ApplicationsTable
+                        key={props.overview.map((application) => application.id).join("-")}
+                        applications={props.overview}
+                        opSollicitatiePagina={true}
+                    />
                 </div>
 
                 {showModal && <ApplicationModal
                     onClose={() => setShowModal(false)}
-                    onCreated={(createdApplication) => {setOverview(prev => [createdApplication, ...prev]);
+                    onCreated={(createdApplication) => {props.setOverview((prev) => [createdApplication, ...prev]);
                     }}
                 />}
             </>

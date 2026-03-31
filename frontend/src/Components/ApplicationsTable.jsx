@@ -1,5 +1,5 @@
 import StatusBadge from "./StatudBadge"
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function ApplicationsTable(props) {
 
@@ -29,11 +29,6 @@ export default function ApplicationsTable(props) {
         )
 
     })
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [props.applications]);
-
     return (
         <div>
         <table className="applications-table">

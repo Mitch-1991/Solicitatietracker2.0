@@ -15,6 +15,17 @@ export function mapFormDataToCreateDto(data) {
     };
 }
 
+export function mapCreatedApplicationToOverviewItem(application, bedrijf) {
+    return {
+        id: application.id,
+        bedrijf: bedrijf.trim(),
+        functie: application.jobTitle,
+        status: application.status,
+        datum: application.appliedDate,
+        volgendeStap: application.nextStep,
+    };
+}
+
 function mapStatusToEnumValue(status) {
     const normalizedStatus = status.trim().toLowerCase();
 

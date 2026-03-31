@@ -1,12 +1,15 @@
 using SolicitatieTracker.App.DTOs;
+using SolicitatieTracker.App.Services;
 using SolicitatieTracker.Infrastructure.Data.Repos;
+using InterviewEntity = SolicitatieTracker.Domain.Entities.Interview;
+using TaskSystem = System.Threading.Tasks.Task;
 
 namespace SolicitatieTracker.Tests;
 
 public class DashboardServiceTests
 {
     [Fact]
-    public async Task GetKPIAsync_MapsRepositoryCountsToDto()
+    public async TaskSystem GetKPIAsync_MapsRepositoryCountsToDto()
     {
         var repository = new FakeDashboardRepository
         {
@@ -42,6 +45,11 @@ public class DashboardServiceTests
         public Task<int> GetAanbiedingenCountAsync() => Task.FromResult(Aanbiedingen);
 
         public Task<IEnumerable<Domain.Entities.Application>> GetAllLopendeSollicitatiesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<InterviewEntity>> GetAllIntervieuwApplicationsAsync()
         {
             throw new NotImplementedException();
         }

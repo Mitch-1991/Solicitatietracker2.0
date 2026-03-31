@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SolicitatieTracker.App.DTOs;
+using SolicitatieTracker.App.Services;
 
 namespace Solicitatietracker_API.Controllers
 {

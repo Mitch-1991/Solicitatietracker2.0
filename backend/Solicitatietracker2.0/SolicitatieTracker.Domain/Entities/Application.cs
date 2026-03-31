@@ -19,7 +19,7 @@ public partial class Application
 
     public string? Priority { get; set; }
 
-    public DateOnly? AppliedDate { get; set; }
+    public DateOnly? AppliedDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
     public string? NextStep { get; set; }
 

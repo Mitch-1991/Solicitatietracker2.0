@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolicitatieTracker.App.DTOs
+namespace SolicitatieTracker.App.Services
 {
     public interface IDashboardService
     {

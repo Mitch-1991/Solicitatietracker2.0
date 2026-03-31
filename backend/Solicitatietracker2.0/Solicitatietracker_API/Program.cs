@@ -1,5 +1,6 @@
 
 using SolicitatieTracker.App.DTOs;
+using SolicitatieTracker.App.Services;
 using SolicitatieTracker.Dependency;
 using SolicitatieTracker.Infrastructure.Data.Repos;
 using Solicitatietracker_API.Data;
@@ -10,6 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddScoped<IApplicationService, ApplicationService>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IApplicationNoteRepository, ApplicationNoteRepository>();
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {

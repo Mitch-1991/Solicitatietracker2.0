@@ -4,6 +4,22 @@ import ApplicationModal from "../Components/ApplicationModal.jsx";
 
 export default function Sollicitaties(props) {
     const [showModal, setShowModal] = useState(false);
+    const [selectedApplication, setSelectedApplication] = useState(null);
+
+    function handleCreateClick() {
+        setSelectedApplication(null);
+        setShowModal(true);
+    }
+
+    function handleEditClick(application) {
+        setSelectedApplication(application);
+        setShowModal(true);
+    }
+
+    function handleCloseModal() {
+        setShowModal(false);
+        setSelectedApplication(null);
+    }
 
     return (
         <section className="dashboard-container sollicitaties-page">
@@ -13,7 +29,7 @@ export default function Sollicitaties(props) {
                     <p className="dashboard-subtitle">Beheer al je sollicitaties</p>
                 </div>
                 <button type="button" className="new-application-button"
-                    onClick={() => setShowModal(true)}>
+                    onClick={handleCreateClick}>
                     + Nieuwe sollicitatie
                 </button>
             </div>
@@ -23,12 +39,22 @@ export default function Sollicitaties(props) {
                         key={props.overview.map((application) => application.id).join("-")}
                         applications={props.overview}
                         opSollicitatiePagina={true}
+                        onEdit={handleEditClick}
                     />
                 </div>
 
                 {showModal && <ApplicationModal
-                    onClose={() => setShowModal(false)}
+                    mode={selectedApplication ? "edit" : "create"}
+                    initialApplication={selectedApplication}
+                    onClose={handleCloseModal}
                     onCreated={(createdApplication) => {props.setOverview((prev) => [createdApplication, ...prev]);
+                    }}
+                    onUpdated={(updatedApplication) => {
+                        props.setOverview((prev) =>
+                            prev.map((application) =>
+                                application.id === updatedApplication.id ? updatedApplication : application
+                            )
+                        );
                     }}
                 />}
             </>

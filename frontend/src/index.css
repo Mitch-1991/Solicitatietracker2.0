@@ -534,6 +534,38 @@ body {
     color: #172036;
 }
 
+.applications-actions{
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.applications-action-button{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: #4f6484;
+    cursor: pointer;
+    transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.applications-action-button:hover{
+    background-color: #edf4ff;
+    color: #244b7d;
+    transform: translateY(-1px);
+}
+
+.applications-action-button:focus-visible{
+    outline: 3px solid rgba(45, 111, 247, 0.2);
+    outline-offset: 2px;
+}
+
 .applications-pagination{
     display: flex;
     align-items: center;
@@ -899,6 +931,10 @@ body {
     .applications-table td > *{
         margin-left: auto;
         text-align: right;
+    }
+
+    .applications-actions{
+        justify-content: flex-end;
     }
 
     .applications-pagination{

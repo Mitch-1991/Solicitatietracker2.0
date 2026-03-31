@@ -1,33 +1,68 @@
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createApplication } from "../Services/SollicitatieService";
 import {
     mapCreatedApplicationToOverviewItem,
     mapFormDataToCreateDto,
 } from "../mappers/SollicitatieMappers";
 
-export default function ApplicationModal(props) {
-    const initialFormData = {
-        bedrijf: "",
-        functie: "",
-        jobUrl: "",
-        status: "",
-        datum: "",
-        priority: "",
-        locatie: "",
-        salarisMin: "",
-        salarisMax: "",
-        contactpersoon: "",
-        contactEmail: "",
-        volgendeStap: "",
-        beschrijving: "",
-    };
-    const formTopRef = useRef(null);
+const emptyFormData = {
+    bedrijf: "",
+    functie: "",
+    jobUrl: "",
+    status: "",
+    datum: "",
+    priority: "",
+    locatie: "",
+    salarisMin: "",
+    salarisMax: "",
+    contactpersoon: "",
+    contactEmail: "",
+    volgendeStap: "",
+    beschrijving: "",
+};
 
-    const [formData, setFormData] = useState(initialFormData);
+function mapApplicationToFormData(application) {
+    if (!application) {
+        return emptyFormData;
+    }
+
+    return {
+        bedrijf: application.bedrijf ?? "",
+        functie: application.functie ?? application.jobTitle ?? "",
+        jobUrl: application.jobUrl ?? "",
+        status: application.status ?? "",
+        datum: application.datum ?? application.appliedDate ?? "",
+        priority: application.priority ?? "",
+        locatie: application.locatie ?? application.location ?? "",
+        salarisMin: application.salarisMin?.toString() ?? application.salaryMin?.toString() ?? "",
+        salarisMax: application.salarisMax?.toString() ?? application.salaryMax?.toString() ?? "",
+        contactpersoon: application.contactpersoon ?? application.contactPerson ?? "",
+        contactEmail: application.contactEmail ?? "",
+        volgendeStap: application.volgendeStap ?? application.nextStep ?? "",
+        beschrijving: application.beschrijving ?? application.omschrijving ?? "",
+    };
+}
+
+export default function ApplicationModal(props) {
+    const formTopRef = useRef(null);
+    const isEditMode = props.mode === "edit";
+    const modalTitle = isEditMode ? "Sollicitatie bewerken" : "Nieuwe sollicitatie toevoegen";
+    const submitLabel = isEditMode ? "Wijzigingen opslaan" : "Opslaan";
+    const submittingLabel = isEditMode ? "Opslaan..." : "Verwerken...";
+
+    const [formData, setFormData] = useState(() => mapApplicationToFormData(props.initialApplication));
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [serverError, setServerError] = useState("");
     const [createdApplication, setCreatedApplication] = useState(null);
+
+    useEffect(() => {
+        setFormData(mapApplicationToFormData(props.initialApplication));
+        setErrors({});
+        setServerError("");
+        setCreatedApplication(null);
+        setIsSubmitting(false);
+    }, [props.initialApplication, props.mode]);
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -89,6 +124,22 @@ export default function ApplicationModal(props) {
             setServerError("")
             setErrors({});
 
+            if (isEditMode) {
+                const updatedApplication = {
+                    id: props.initialApplication?.id,
+                    bedrijf: formData.bedrijf.trim(),
+                    functie: formData.functie.trim(),
+                    status: formData.status.trim(),
+                    datum: formData.datum,
+                    volgendeStap: formData.volgendeStap.trim() || null,
+                };
+
+                console.log("Bewerk sollicitatie", updatedApplication);
+                props.onUpdated?.(updatedApplication);
+                handleClose();
+                return;
+            }
+
             const dto = mapFormDataToCreateDto(formData)
             const createdResult = await createApplication(dto)
             const createdApplicationWithCompany = {
@@ -119,7 +170,7 @@ export default function ApplicationModal(props) {
     }
 
     function handleClose() {
-        setFormData(initialFormData);
+        setFormData(emptyFormData);
         setServerError("")
         setErrors({});
         setCreatedApplication(null)
@@ -138,7 +189,7 @@ export default function ApplicationModal(props) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     }
 
-    if (createdApplication) {
+    if (createdApplication && !isEditMode) {
         return (
             <section
                 className="application-modal-overlay"
@@ -188,7 +239,7 @@ export default function ApplicationModal(props) {
         <section className="application-modal-overlay" onClick={(e) => e.target === e.currentTarget && handleClose()}>
             <div className="application-modal">
                 <div ref={formTopRef} className="application-modal-header">
-                    <h2 className="application-modal-title">Nieuwe sollicitatie toevoegen</h2>
+                    <h2 className="application-modal-title">{modalTitle}</h2>
                     <button
                         type="button"
                         className="application-modal-close"
@@ -372,7 +423,7 @@ export default function ApplicationModal(props) {
                             className="application-modal-button application-modal-button-primary"
                             disabled={isSubmitting}
                         >
-                            {isSubmitting ? "Verwerken..." : "Opslaan"}
+                            {isSubmitting ? submittingLabel : submitLabel}
                         </button>
                     </div>
                 </form>

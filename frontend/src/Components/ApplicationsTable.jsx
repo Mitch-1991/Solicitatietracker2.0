@@ -1,5 +1,6 @@
 import StatusBadge from "./StatudBadge"
 import { useState } from "react";
+import { Eye, PencilLine, Trash2 } from "lucide-react";
 
 export default function ApplicationsTable(props) {
 
@@ -12,6 +13,22 @@ export default function ApplicationsTable(props) {
     const totalPages = Math.ceil(props.applications.length / itemsPerPage);
     const hasPagination = totalPages > 1;
 
+    function handleActionClick(action, application) {
+        console.log(`${action} sollicitatie`, application);
+
+        if (action === "Detail" && props.onDetail) {
+            props.onDetail(application);
+        }
+
+        if (action === "Bewerken" && props.onEdit) {
+            props.onEdit(application);
+        }
+
+        if (action === "Verwijderen" && props.onDelete) {
+            props.onDelete(application);
+        }
+    }
+
     const Sollicitatierij = currentItems.map((app) => {
         return (
             <tr key={app.id} className="applications-row">
@@ -22,7 +39,35 @@ export default function ApplicationsTable(props) {
                 <td data-label="Volgende stap">{app.volgendeStap}</td>
                 {props.opSollicitatiePagina && (
                     <td data-label="Acties">
-                        <button className="applications-action-button">Bewerken</button>
+                        <div className="applications-actions">
+                            <button
+                                type="button"
+                                className="applications-action-button"
+                                aria-label={`Bekijk details van ${app.functie} bij ${app.bedrijf}`}
+                                title="Detail"
+                                onClick={() => handleActionClick("Detail", app)}
+                            >
+                                <Eye size={20} strokeWidth={2.1} />
+                            </button>
+                            <button
+                                type="button"
+                                className="applications-action-button"
+                                aria-label={`Bewerk ${app.functie} bij ${app.bedrijf}`}
+                                title="Bewerken"
+                                onClick={() => handleActionClick("Bewerken", app)}
+                            >
+                                <PencilLine size={20} strokeWidth={2.1} />
+                            </button>
+                            <button
+                                type="button"
+                                className="applications-action-button"
+                                aria-label={`Verwijder ${app.functie} bij ${app.bedrijf}`}
+                                title="Verwijderen"
+                                onClick={() => handleActionClick("Verwijderen", app)}
+                            >
+                                <Trash2 size={20} strokeWidth={2.1} />
+                            </button>
+                        </div>
                     </td>
                 )}
             </tr>

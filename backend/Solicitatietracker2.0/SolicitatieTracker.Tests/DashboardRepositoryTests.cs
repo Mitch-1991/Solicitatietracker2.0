@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using SolicitatieTracker.Domain.Entities;
-using SolicitatieTracker.Infrastructure.Data;
-using SolicitatieTracker.Infrastructure.Data.Repos;
+using SollicitatieTracker.Domain.Entities;
+using SollicitatieTracker.Infrastructure.Data;
+using SollicitatieTracker.Infrastructure.Data.Repos;
 using TaskSystem = System.Threading.Tasks.Task;
 
-namespace SolicitatieTracker.Tests;
+namespace SollicitatieTracker.Tests;
 
 public class DashboardRepositoryTests
 {

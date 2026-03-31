@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using SolicitatieTracker.Domain.Entities;
-using TaskEntity = SolicitatieTracker.Domain.Entities.Task;
+using SollicitatieTracker.Domain.Entities;
+using TaskEntity = SollicitatieTracker.Domain.Entities.Task;
 
-namespace SolicitatieTracker.Infrastructure.Data;
+namespace SollicitatieTracker.Infrastructure.Data;
 
 public partial class SollicitatietrackerDbContext : DbContext
 {

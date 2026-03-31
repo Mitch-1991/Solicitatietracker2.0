@@ -1,2 +1,2 @@
-import "./SolicitatieMappers.test.js";
+import "./SollicitatieMappers.test.js";
 import "./SollicitatieService.test.js";

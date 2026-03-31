@@ -1,12 +1,12 @@
-using SolicitatieTracker.App.DTOs;
-using SolicitatieTracker.App.Services;
-using SolicitatieTracker.Infrastructure.Data.Repos;
-using ApplicationEntity = SolicitatieTracker.Domain.Entities.Application;
-using ApplicationNoteEntity = SolicitatieTracker.Domain.Entities.ApplicationNote;
-using CompanyEntity = SolicitatieTracker.Domain.Entities.Company;
+using SollicitatieTracker.App.DTOs;
+using SollicitatieTracker.App.Services;
+using SollicitatieTracker.Infrastructure.Data.Repos;
+using ApplicationEntity = SollicitatieTracker.Domain.Entities.Application;
+using ApplicationNoteEntity = SollicitatieTracker.Domain.Entities.ApplicationNote;
+using CompanyEntity = SollicitatieTracker.Domain.Entities.Company;
 using TaskSystem = System.Threading.Tasks.Task;
 
-namespace SolicitatieTracker.Tests;
+namespace SollicitatieTracker.Tests;
 
 public class ApplicationServiceTests
 {

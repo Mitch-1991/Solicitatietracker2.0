@@ -1,4 +1,4 @@
-export const Solicitaties = [
+export const Sollicitaties = [
     {
         id:2,
         bedrijf: "TechCorp",

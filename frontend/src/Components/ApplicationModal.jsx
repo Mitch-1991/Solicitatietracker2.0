@@ -3,7 +3,7 @@ import { createApplication } from "../Services/SollicitatieService";
 import {
     mapCreatedApplicationToOverviewItem,
     mapFormDataToCreateDto,
-} from "../mappers/SolicitatieMappers";
+} from "../mappers/SollicitatieMappers";
 
 export default function ApplicationModal(props) {
     const initialFormData = {

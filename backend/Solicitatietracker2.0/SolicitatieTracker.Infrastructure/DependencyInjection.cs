@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SolicitatieTracker.Infrastructure.Data;
+using SollicitatieTracker.Infrastructure.Data;
 
-namespace SolicitatieTracker.Dependency;
+namespace SollicitatieTracker.Dependency;
 
 public static class DependencyInjection
 {

@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace SolicitatieTracker.Domain.Entities;
+namespace SollicitatieTracker.Domain.Entities;
 
 public partial class Application
 {

@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using SolicitatieTracker.Domain.Entities;
-using SolicitatieTracker.Infrastructure.Data;
+using SollicitatieTracker.Domain.Entities;
+using SollicitatieTracker.Infrastructure.Data;
 using TaskSystem = System.Threading.Tasks.Task;
 
-namespace Solicitatietracker_API.Data;
+namespace Sollicitatietracker_API.Data;
 
 public static class DatabaseSeeder
 {

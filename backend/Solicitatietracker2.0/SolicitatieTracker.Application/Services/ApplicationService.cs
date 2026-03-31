@@ -1,13 +1,13 @@
-﻿using SolicitatieTracker.App.DTOs;
-using SolicitatieTracker.Domain.Entities;
-using SolicitatieTracker.Infrastructure.Data.Repos;
+using SollicitatieTracker.App.DTOs;
+using SollicitatieTracker.Domain.Entities;
+using SollicitatieTracker.Infrastructure.Data.Repos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SystemTask = System.Threading.Tasks.Task;
 
-namespace SolicitatieTracker.App.Services
+namespace SollicitatieTracker.App.Services
 {
     public class ApplicationService : IApplicationService
     {

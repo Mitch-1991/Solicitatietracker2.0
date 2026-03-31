@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SolicitatieTracker.App.DTOs;
-using SolicitatieTracker.App.Services;
+using SollicitatieTracker.App.DTOs;
+using SollicitatieTracker.App.Services;
 
-namespace Solicitatietracker_API.Controllers
+namespace Sollicitatietracker_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

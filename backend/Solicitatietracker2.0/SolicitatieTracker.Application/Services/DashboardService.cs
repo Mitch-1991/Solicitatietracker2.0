@@ -1,6 +1,6 @@
-﻿using SolicitatieTracker.App.DTOs;
-using SolicitatieTracker.Infrastructure.Data;
-using SolicitatieTracker.Infrastructure.Data.Repos;
+using SollicitatieTracker.App.DTOs;
+using SollicitatieTracker.Infrastructure.Data;
+using SollicitatieTracker.Infrastructure.Data.Repos;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolicitatieTracker.App.Services
+namespace SollicitatieTracker.App.Services
 {
     public class DashboardService : IDashboardService
     {

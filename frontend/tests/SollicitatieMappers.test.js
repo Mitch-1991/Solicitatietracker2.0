@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {
     mapCreatedApplicationToOverviewItem,
     mapFormDataToCreateDto,
-} from "../src/mappers/SolicitatieMappers.js";
+} from "../src/mappers/SollicitatieMappers.js";
 
 test("mapFormDataToCreateDto trims and converts form fields", () => {
     const result = mapFormDataToCreateDto({

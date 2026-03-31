@@ -1,9 +1,9 @@
 
-using SolicitatieTracker.App.DTOs;
-using SolicitatieTracker.App.Services;
-using SolicitatieTracker.Dependency;
-using SolicitatieTracker.Infrastructure.Data.Repos;
-using Solicitatietracker_API.Data;
+using SollicitatieTracker.App.DTOs;
+using SollicitatieTracker.App.Services;
+using SollicitatieTracker.Dependency;
+using SollicitatieTracker.Infrastructure.Data.Repos;
+using Sollicitatietracker_API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +32,7 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<SolicitatieTracker.Infrastructure.Data.SollicitatietrackerDbContext>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<SollicitatieTracker.Infrastructure.Data.SollicitatietrackerDbContext>();
     await DatabaseSeeder.SeedAsync(dbContext);
 }
 

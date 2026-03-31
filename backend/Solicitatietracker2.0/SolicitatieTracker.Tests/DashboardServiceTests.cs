@@ -1,10 +1,10 @@
-using SolicitatieTracker.App.DTOs;
-using SolicitatieTracker.App.Services;
-using SolicitatieTracker.Infrastructure.Data.Repos;
-using InterviewEntity = SolicitatieTracker.Domain.Entities.Interview;
+using SollicitatieTracker.App.DTOs;
+using SollicitatieTracker.App.Services;
+using SollicitatieTracker.Infrastructure.Data.Repos;
+using InterviewEntity = SollicitatieTracker.Domain.Entities.Interview;
 using TaskSystem = System.Threading.Tasks.Task;
 
-namespace SolicitatieTracker.Tests;
+namespace SollicitatieTracker.Tests;
 
 public class DashboardServiceTests
 {

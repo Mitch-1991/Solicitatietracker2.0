@@ -51,5 +51,28 @@ namespace Sollicitatietracker_API.Controllers
 
             }
         }
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<ApplicationDto>> UpdateApplication(int id, [FromBody] UpdateApplicationDto updateApplicationDto)
+        {
+            try
+            {
+                var updatedApplication = await _applicationService.UpdateAsync(id, updateApplicationDto);
+
+                if (updatedApplication == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(updatedApplication);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while updating the application.");
+            }
+        }
     }
 }

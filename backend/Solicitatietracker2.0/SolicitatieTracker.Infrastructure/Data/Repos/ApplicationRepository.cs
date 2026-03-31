@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SollicitatieTracker.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,19 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
         public async Task<Application> GetApplicationByIdAsync(int id) =>
             await _context.Applications.FindAsync(id);
 
+        public async Task<Application?> GetApplicationByIdWithDetailsAsync(int id)
+        {
+            return await _context.Applications
+                .Include(a => a.Company)
+                .Include(a => a.ApplicationNotes)
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
 
+        public async Task<Application> UpdateApplicationAsync(Application application)
+        {
+            _context.Applications.Update(application);
+            await _context.SaveChangesAsync();
+            return application;
+        }
     }
 }

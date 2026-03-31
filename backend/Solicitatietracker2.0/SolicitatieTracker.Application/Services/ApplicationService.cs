@@ -164,6 +164,83 @@ namespace SollicitatieTracker.App.Services
 
             return d[s.Length, t.Length];
         }
+
+        public async Task<ApplicationDto?> UpdateAsync(int id, UpdateApplicationDto dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Bedrijf))
+            {
+                throw new ArgumentException("Bedrijf is verplicht");
+            }
+
+            if (string.IsNullOrWhiteSpace(dto.JobTitle))
+            {
+                throw new ArgumentException("JobTitle is verplicht");
+            }
+
+            var application = await _applicationRepository.GetApplicationByIdWithDetailsAsync(id);
+
+            if (application == null)
+            {
+                return null;
+            }
+
+            application.JobTitle = dto.JobTitle.Trim();
+            application.JobUrl = string.IsNullOrWhiteSpace(dto.JobUrl) ? null : dto.JobUrl.Trim();
+            application.Status = dto.Status;
+            application.Priority = string.IsNullOrWhiteSpace(dto.Priority) ? null : dto.Priority.Trim();
+            application.AppliedDate = dto.AppliedDate;
+            application.NextStep = string.IsNullOrWhiteSpace(dto.NextStep) ? null : dto.NextStep.Trim();
+            application.SalaryMin = dto.SalaryMin;
+            application.SalaryMax = dto.SalaryMax;
+            application.UpdatedAt = DateTime.UtcNow;
+
+            application.Company.Name = dto.Bedrijf.Trim();
+            application.Company.Location = string.IsNullOrWhiteSpace(dto.Location) ? null : dto.Location.Trim();
+
+            var existingNote = application.ApplicationNotes
+                .OrderByDescending(n => n.CreatedAt)
+                .FirstOrDefault();
+
+            if (string.IsNullOrWhiteSpace(dto.Omschrijving))
+            {
+                if (existingNote != null)
+                {
+                    existingNote.NoteText = string.Empty;
+                }
+            }
+            else
+            {
+                if (existingNote == null)
+                {
+                    application.ApplicationNotes.Add(new ApplicationNote
+                    {
+                        ApplicationId = application.Id,
+                        NoteText = dto.Omschrijving.Trim(),
+                        CreatedAt = DateTime.UtcNow
+                    });
+                }
+                else
+                {
+                    existingNote.NoteText = dto.Omschrijving.Trim();
+                }
+            }
+
+            var updatedApplication = await _applicationRepository.UpdateApplicationAsync(application);
+
+            return new ApplicationDto
+            {
+                Id = updatedApplication.Id,
+                CompanyId = updatedApplication.CompanyId,
+                UserId = updatedApplication.UserId,
+                JobTitle = updatedApplication.JobTitle,
+                Status = updatedApplication.Status.ToString(),
+                Priority = updatedApplication.Priority,
+                AppliedDate = updatedApplication.AppliedDate,
+                NextStep = updatedApplication.NextStep,
+                CreatedAt = updatedApplication.CreatedAt,
+                UpdatedAt = updatedApplication.UpdatedAt
+            };
+        }
     }
 }
 

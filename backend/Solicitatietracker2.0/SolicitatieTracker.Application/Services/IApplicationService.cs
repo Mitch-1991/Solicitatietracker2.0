@@ -11,5 +11,6 @@ namespace SollicitatieTracker.App.Services
     {
         Task<ApplicationDto> CreateAsync(CreateApplicationDto createApplicationDto);
         Task<ApplicationDto?> FindByIdAsync(int id);
+        Task<ApplicationDto?> UpdateAsync(int id, UpdateApplicationDto updateApplicationDto);
     }
 }

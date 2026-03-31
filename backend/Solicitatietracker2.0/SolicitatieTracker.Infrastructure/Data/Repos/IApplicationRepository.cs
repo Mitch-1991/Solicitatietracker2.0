@@ -11,5 +11,7 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
     {
         Task<Application> AddApplicationAsync(Application application);
         Task<Application> GetApplicationByIdAsync(int id);
+        Task<Application?> GetApplicationByIdWithDetailsAsync(int id);
+        Task<Application> UpdateApplicationAsync(Application application);
     }
 }

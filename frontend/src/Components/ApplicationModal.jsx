@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { createApplication } from "../Services/SollicitatieService";
+import { createApplication, updateApplication } from "../Services/SollicitatieService";
 import {
     mapCreatedApplicationToOverviewItem,
     mapFormDataToCreateDto,
+    mapFormDataToUpdateDto
 } from "../mappers/SollicitatieMappers";
 
 const emptyFormData = {
@@ -125,18 +126,24 @@ export default function ApplicationModal(props) {
             setErrors({});
 
             if (isEditMode) {
-                const updatedApplication = {
-                    id: props.initialApplication?.id,
-                    bedrijf: formData.bedrijf.trim(),
-                    functie: formData.functie.trim(),
-                    status: formData.status.trim(),
-                    datum: formData.datum,
-                    volgendeStap: formData.volgendeStap.trim() || null,
-                };
+                const applicationId = props.initialApplication.id
 
-                console.log("Bewerk sollicitatie", updatedApplication);
-                props.onUpdated?.(updatedApplication);
-                handleClose();
+                if(!applicationId){
+                    throw new Error("Ongeldige sollicitatie. ID ontbreekt.")
+                }
+                const dto = mapFormDataToUpdateDto(formData)
+                const updatedResult = await updateApplication(applicationId, dto)
+
+                const updatedApplicationForOverview = mapCreatedApplicationToOverviewItem({
+                    ...updatedResult,
+                    appliedDate: updatedResult.appliedDate ?? dto.appliedDate,
+                    nextStep: updatedResult.nextStep ?? dto.nextStep,
+                },
+                updatedResult.bedrijf ?? dto.bedrijf
+                )
+
+                props.onUpdated?.(updatedApplicationForOverview)
+                handleClose()
                 return;
             }
 

@@ -14,6 +14,21 @@ export function mapFormDataToCreateDto(data) {
         omschrijving: data.beschrijving.trim() || null,
     };
 }
+export function mapFormDataToUpdateDto(data) {
+    return {
+        bedrijf: data.bedrijf.trim(),
+        jobTitle: data.functie.trim(),
+        jobUrl: data.jobUrl.trim() || null,
+        location: data.locatie.trim() || null,
+        status: mapStatusToEnumValue(data.status),
+        priority: data.priority.trim() || null,
+        appliedDate: data.datum,
+        nextStep: data.volgendeStap.trim() || null,
+        salaryMin: data.salarisMin ? Number(data.salarisMin) : null,
+        salaryMax: data.salarisMax ? Number(data.salarisMax) : null,
+        omschrijving: data.beschrijving.trim() || null,
+    };
+}
 
 export function mapCreatedApplicationToOverviewItem(application, bedrijf) {
     return {

@@ -27,6 +27,10 @@ export default function Sollicitaties(props) {
         setShowModal(false);
         setSelectedApplication(null);
     }
+    function handleCloseDetail() {
+        setShowDetail(false);
+        setSelectedApplication(null);
+    }
 
     return (
         <section className="dashboard-container sollicitaties-page">
@@ -65,7 +69,10 @@ export default function Sollicitaties(props) {
                         );
                     }}
                 />}
-                {showDetail && <ApplicationDetail />}
+                {showDetail && <ApplicationDetail 
+                initialApplication={selectedApplication}
+                onClose={handleCloseDetail}
+                />}
             </>
         </section>
     )

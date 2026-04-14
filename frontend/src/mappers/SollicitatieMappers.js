@@ -1,3 +1,19 @@
+export const emptyFormData = {
+    bedrijf: "",
+    functie: "",
+    jobUrl: "",
+    status: "",
+    datum: "",
+    priority: "",
+    locatie: "",
+    salarisMin: "",
+    salarisMax: "",
+    contactpersoon: "",
+    contactEmail: "",
+    volgendeStap: "",
+    beschrijving: "",
+};
+
 export function mapFormDataToCreateDto(data) {
     return {
         userId: 1,
@@ -38,6 +54,28 @@ export function mapCreatedApplicationToOverviewItem(application, bedrijf) {
         status: application.status,
         datum: application.appliedDate,
         volgendeStap: application.nextStep,
+    };
+}
+
+export function mapApplicationToFormData(application) {
+    if (!application) {
+        return emptyFormData;
+    }
+
+    return {
+        bedrijf: application.bedrijf ?? "",
+        functie: application.functie ?? application.jobTitle ?? "",
+        jobUrl: application.jobUrl ?? "",
+        status: application.status ?? "",
+        datum: application.datum ?? application.appliedDate ?? "",
+        priority: application.priority ?? "",
+        locatie: application.locatie ?? application.location ?? "",
+        salarisMin: application.salarisMin?.toString() ?? application.salaryMin?.toString() ?? "",
+        salarisMax: application.salarisMax?.toString() ?? application.salaryMax?.toString() ?? "",
+        contactpersoon: application.contactpersoon ?? application.contactPerson ?? "",
+        contactEmail: application.contactEmail ?? "",
+        volgendeStap: application.volgendeStap ?? application.nextStep ?? "",
+        beschrijving: application.beschrijving ?? application.omschrijving ?? "",
     };
 }
 

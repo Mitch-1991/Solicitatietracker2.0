@@ -65,8 +65,8 @@ export function mapCreatedApplicationToOverviewItem(application: createApplicati
     };
 }
 
-//any moet nog aangepast worden
-export function mapApplicationToFormData(application: any): ApplicationFormData {
+
+export function mapApplicationToFormData(application): ApplicationFormData {
     if (!application) {
         return emptyFormData;
     }

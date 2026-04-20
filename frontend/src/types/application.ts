@@ -5,20 +5,20 @@ export interface OverviewApplication {
     company: string;
     function: string;
     status: ApplicationStatus;
-    date: string;
-    nextStep: string;    
+    date: string | null;
+    nextStep: string | null;    
 }
 
 export interface ApplicationFormData {
     companyName: string;
     jobTitle: string;
-    jobUrl: string;
-    status: ApplicationStatus;
-    date: string;
-    priority: priorityStatus;
-    location: string;
-    salarisMin: number;
-    salarisMax: number;
+    jobUrl: string | null;
+    status: ApplicationStatus | "";
+    date: string | null;
+    priority: priorityStatus | null;
+    location: string | null;
+    salaryMin: number | "";
+    salaryMax: number | "";
     notes: string;
     contactPerson: string;
     contactEmail: string;
@@ -29,27 +29,27 @@ export interface createApplicationDto {
     userId: number;
     companyName: string;
     jobTitle: string;
-    jobUrl: string;
+    jobUrl: string | null;
     status: ApplicationStatus;
-    appliedDate: string;
+    appliedDate: string | null;
     priority: priorityStatus;
-    location: string;
-    salarisMin: number;
-    salarisMax: number;
-    notes: string;
-    nextStep: string;
+    location: string | null;
+    salaryMin: number | null;
+    salaryMax: number | null;
+    notes: string | null;
+    nextStep: string | null;
 }
 
 export interface updateApplicationDto {
     companyName: string;
     jobTitle: string;
-    jobUrl: string;
+    jobUrl: string | null;
     status: ApplicationStatus;
-    appliedDate: string;
+    appliedDate: string | null;
     priority: priorityStatus;
-    location: string;
-    salarisMin: number;
-    salarisMax: number;
-    notes: string;
-    nextStep: string;
+    location: string | null;
+    salaryMin: number | null;
+    salaryMax: number | null;
+    notes: string | null;
+    nextStep: string | null;
 }

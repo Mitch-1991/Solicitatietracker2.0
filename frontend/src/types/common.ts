@@ -4,7 +4,7 @@ export type ApplicationStatus =
 | "afgewezen"
 | "aanbieding";
 
-export type priorityStatus = "hoog" | "gemiddeld" | "laag";
+export type PriorityStatus = "hoog" | "gemiddeld" | "laag";
 
 export interface SelectOption {
     value: string;

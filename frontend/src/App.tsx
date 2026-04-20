@@ -14,7 +14,7 @@ export default function App() {
   const [overview, setOverview] = useState([])
 
   useEffect(() => {
-    const fetchOverview = async () => {
+    const fetchOverview = async (): Promise<void> => {
       const data = await getDashboardOverview()
       const mappedOverview = MapOverview(data)
       setOverview(mappedOverview)

@@ -4,17 +4,19 @@ export type ApplicationStatus =
 | "afgewezen"
 | "aanbieding";
 
-export type SelectOption = {
+export type priorityStatus = "hoog" | "gemiddeld" | "laag";
+
+export interface SelectOption {
     value: string;
     label: string;
 }
 
-export type ApiError = {
+export interface ApiError {
     message: string;
     error: string;
 }
 
-export type ApiResponse<T> = {
+export interface ApiResponse<T> {
     data: T;
     message?: string;
     success: boolean;

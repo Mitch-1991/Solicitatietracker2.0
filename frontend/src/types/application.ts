@@ -40,6 +40,19 @@ export interface createApplicationDto {
     nextStep: string | null;
 }
 
+export interface createdApplicationResponse {
+    id: number;
+    companyName: string;
+    jobTitle: string;
+    status: ApplicationStatus;
+    appliedDate: string | null;
+    priority: PriorityStatus | null;
+    salaryMin: number | null;
+    salaryMax: number | null;
+    notes: string | null;
+    nextStep: string | null;
+}
+
 export interface updateApplicationDto {
     companyName: string;
     jobTitle: string;

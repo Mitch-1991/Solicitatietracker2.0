@@ -1,48 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { createApplication, updateApplication } from "../Services/SollicitatieService";
 import {
+    emptyFormData,
     mapCreatedApplicationToOverviewItem,
     mapFormDataToCreateDto,
-    mapFormDataToUpdateDto
+    mapFormDataToUpdateDto,
+    mapApplicationToFormData,
 } from "../mappers/SollicitatieMappers";
 
-const emptyFormData = {
-    bedrijf: "",
-    functie: "",
-    jobUrl: "",
-    status: "",
-    datum: "",
-    priority: "",
-    locatie: "",
-    salarisMin: "",
-    salarisMax: "",
-    contactpersoon: "",
-    contactEmail: "",
-    volgendeStap: "",
-    beschrijving: "",
-};
 
-function mapApplicationToFormData(application) {
-    if (!application) {
-        return emptyFormData;
-    }
-
-    return {
-        bedrijf: application.bedrijf ?? "",
-        functie: application.functie ?? application.jobTitle ?? "",
-        jobUrl: application.jobUrl ?? "",
-        status: application.status ?? "",
-        datum: application.datum ?? application.appliedDate ?? "",
-        priority: application.priority ?? "",
-        locatie: application.locatie ?? application.location ?? "",
-        salarisMin: application.salarisMin?.toString() ?? application.salaryMin?.toString() ?? "",
-        salarisMax: application.salarisMax?.toString() ?? application.salaryMax?.toString() ?? "",
-        contactpersoon: application.contactpersoon ?? application.contactPerson ?? "",
-        contactEmail: application.contactEmail ?? "",
-        volgendeStap: application.volgendeStap ?? application.nextStep ?? "",
-        beschrijving: application.beschrijving ?? application.omschrijving ?? "",
-    };
-}
 
 export default function ApplicationModal(props) {
     const formTopRef = useRef(null);

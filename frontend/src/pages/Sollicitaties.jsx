@@ -1,9 +1,11 @@
 import ApplicationsTable from "../Components/ApplicationsTable.jsx";
 import { useState } from "react";
 import ApplicationModal from "../Components/ApplicationModal.jsx";
+import ApplicationDetail from "../Components/ApplicationDetailComponent.jsx"
 
 export default function Sollicitaties(props) {
     const [showModal, setShowModal] = useState(false);
+    const [showDetail, setShowDetail] = useState(false);
     const [selectedApplication, setSelectedApplication] = useState(null);
 
     function handleCreateClick() {
@@ -15,9 +17,18 @@ export default function Sollicitaties(props) {
         setSelectedApplication(application);
         setShowModal(true);
     }
+    function handleDetailClick(application){
+        setSelectedApplication(application);
+        setShowDetail(true);
+    }
+
 
     function handleCloseModal() {
         setShowModal(false);
+        setSelectedApplication(null);
+    }
+    function handleCloseDetail() {
+        setShowDetail(false);
         setSelectedApplication(null);
     }
 
@@ -40,6 +51,7 @@ export default function Sollicitaties(props) {
                         applications={props.overview}
                         opSollicitatiePagina={true}
                         onEdit={handleEditClick}
+                        onDetail={handleDetailClick}
                     />
                 </div>
 
@@ -56,6 +68,10 @@ export default function Sollicitaties(props) {
                             )
                         );
                     }}
+                />}
+                {showDetail && <ApplicationDetail 
+                initialApplication={selectedApplication}
+                onClose={handleCloseDetail}
                 />}
             </>
         </section>

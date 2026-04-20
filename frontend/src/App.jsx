@@ -1,5 +1,5 @@
 import Header from "./Components/Header"
-// import Dashboard from "./pages/Dashboard"
+import Dashboard from "./pages/Dashboard"
 import SideBar from "./Components/SideBar"
 import Sollicitaties from "./pages/Sollicitaties"
 import { useState, useEffect } from "react"
@@ -27,7 +27,7 @@ export default function App() {
       <Header />
       <section className="main-content">
         <SideBar />
-        <Sollicitaties overview={overview} setOverview={setOverview} />
+       <Sollicitaties overview={overview} setOverview={setOverview} />
         {/* <Dashboard overview={overview} />  */}
       </section>
     </>

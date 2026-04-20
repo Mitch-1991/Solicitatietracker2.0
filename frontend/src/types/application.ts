@@ -1,4 +1,4 @@
-import type { ApplicationStatus, priorityStatus } from "./common";
+import type { ApplicationStatus, PriorityStatus } from "./common";
 
 export interface OverviewApplication {
     id: number;
@@ -15,7 +15,7 @@ export interface ApplicationFormData {
     jobUrl: string | null;
     status: ApplicationStatus | "";
     date: string | null;
-    priority: priorityStatus | null;
+    priority: PriorityStatus | "";
     location: string | null;
     salaryMin: number | "";
     salaryMax: number | "";
@@ -32,7 +32,7 @@ export interface createApplicationDto {
     jobUrl: string | null;
     status: ApplicationStatus;
     appliedDate: string | null;
-    priority: priorityStatus;
+    priority: PriorityStatus | null;
     location: string | null;
     salaryMin: number | null;
     salaryMax: number | null;
@@ -46,7 +46,7 @@ export interface updateApplicationDto {
     jobUrl: string | null;
     status: ApplicationStatus;
     appliedDate: string | null;
-    priority: priorityStatus;
+    priority: PriorityStatus | null;
     location: string | null;
     salaryMin: number | null;
     salaryMax: number | null;

@@ -7,7 +7,7 @@ export interface DashboardOverviewItem{
     jobTitle: string;
     status: ApplicationStatus;
     appliedDate: string | null;
-    nextStep: string;
+    nextStep: string | null;
 }
 
 export interface DashboardOverviewResponse {

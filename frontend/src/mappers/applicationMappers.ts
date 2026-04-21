@@ -1,11 +1,11 @@
 import type {
     ApplicationFormData,
     createApplicationDto,
-    OverviewApplication,
     updateApplicationDto,
     ApplicationDetailResponse
 } from "../types/application";
 import type { ApplicationStatus, PriorityStatus } from "../types/common";
+import type { DashboardOverviewItem } from "../types/dashboard";
 
 export const emptyFormData: ApplicationFormData = {
     companyName: "",
@@ -55,13 +55,13 @@ export function mapFormDataToUpdateDto(data: ApplicationFormData): updateApplica
     };
 }
 
-export function mapCreatedApplicationToOverviewItem(application: createApplicationDto, bedrijf: string): OverviewApplication {
+export function mapCreatedApplicationToOverviewItem(application: createApplicationDto, companyName: string): DashboardOverviewItem {
     return {
         id: application.userId,
-        company: bedrijf.trim(),
-        function: application.jobTitle,
+        companyName: companyName.trim(),
+        jobTitle: application.jobTitle,
         status: application.status,
-        date: application.appliedDate,
+        appliedDate: application.appliedDate,
         nextStep: application.nextStep,
     };
 }

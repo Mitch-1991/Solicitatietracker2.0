@@ -1,14 +1,5 @@
 import type { ApplicationStatus, PriorityStatus } from "./common";
 
-export interface OverviewApplication {
-    id: number;
-    company: string;
-    function: string;
-    status: ApplicationStatus;
-    date: string | null;
-    nextStep: string | null;    
-}
-
 export interface ApplicationFormData {
     companyName: string;
     jobTitle: string;

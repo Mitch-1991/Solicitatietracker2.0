@@ -31,7 +31,7 @@ export default function Sollicitaties(props) {
         setShowDetail(false);
         setSelectedApplication(null);
     }
-
+ 
     return (
         <section className="dashboard-container sollicitaties-page">
             <div className="page-header">

@@ -2,6 +2,7 @@ import type {
     createdApplicationResponse,
     createApplicationDto,
     updateApplicationDto,
+    ApplicationDetailResponse
 } from "../types/application";
 
 const API_URL = "http://localhost:5158/api/application"
@@ -46,6 +47,25 @@ export async function updateApplication(id: number, applicationData: updateAppli
             }
         } catch {
             // Ignore JSON parse errors
+        }
+        throw new Error(errorMessage);
+    }
+
+    return await response.json();
+}
+
+export async function getApplicationById(id: number): Promise<ApplicationDetailResponse> {
+    const response: Response = await fetch(`${API_URL}/${id}`);
+
+    if (!response.ok) {
+        let errorMessage = "Fout bij het ophalen van de sollicitatie.";
+        try {
+            const errorData = await response.json();
+            if (errorData?.message) {
+                errorMessage = errorData.message;
+            }
+        } catch {
+            // ignore
         }
         throw new Error(errorMessage);
     }

@@ -1,10 +1,11 @@
-import type { 
-    ApplicationFormData, 
-    createApplicationDto, 
-    OverviewApplication, 
-    updateApplicationDto 
+import type {
+    ApplicationFormData,
+    createApplicationDto,
+    OverviewApplication,
+    updateApplicationDto,
+    ApplicationDetailResponse
 } from "../types/application";
-import type {ApplicationStatus, PriorityStatus} from "../types/common";
+import type { ApplicationStatus, PriorityStatus } from "../types/common";
 
 export const emptyFormData: ApplicationFormData = {
     companyName: "",
@@ -31,7 +32,7 @@ export function mapFormDataToCreateDto(data: ApplicationFormData): createApplica
         location: data.location?.trim() || null,
         status: (data.status.trim()) as ApplicationStatus,
         priority: (data.priority?.trim()) as PriorityStatus || null,
-        appliedDate: data.date ||  null,
+        appliedDate: data.date || null,
         nextStep: data.nextStep.trim() || null,
         salaryMin: data.salaryMin ? Number(data.salaryMin) : null,
         salaryMax: data.salaryMax ? Number(data.salaryMax) : null,
@@ -66,25 +67,26 @@ export function mapCreatedApplicationToOverviewItem(application: createApplicati
 }
 
 
-export function mapApplicationToFormData(application): ApplicationFormData {
+export function mapApplicationToFormData(
+    application: ApplicationDetailResponse | null): ApplicationFormData {
     if (!application) {
         return emptyFormData;
     }
 
     return {
-        companyName: application.bedrijf ?? "",
-        jobTitle: application.functie ?? application.jobTitle ?? "",
+        companyName: application.companyName ?? "",
+        jobTitle: application.jobTitle ?? "",
         jobUrl: application.jobUrl ?? "",
         status: application.status ?? "",
-        date: application.datum ?? application.appliedDate ?? "",
+        date: application.appliedDate ?? "",
         priority: application.priority ?? "",
-        location: application.locatie ?? application.location ?? "",
-        salaryMin: application.salarisMin?.toString() ?? application.salaryMin?.toString() ?? "",
-        salaryMax: application.salarisMax?.toString() ?? application.salaryMax?.toString() ?? "",
-        contactPerson: application.contactpersoon ?? application.contactPerson ?? "",
+        location: application.location ?? "",
+        salaryMin: application.salaryMin ?? "",
+        salaryMax: application.salaryMax ?? "",
+        contactPerson: application.contactPerson ?? "",
         contactEmail: application.contactEmail ?? "",
-        nextStep: application.volgendeStap ?? application.nextStep ?? "",
-        notes: application.beschrijving ?? application.omschrijving ?? "",
+        nextStep: application.nextStep ?? "",
+        notes: application.notes ?? "",
     };
 }
 

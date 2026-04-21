@@ -66,3 +66,20 @@ export interface updateApplicationDto {
     notes: string | null;
     nextStep: string | null;
 }
+
+export interface ApplicationDetailResponse {
+    id: number;
+    companyName: string;
+    jobTitle: string;
+    jobUrl: string | null;
+    status: ApplicationStatus;
+    appliedDate: string | null;
+    priority: PriorityStatus | null;
+    location: string | null;
+    salaryMin: number | null;
+    salaryMax: number | null;
+    notes: string | null;
+    contactPerson: string | null;
+    contactEmail: string | null;
+    nextStep: string | null;
+}

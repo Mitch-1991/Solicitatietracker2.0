@@ -7,7 +7,7 @@ import type {
 const API_URL = "http://localhost:5158/api/application"
 
 export async function createApplication(applicationData: createApplicationDto): Promise<createdApplicationResponse> {
-    const response = await fetch (API_URL, {
+    const response: Response = await fetch (API_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -29,7 +29,7 @@ export async function createApplication(applicationData: createApplicationDto): 
     return await response.json()
 }
 export async function updateApplication(id: number, applicationData: updateApplicationDto): Promise<createdApplicationResponse> {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response: Response = await fetch(`${API_URL}/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"

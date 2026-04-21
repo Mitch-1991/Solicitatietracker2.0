@@ -5,7 +5,17 @@ import {
   Clock,
 } from "lucide-react";
 
-export const MapKPIs = (data) => [
+import type {
+  DashboardKpiResponse,
+  DashboardOverviewItem,
+  DashboardOverviewResponse,
+  UpcomingInterviewResponse,
+  UpcomingInterview,
+  MappedKpi,
+} from "../types/dashboard"; 
+
+
+export const MapKPIs = (data: DashboardKpiResponse): MappedKpi[] => [
     {
       id: 1,
       label: "Lopende sollicitaties",
@@ -36,21 +46,21 @@ export const MapKPIs = (data) => [
     },
 ]
 
-export const MapOverview = (data = []) =>
-    data.map((item) => ({
+export const MapOverview = (data: DashboardOverviewResponse[] = []): DashboardOverviewItem[] =>
+    data.map((item: DashboardOverviewResponse): DashboardOverviewItem => ({
         id: item.id,
-        bedrijf: item.bedrijf,
-        functie: item.functie,
+        companyName: item.companyName,
+        jobTitle: item.jobTitle,
         status: item.status,
-        datum: item.appliedDate,
-        volgendeStap: item.nextStep,
+        appliedDate: item.appliedDate,
+        nextStep: item.nextStep,
     }))
 
-export const MapUpcomingInterviews = (data = []) =>
-    data.map((item) => ({
+export const MapUpcomingInterviews = (data: UpcomingInterviewResponse[] = []): UpcomingInterview[] =>
+    data.map((item: UpcomingInterviewResponse): UpcomingInterview => ({
         id:2,
-        bedrijf: item.bedrijf,
-        functie: item.functie,
-        datum: item.datum,
-        uur: item.uur,
+        companyName: item.companyName,
+        jobTitle: item.jobTitle,
+        interviewDate: item.interviewDate,
+        hour: item.hour,
     }))

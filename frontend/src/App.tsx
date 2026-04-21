@@ -1,11 +1,11 @@
-import Header from "./Components/Header"
-import Dashboard from "./pages/Dashboard"
-import SideBar from "./Components/SideBar"
+import Header from "./components/Header.tsx"
+// import Dashboard from "./pages/Dashboard.tsx"
+import SideBar from "./components/SideBar.tsx"
 import Application from "./pages/Application.tsx"
 import { useState, useEffect } from "react"
-import { MapOverview } from "./mappers/dashboardMappers.js"
-import { getDashboardOverview } from "./Services/dashboardService.js";
-import type { DashboardOverviewItem } from "./types/dashboard.js"
+import { MapOverview } from "./mappers/dashboardMappers.ts"
+import { getDashboardOverview } from "./services/dashboardService.ts"
+import type { DashboardOverviewItem } from "./types/dashboard.ts"
 
 
 

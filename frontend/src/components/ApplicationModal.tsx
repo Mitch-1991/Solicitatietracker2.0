@@ -1,27 +1,43 @@
-import { useEffect, useRef, useState } from "react";
-import { createApplication, updateApplication } from "../Services/SollicitatieService";
+import React, { useEffect, useRef, useState } from "react";
+import { createApplication, updateApplication } from "../services/applicationService.ts";
 import {
     emptyFormData,
     mapCreatedApplicationToOverviewItem,
     mapFormDataToCreateDto,
     mapFormDataToUpdateDto,
     mapApplicationToFormData,
-} from "../mappers/SollicitatieMappers";
+} from "../mappers/applicationMappers";
+import type { 
+    ApplicationDetailResponse, 
+    ApplicationFormData, 
+    createdApplicationResponse, 
+    updateApplicationDto ,
+    createApplicationDto
+} from "../types/application.ts";
+import type { DashboardOverviewItem } from "../types/dashboard.ts";
 
 
+type ApplicationModalProps = {
+    mode: "create" | "edit";
+    initialApplication: ApplicationDetailResponse | null;
+    onClose: () => void;
+    onCreated?: (createdOverviewItem: DashboardOverviewItem) => void;
+    onUpdated?: (updatedOverviewItem: DashboardOverviewItem) => void;
+};
+type ApplicationFormErrors = Partial<Record<keyof ApplicationFormData, string>>;
 
-export default function ApplicationModal(props) {
-    const formTopRef = useRef(null);
-    const isEditMode = props.mode === "edit";
-    const modalTitle = isEditMode ? "Sollicitatie bewerken" : "Nieuwe sollicitatie toevoegen";
-    const submitLabel = isEditMode ? "Wijzigingen opslaan" : "Opslaan";
-    const submittingLabel = isEditMode ? "Opslaan..." : "Verwerken...";
+export default function ApplicationModal(props: ApplicationModalProps) {
+    const formTopRef = useRef<HTMLDivElement | null>(null);
+    const isEditMode: boolean = props.mode === "edit";
+    const modalTitle: string = isEditMode ? "Sollicitatie bewerken" : "Nieuwe sollicitatie toevoegen";
+    const submitLabel: string = isEditMode ? "Wijzigingen opslaan" : "Opslaan";
+    const submittingLabel: string = isEditMode ? "Opslaan..." : "Verwerken...";
 
-    const [formData, setFormData] = useState(() => mapApplicationToFormData(props.initialApplication));
-    const [errors, setErrors] = useState({});
+    const [formData, setFormData] = useState<ApplicationFormData>(() => mapApplicationToFormData(props.initialApplication));
+    const [errors, setErrors] = useState<ApplicationFormErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [serverError, setServerError] = useState("");
-    const [createdApplication, setCreatedApplication] = useState(null);
+    const [createdApplication, setCreatedApplication] = useState<ApplicationFormData | null>(null);
 
     useEffect(() => {
         setFormData(mapApplicationToFormData(props.initialApplication));
@@ -31,7 +47,7 @@ export default function ApplicationModal(props) {
         setIsSubmitting(false);
     }, [props.initialApplication, props.mode]);
 
-    function handleChange(event) {
+    function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
         const { name, value } = event.target;
 
         setFormData((prevData) => ({
@@ -44,25 +60,25 @@ export default function ApplicationModal(props) {
             [name]: "",
         }));
     }
-    function validateForm() {
-        const newErrors = {};
+    function validateForm(): ApplicationFormErrors {
+        const newErrors: ApplicationFormErrors = {};
 
-        if (!formData.bedrijf.trim()) {
-            newErrors.bedrijf = "Bedrijf is verplicht.";
+        if (!formData.companyName.trim()) {
+            newErrors.companyName = "Bedrijf is verplicht.";
         }
 
-        if (!formData.functie.trim()) {
-            newErrors.functie = "Functie is verplicht.";
+        if (!formData.jobTitle.trim()) {
+            newErrors.jobTitle = "Functie is verplicht.";
         }
 
         if (!formData.status.trim()) {
             newErrors.status = "Status is verplicht.";
         }
 
-        if (!formData.datum.trim()) {
-            newErrors.datum = "Datum is verplicht.";
+        if (!formData.date?.trim()) {
+            newErrors.date = "Datum is verplicht.";
         }
-        if (formData.jobUrl.trim() && !isValidUrl(formData.jobUrl.trim())) {
+        if (formData.jobUrl?.trim() && !isValidUrl(formData.jobUrl.trim())) {
             newErrors.jobUrl = "Voer een geldige URL in.";
         }
         if (formData.contactEmail.trim() && !isValidEmail(formData.contactEmail.trim())) {
@@ -72,7 +88,7 @@ export default function ApplicationModal(props) {
         return newErrors;
     }
 
-    async function handleSubmit(event) {
+    async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
 
         const validationErrors = validateForm();
@@ -92,20 +108,23 @@ export default function ApplicationModal(props) {
             setErrors({});
 
             if (isEditMode) {
-                const applicationId = props.initialApplication.id
+                if (!props.initialApplication) {
+                    throw new Error("Ongeldige sollicitatie. Geen gegevens om te bewerken.")
+                }
+                const applicationId: number = props.initialApplication.id
 
                 if(!applicationId){
                     throw new Error("Ongeldige sollicitatie. ID ontbreekt.")
                 }
-                const dto = mapFormDataToUpdateDto(formData)
-                const updatedResult = await updateApplication(applicationId, dto)
+                const dto: updateApplicationDto = mapFormDataToUpdateDto(formData)
+                const updatedResult: createdApplicationResponse = await updateApplication(applicationId, dto)
 
-                const updatedApplicationForOverview = mapCreatedApplicationToOverviewItem({
+                const updatedApplicationForOverview: DashboardOverviewItem = mapCreatedApplicationToOverviewItem({
                     ...updatedResult,
                     appliedDate: updatedResult.appliedDate ?? dto.appliedDate,
                     nextStep: updatedResult.nextStep ?? dto.nextStep,
                 },
-                updatedResult.bedrijf ?? dto.bedrijf
+                updatedResult.companyName ?? dto.companyName
                 )
 
                 props.onUpdated?.(updatedApplicationForOverview)
@@ -113,24 +132,23 @@ export default function ApplicationModal(props) {
                 return;
             }
 
-            const dto = mapFormDataToCreateDto(formData)
-            const createdResult = await createApplication(dto)
-            const createdApplicationWithCompany = {
+            const dto: createApplicationDto = mapFormDataToCreateDto(formData)
+            const createdResult: createdApplicationResponse = await createApplication(dto)
+            const createdApplicationWithCompany: ApplicationFormData = mapApplicationToFormData({
                 ...createdResult,
-                bedrijf: dto.bedrijf,
+                companyName: createdResult.companyName ?? dto.companyName,
                 appliedDate: createdResult.appliedDate ?? dto.appliedDate,
                 nextStep: createdResult.nextStep ?? dto.nextStep,
-            };
+            }  
+        );
 
             setCreatedApplication(createdApplicationWithCompany)
 
             if (props.onCreated) {
-                props.onCreated(
-                    mapCreatedApplicationToOverviewItem(createdApplicationWithCompany, dto.bedrijf)
-                )
+                props.onCreated(mapCreatedApplicationToOverviewItem(createdResult, createdResult.companyName ?? dto.companyName));
             }
-        } catch (error) {
-            setServerError(error.message || "Er is een fout opgetreden bij het aanmaken van de sollicitatie.")
+        } catch (error: unknown) {
+            setServerError(error instanceof Error ? error.message : "Er is een fout opgetreden bij het aanmaken van de sollicitatie.")
 
             formTopRef.current?.scrollIntoView({
                 behavior: "smooth",
@@ -150,7 +168,7 @@ export default function ApplicationModal(props) {
         props.onClose();
     }
 
-    function isValidUrl(value) {
+    function isValidUrl(value: string): boolean {
         try {
             new URL(value);
             return true;
@@ -158,7 +176,7 @@ export default function ApplicationModal(props) {
             return false;
         }
     }
-    function isValidEmail(value) {
+    function isValidEmail(value: string): boolean {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     }
 
@@ -183,14 +201,13 @@ export default function ApplicationModal(props) {
 
                     <div className="application-modal-form">
                         <div className="application-modal-field application-modal-field-full">
-                            <p><strong>Bedrijf:</strong> {createdApplication.bedrijf}</p>
+                            <p><strong>Bedrijf:</strong> {createdApplication.companyName}</p>
                             <p><strong>Jobtitel:</strong> {createdApplication.jobTitle}</p>
                             <p><strong>Status:</strong> {createdApplication.status}</p>
                             <p><strong>Prioriteit:</strong> {createdApplication.priority || "-"}</p>
-                            <p><strong>Applied date:</strong> {createdApplication.appliedDate || "-"}</p>
+                            <p><strong>Applied date:</strong> {createdApplication.date || "-"}</p>
                             <p><strong>Volgende stap:</strong> {createdApplication.nextStep || "-"}</p>
-                            <p><strong>Aangemaakt op:</strong> {createdApplication.createdAt}</p>
-                            <p><strong>Updated op:</strong> {createdApplication.updatedAt}</p>
+
                         </div>
 
                         <div className="application-modal-footer">
@@ -234,23 +251,23 @@ export default function ApplicationModal(props) {
                             <label>Bedrijf *</label>
                             <input
                                 type="text"
-                                name="bedrijf"
-                                value={formData.bedrijf}
+                                name="companyName"
+                                value={formData.companyName}
                                 onChange={handleChange}
-                                className={errors.bedrijf ? "input-error" : ""}
+                                className={errors.companyName ? "input-error" : ""}
                             />
-                            {errors.bedrijf && <p className="field-error">{errors.bedrijf}</p>}
+                            {errors.companyName && <p className="field-error">{errors.companyName}</p>}
                         </div>
                         <div className="application-modal-field">
                             <label>Functie *</label>
                             <input
                                 type="text"
-                                name="functie"
-                                value={formData.functie}
+                                name="jobTitle"
+                                value={formData.jobTitle}
                                 onChange={handleChange}
-                                className={errors.functie ? "input-error" : ""}
+                                className={errors.jobTitle ? "input-error" : ""}
                             />
-                            {errors.functie && <p className="field-error">{errors.functie}</p>}
+                            {errors.jobTitle && <p className="field-error">{errors.jobTitle}</p>}
                         </div>
 
                         <div className="application-modal-field">
@@ -276,13 +293,13 @@ export default function ApplicationModal(props) {
                             <label>Datum *</label>
                             <input
                                 type="date"
-                                name="datum"
-                                defaultValue={Date.now}
-                                value={formData.datum}
+                                name="date"
+                                defaultValue={Date.now()}
+                                value={formData.date || ""}
                                 onChange={handleChange}
-                                className={errors.datum ? "input-error" : ""}
+                                className={errors.date ? "input-error" : ""}
                             />
-                            {errors.datum && <p className="field-error">{errors.datum}</p>}
+                            {errors.date && <p className="field-error">{errors.date}</p>}
                         </div>
 
                         <div className="application-modal-field">
@@ -290,7 +307,7 @@ export default function ApplicationModal(props) {
                             <input
                                 type="text"
                                 name="jobUrl"
-                                value={formData.jobUrl}
+                                value={formData.jobUrl || ""}
                                 onChange={handleChange}
 
                             />
@@ -301,8 +318,8 @@ export default function ApplicationModal(props) {
                             <label>Locatie</label>
                             <input
                                 type="text"
-                                name="locatie"
-                                value={formData.locatie}
+                                name="location"
+                                value={formData.location || ""}
                                 onChange={handleChange}
                             />
                         </div>
@@ -311,8 +328,8 @@ export default function ApplicationModal(props) {
                             <label>Salaris min</label>
                             <input
                                 type="text"
-                                name="salarisMin"
-                                value={formData.salarisMin}
+                                name="salaryMin"
+                                value={formData.salaryMin}
                                 onChange={handleChange}
                             />
                         </div>
@@ -320,8 +337,8 @@ export default function ApplicationModal(props) {
                             <label>Salaris max</label>
                             <input
                                 type="text"
-                                name="salarisMax"
-                                value={formData.salarisMax}
+                                name="salaryMax"
+                                value={formData.salaryMax}
                                 onChange={handleChange}
                             />
                         </div>
@@ -339,35 +356,14 @@ export default function ApplicationModal(props) {
                                 <option value="laag">Laag</option>
                             </select>
                         </div>
-
-                        {/* <div className="application-modal-field">
-                            <label>Contactpersoon</label>
-                            <input
-                                type="text"
-                                name="contactpersoon"
-                                value={formData.contactpersoon}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="application-modal-field">
-                            <label>Contact e-mail</label>
-                            <input
-                                type="email"
-                                name="contactEmail"
-                                value={formData.contactEmail}
-                                onChange={handleChange}
-                            />
-                            {errors.contactEmail && <p className="field-error">{errors.contactEmail}</p>}
-                        </div> */}
                     </div>
 
                     <div className="application-modal-field application-modal-field-full">
                         <label>Volgende stap</label>
                         <input
                             type="text"
-                            name="volgendeStap"
-                            value={formData.volgendeStap}
+                            name="nextStep"
+                            value={formData.nextStep}
                             onChange={handleChange}
                             placeholder="bijv. Wachten op reactie"
                         />
@@ -376,10 +372,10 @@ export default function ApplicationModal(props) {
                     <div className="application-modal-field application-modal-field-full">
                         <label>Beschrijving</label>
                         <textarea
-                            name="beschrijving"
-                            value={formData.beschrijving}
+                            name="notes"
+                            value={formData.notes}
                             onChange={handleChange}
-                            rows="4"
+                            rows={4}
                         />
                     </div>
 

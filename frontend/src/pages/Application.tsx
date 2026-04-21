@@ -76,7 +76,7 @@ export default function Application(props: ApplicationProps): JSX.Element {
 
                 {showModal && <ApplicationModal
                     mode={selectedApplication ? "edit" : "create"}
-                    initialApplication={selectedApplication}
+                    initialApplication={selectedApplication as ApplicationDetailResponse | null}
                     onClose={handleCloseModal}
                     onCreated={(createdApplication: DashboardOverviewItem) => {
                         props.setOverview((prev: DashboardOverviewItem[]) => [createdApplication, ...prev]);

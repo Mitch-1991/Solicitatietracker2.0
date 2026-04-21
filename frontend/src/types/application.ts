@@ -35,11 +35,15 @@ export interface createdApplicationResponse {
     id: number;
     companyName: string;
     jobTitle: string;
+    jobUrl: string | null;
     status: ApplicationStatus;
+    location: string | null;
     appliedDate: string | null;
     priority: PriorityStatus | null;
     salaryMin: number | null;
     salaryMax: number | null;
+    contactPerson: string | null;
+    contactEmail: string | null;
     notes: string | null;
     nextStep: string | null;
 }

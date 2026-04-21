@@ -2,7 +2,8 @@ import type {
     ApplicationFormData,
     createApplicationDto,
     updateApplicationDto,
-    ApplicationDetailResponse
+    ApplicationDetailResponse,
+    createdApplicationResponse
 } from "../types/application";
 import type { ApplicationStatus, PriorityStatus } from "../types/common";
 import type { DashboardOverviewItem } from "../types/dashboard";
@@ -55,9 +56,9 @@ export function mapFormDataToUpdateDto(data: ApplicationFormData): updateApplica
     };
 }
 
-export function mapCreatedApplicationToOverviewItem(application: createApplicationDto, companyName: string): DashboardOverviewItem {
+export function mapCreatedApplicationToOverviewItem(application: createdApplicationResponse, companyName: string): DashboardOverviewItem {
     return {
-        id: application.userId,
+        id: application.id,
         companyName: companyName.trim(),
         jobTitle: application.jobTitle,
         status: application.status,
@@ -68,7 +69,7 @@ export function mapCreatedApplicationToOverviewItem(application: createApplicati
 
 
 export function mapApplicationToFormData(
-    application: ApplicationDetailResponse | null): ApplicationFormData {
+    application: ApplicationDetailResponse | createdApplicationResponse | null): ApplicationFormData {
     if (!application) {
         return emptyFormData;
     }

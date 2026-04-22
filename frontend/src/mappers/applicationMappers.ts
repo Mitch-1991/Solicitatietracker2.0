@@ -23,6 +23,7 @@ export const emptyFormData: ApplicationFormData = {
     contactEmail: "",
     nextStep: "",
     notes: "",
+    websiteURL: "",
 };
 
 export function mapFormDataToCreateDto(data: ApplicationFormData): createApplicationDto {
@@ -93,6 +94,7 @@ export function mapApplicationToFormData(
         contactEmail: application.contactEmail ?? "",
         nextStep: application.nextStep ?? "",
         notes: application.notes ?? "",
+        websiteURL: "",
     };
 }
 

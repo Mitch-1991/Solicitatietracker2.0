@@ -408,7 +408,8 @@ body {
 }
 
 .application-modal-field-full{
-    margin-top: 16px;
+    grid-column: 1 / -1;
+    margin-top: 0;
 }
 
 .application-modal-field label{
@@ -471,6 +472,7 @@ body {
 }
 
 .application-modal-footer{
+    grid-column: 1 / -1;
     margin: 26px -24px -24px;
     padding: 20px 24px;
     border-top: 1px solid #dbe4f0;
@@ -964,7 +966,8 @@ body {
     }
 
     .application-modal-field-full{
-        margin-top: 14px;
+        grid-column: auto;
+        margin-top: 0;
     }
 
     .application-modal-footer{

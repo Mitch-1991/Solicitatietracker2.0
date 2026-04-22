@@ -7,6 +7,13 @@ type DummySollicitatie = {
     uur: string;
 }
 
+export type DummyCompany = {
+    id: number;
+    companyName: string;
+    websiteURL: string;
+    location: string;
+}
+
 export const Sollicitaties: DummySollicitatie[] = [
     {
         id:2,
@@ -23,5 +30,20 @@ export const Sollicitaties: DummySollicitatie[] = [
         status: "Verzonden",
         datum: "18 mrt 2026",
         uur: "10:30"
+    }
+]
+
+export const Companies: DummyCompany[] = [
+    {
+        id: 1,
+        companyName: "TechCorp",
+        websiteURL: "https://www.techcorp.com",
+        location: "Antwerpen"
+    },
+    {
+        id: 2,
+        companyName: "InnovativeHub",
+        websiteURL: "https://www.innovativehub.com",
+        location: "Brussel"
     }
 ]

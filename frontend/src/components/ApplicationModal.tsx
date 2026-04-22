@@ -7,38 +7,77 @@ import {
     mapFormDataToUpdateDto,
     mapApplicationToFormData,
 } from "../mappers/applicationMappers";
-import type { 
-    ApplicationDetailResponse, 
-    ApplicationFormData, 
-    createdApplicationResponse, 
-    updateApplicationDto ,
+import type {
+    ApplicationDetailResponse,
+    ApplicationFormData,
+    createdApplicationResponse,
+    updateApplicationDto,
     createApplicationDto
 } from "../types/application.ts";
+import { Companies } from "../dummy.ts";
+import type { DummyCompany } from "../dummy.ts";
+
+
 import type { DashboardOverviewItem } from "../types/dashboard.ts";
 
 
 type ApplicationModalProps = {
     mode: "create" | "edit";
     initialApplication: ApplicationDetailResponse | null;
-    onClose: () => void; 
+    onClose: () => void;
     onCreated?: (createdOverviewItem: DashboardOverviewItem) => void;
     onUpdated?: (updatedOverviewItem: DashboardOverviewItem) => void;
 };
 type ApplicationFormErrors = Partial<Record<keyof ApplicationFormData, string>>;
 
 export default function ApplicationModal(props: ApplicationModalProps) {
-    const formTopRef = useRef<HTMLDivElement | null>(null);
-    const isEditMode: boolean = props.mode === "edit";
-    const modalTitle: string = isEditMode ? "Sollicitatie bewerken" : "Nieuwe sollicitatie toevoegen";
-    const submitLabel: string = isEditMode ? "Wijzigingen opslaan" : "Opslaan";
-    const submittingLabel: string = isEditMode ? "Opslaan..." : "Verwerken...";
 
     const [formData, setFormData] = useState<ApplicationFormData>(() => mapApplicationToFormData(props.initialApplication));
     const [errors, setErrors] = useState<ApplicationFormErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [serverError, setServerError] = useState("");
     const [createdApplication, setCreatedApplication] = useState<ApplicationFormData | null>(null);
+    const [selectedCompany, setSelectedCompany] = useState<string>("");
 
+    const formTopRef = useRef<HTMLDivElement | null>(null);
+    const isEditMode: boolean = props.mode === "edit";
+    const modalTitle: string = isEditMode ? "Sollicitatie bewerken" : "Nieuwe sollicitatie toevoegen";
+    const submitLabel: string = isEditMode ? "Wijzigingen opslaan" : "Opslaan";
+    const submittingLabel: string = isEditMode ? "Opslaan..." : "Verwerken...";
+    const isNewCompany: boolean = selectedCompany === "new";
+    const companies: DummyCompany[] = Companies;
+    const showReadonlyCompanyFields: boolean = selectedCompany !== "" && !isNewCompany && !isEditMode;
+    const showEditableCompanyFields: boolean = isEditMode || isNewCompany;
+
+
+    function handleCompanyChange(event: React.ChangeEvent<HTMLSelectElement>) {
+        const value = event.target.value;
+        setSelectedCompany(value);
+
+        if (value == "" || value === "new") {
+            setFormData((prevData) => ({
+                ...prevData,
+                companyName: "",
+                location: "",
+                websiteURL: "",
+            }))
+            return;
+        }
+        const selectedCompanyData = companies.find((company) => String(company.id) === value);
+        if (!selectedCompanyData) {
+            return;
+        }
+        setFormData((prevData) => ({
+            ...prevData,
+            companyName: selectedCompanyData.companyName ?? "",
+            location: selectedCompanyData.location ?? "",
+            websiteURL: selectedCompanyData.websiteURL ?? "",
+        }));
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            companyName: "",
+        }));
+    }
 
     function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
         const { name, value } = event.target;
@@ -106,7 +145,7 @@ export default function ApplicationModal(props: ApplicationModalProps) {
                 }
                 const applicationId: number = props.initialApplication.id
 
-                if(!applicationId){
+                if (!applicationId) {
                     throw new Error("Ongeldige sollicitatie. ID ontbreekt.")
                 }
                 const dto: updateApplicationDto = mapFormDataToUpdateDto(formData)
@@ -117,7 +156,7 @@ export default function ApplicationModal(props: ApplicationModalProps) {
                     appliedDate: updatedResult.appliedDate ?? dto.appliedDate,
                     nextStep: updatedResult.nextStep ?? dto.nextStep,
                 },
-                updatedResult.companyName ?? dto.companyName
+                    updatedResult.companyName ?? dto.companyName
                 )
 
                 props.onUpdated?.(updatedApplicationForOverview)
@@ -132,8 +171,8 @@ export default function ApplicationModal(props: ApplicationModalProps) {
                 companyName: createdResult.companyName ?? dto.companyName,
                 appliedDate: createdResult.appliedDate ?? dto.appliedDate,
                 nextStep: createdResult.nextStep ?? dto.nextStep,
-            }  
-        );
+            }
+            );
 
             setCreatedApplication(createdApplicationWithCompany)
 
@@ -242,15 +281,23 @@ export default function ApplicationModal(props: ApplicationModalProps) {
                     <div className="application-modal-grid">
                         <div className="application-modal-field">
                             <label>Bedrijf *</label>
-                            <input
-                                type="text"
-                                name="companyName"
-                                value={formData.companyName}
-                                onChange={handleChange}
+                            <select
+                                name="selectedCompany"
+                                value={selectedCompany}
+                                onChange={handleCompanyChange}
                                 className={errors.companyName ? "input-error" : ""}
-                            />
+                            >
+                                <option value="">Selecteer bedrijf</option>
+                                <option value="new">Nieuw bedrijf</option>
+                                {companies.map((company) => (
+                                    <option key={company.id} value={String(company.id)}>
+                                        {company.companyName}
+                                    </option>
+                                ))}
+                            </select>
                             {errors.companyName && <p className="field-error">{errors.companyName}</p>}
                         </div>
+
                         <div className="application-modal-field">
                             <label>Functie *</label>
                             <input
@@ -262,6 +309,63 @@ export default function ApplicationModal(props: ApplicationModalProps) {
                             />
                             {errors.jobTitle && <p className="field-error">{errors.jobTitle}</p>}
                         </div>
+
+                        {showReadonlyCompanyFields && (
+                            <>
+                                <div className="application-modal-field">
+                                    <label>Bedrijfsnaam</label>
+                                    <input type="text" value={formData.companyName} readOnly />
+                                </div>
+
+                                <div className="application-modal-field">
+                                    <label>Website URL</label>
+                                    <input type="text" value={formData.websiteURL || ""} readOnly />
+                                </div>
+
+                                <div className="application-modal-field">
+                                    <label>Locatie</label>
+                                    <input type="text" value={formData.location || ""} readOnly />
+                                </div>
+                            </>
+                        )}
+
+                        {showEditableCompanyFields && (
+                            <>
+                                <div className="application-modal-field">
+                                    <label>Bedrijfsnaam</label>
+                                    <input
+                                        type="text"
+                                        name="companyName"
+                                        value={formData.companyName}
+                                        onChange={handleChange}
+                                        className={errors.companyName ? "input-error" : ""}
+                                    />
+                                    {errors.companyName && <p className="field-error">{errors.companyName}</p>}
+                                </div>
+
+                                <div className="application-modal-field">
+                                    <label>Website URL</label>
+                                    <input
+                                        type="text"
+                                        name="websiteURL"
+                                        value={formData.websiteURL || ""}
+                                        onChange={handleChange}
+                                        className={errors.websiteURL ? "input-error" : ""}
+                                    />
+                                    {errors.websiteURL && <p className="field-error">{errors.websiteURL}</p>}
+                                </div>
+
+                                <div className="application-modal-field">
+                                    <label>Locatie</label>
+                                    <input
+                                        type="text"
+                                        name="location"
+                                        value={formData.location || ""}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </>
+                        )}
 
                         <div className="application-modal-field">
                             <label>Status *</label>
@@ -295,6 +399,7 @@ export default function ApplicationModal(props: ApplicationModalProps) {
                             {errors.date && <p className="field-error">{errors.date}</p>}
                         </div>
 
+
                         <div className="application-modal-field">
                             <label>Job URL</label>
                             <input
@@ -307,15 +412,6 @@ export default function ApplicationModal(props: ApplicationModalProps) {
                             {errors.jobUrl && <p className="field-error">{errors.jobUrl}</p>}
                         </div>
 
-                        <div className="application-modal-field">
-                            <label>Locatie</label>
-                            <input
-                                type="text"
-                                name="location"
-                                value={formData.location || ""}
-                                onChange={handleChange}
-                            />
-                        </div>
 
                         <div className="application-modal-field">
                             <label>Salaris min</label>
@@ -349,44 +445,44 @@ export default function ApplicationModal(props: ApplicationModalProps) {
                                 <option value="laag">Laag</option>
                             </select>
                         </div>
-                    </div>
 
-                    <div className="application-modal-field application-modal-field-full">
-                        <label>Volgende stap</label>
-                        <input
-                            type="text"
-                            name="nextStep"
-                            value={formData.nextStep}
-                            onChange={handleChange}
-                            placeholder="bijv. Wachten op reactie"
-                        />
-                    </div>
+                        <div className="application-modal-field application-modal-field-full">
+                            <label>Volgende stap</label>
+                            <input
+                                type="text"
+                                name="nextStep"
+                                value={formData.nextStep}
+                                onChange={handleChange}
+                                placeholder="bijv. Wachten op reactie"
+                            />
+                        </div>
 
-                    <div className="application-modal-field application-modal-field-full">
-                        <label>Beschrijving</label>
-                        <textarea
-                            name="notes"
-                            value={formData.notes}
-                            onChange={handleChange}
-                            rows={4}
-                        />
-                    </div>
+                        <div className="application-modal-field application-modal-field-full">
+                            <label>Beschrijving</label>
+                            <textarea
+                                name="notes"
+                                value={formData.notes}
+                                onChange={handleChange}
+                                rows={4}
+                            />
+                        </div>
 
-                    <div className="application-modal-footer">
-                        <button
-                            type="button"
-                            className="application-modal-button application-modal-button-secondary"
-                            onClick={handleClose}
-                        >
-                            Annuleren
-                        </button>
-                        <button
-                            type="submit"
-                            className="application-modal-button application-modal-button-primary"
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ? submittingLabel : submitLabel}
-                        </button>
+                        <div className="application-modal-footer">
+                            <button
+                                type="button"
+                                className="application-modal-button application-modal-button-secondary"
+                                onClick={handleClose}
+                            >
+                                Annuleren
+                            </button>
+                            <button
+                                type="submit"
+                                className="application-modal-button application-modal-button-primary"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? submittingLabel : submitLabel}
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -14,6 +14,7 @@ export interface ApplicationFormData {
     contactPerson: string;
     contactEmail: string;
     nextStep: string;
+    websiteURL: string | null;
 }
 
 export interface createApplicationDto {

@@ -1,11 +1,13 @@
 import Header from "./components/Header.tsx"
 import Dashboard from "./pages/Dashboard.tsx"
 import SideBar from "./components/SideBar.tsx"
-// import Application from "./pages/Application.tsx"
+import Application from "./pages/Application.tsx"
 import { useState, useEffect } from "react"
 import { MapOverview } from "./mappers/dashboardMappers.ts"
 import { getDashboardOverview } from "./services/dashboardService.ts"
-import type { DashboardOverviewItem } from "./types/dashboard.ts"
+import {Routes, Route, Navigate} from "react-router-dom"
+
+import type { DashboardOverviewItem, DashboardOverviewResponse } from "./types/dashboard.ts"
 
 
 
@@ -16,8 +18,8 @@ export default function App() {
 
   useEffect(() => {
     const fetchOverview = async (): Promise<void> => {
-      const data = await getDashboardOverview()
-      const mappedOverview = MapOverview(data)
+      const data: DashboardOverviewResponse[] = await getDashboardOverview()
+      const mappedOverview: DashboardOverviewItem[] = MapOverview(data)
       setOverview(mappedOverview)
     };
     fetchOverview()
@@ -28,8 +30,13 @@ export default function App() {
       <Header />
       <section className="main-content">
         <SideBar />
-       {/* <Application overview={overview} setOverview={setOverview} /> */}
-        <Dashboard overview={overview} /> 
+
+        <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" replace/>} />
+          <Route path="/dashboard" element={<Dashboard overview={overview} />} />
+          <Route path="/applications" element={<Application overview={overview} setOverview={setOverview}/>} />
+        </Routes>
+
       </section>
     </>
 

@@ -3,6 +3,8 @@ import {
     FileText
 
 } from "lucide-react";
+import { NavLink } from "react-router-dom";
+
 import type { LucideIcon } from "lucide-react";
 import type {JSX} from "react";
 
@@ -10,7 +12,7 @@ type NavigationItem = {
     id: string;
     label: string;
     icon: LucideIcon;
-    active: boolean;
+    to: string;
 };
 
 const navigationItems: NavigationItem[] = [
@@ -18,13 +20,13 @@ const navigationItems: NavigationItem[] = [
         id: "dashboard",
         label: "Dashboard",
         icon: LayoutDashboard,
-        active: true,
+        to: "/dashboard",
     },
     {
-        id: "sollicitaties",
+        id: "applications",
         label: "Sollicitaties",
         icon: FileText,
-        active: true,
+        to: "/applications",
     }
 ];
 
@@ -34,15 +36,15 @@ export default function SideBar(): JSX.Element {
 
         return (
             <li key={item.id} className="sidebar-nav-item">
-                <button
-                    type="button"
-                    className={`sidebar-nav-link${item.active ? " active" : ""}`}
+                <NavLink
+                    to={item.to}
+                    className={({ isActive }) => `sidebar-nav-link ${isActive ? "active" : ""}`}
                 >
                     <span className="sidebar-nav-icon">
                         <Icon />
                     </span>
                     <span className="sidebar-nav-label">{item.label}</span>
-                </button>
+                </NavLink>
             </li>
         );
     });

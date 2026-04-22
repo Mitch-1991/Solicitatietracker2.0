@@ -128,21 +128,21 @@ body {
 
 .header-container{
     background-color: #ffffff;
-    height: 72px;
+    height: 68px;
     width: 100%;
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 0 20px 0 22px;
+    padding: 0 20px;
     border-bottom: 1px solid #d9e3f0;
     box-shadow: 0 1px 0 rgba(15, 23, 42, 0.03);
 }
 
 .header-logo{
     flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     background: linear-gradient(180deg, #6d5efc 0%, #4f46e5 100%);
     box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
     display: inline-flex;
@@ -151,14 +151,14 @@ body {
 }
 
 .header-logo svg{
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     color: #ffffff;
 }
 
 .header-container > h1{
     margin: 0;
-    font-size: 1.9rem;
+    font-size: 1.75rem;
     font-weight: 800;
     letter-spacing: -0.03em;
     color: #172036;
@@ -166,15 +166,15 @@ body {
 
 .main-content{
     display: flex;
-    min-height: calc(100vh - 72px);
+    min-height: calc(100vh - 68px);
 }
 
 .sidebar-container{
     background-color: #ffffff;
-    width: 280px;
-    min-height: calc(100vh - 72px);
+    width: 248px;
+    min-height: calc(100vh - 68px);
     flex-shrink: 0;
-    padding: 28px 14px 24px;
+    padding: 18px 12px 20px;
     border-right: 1px solid #dbe4f0;
 }
 
@@ -187,7 +187,7 @@ body {
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 8px;
+    gap: 4px;
 }
 
 .sidebar-nav-item{
@@ -198,14 +198,14 @@ body {
     width: 100%;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     border: 1px solid transparent;
-    border-radius: 14px;
+    border-radius: 12px;
     background-color: transparent;
     color: #41506a;
-    padding: 12px 14px;
+    padding: 10px 12px;
     font: inherit;
-    font-size: 1.08rem;
+    font-size: 0.98rem;
     font-weight: 600;
     text-align: left;
     cursor: pointer;
@@ -231,8 +231,8 @@ body {
 }
 
 .sidebar-nav-icon{
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
     flex-shrink: 0;
     display: inline-flex;
     align-items: center;
@@ -241,8 +241,8 @@ body {
 }
 
 .sidebar-nav-icon svg{
-    width: 19px;
-    height: 19px;
+    width: 16px;
+    height: 16px;
     stroke-width: 2.1;
 }
 
@@ -254,21 +254,24 @@ body {
 .dashboard-container{
     flex: 1;
     min-width: 0;
-    padding: 32px 24px 40px;
+    width: min(100%, 1260px);
+    margin: 0 auto;
+    padding: 22px 24px 32px;
+    text-align: left;
     overflow-x: hidden;
 }
 
 .dashboard-title{
     margin: 0;
-    font-size: 3rem;
-    line-height: 1.05;
+    font-size: 2.35rem;
+    line-height: 1.08;
     font-weight: 800;
     color: #16213b;
 }
 
 .dashboard-subtitle{
-    margin: 8px 0 32px;
-    font-size: 1.45rem;
+    margin: 6px 0 22px;
+    font-size: 1rem;
     color: #52627d;
 }
 
@@ -529,22 +532,22 @@ body {
 
 .kpi-container{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px;
     width: 100%;
 }
 
 .kpi-card{
     width: 100%;
-    min-height: 108px;
+    min-height: 78px;
     background-color: #FFFFFF;
     border: 1px solid #d6dfec;
-    border-radius: 18px;
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+    border-radius: 16px;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 22px 24px;
+    padding: 16px 18px;
 }
 
 .kpi-card .kpi-label,
@@ -554,12 +557,12 @@ body {
 
 .kpi-label{
     color: #52627d;
-    margin: 0 0 6px;
-    font-size: 1.2rem;
+    margin: 0 0 4px;
+    font-size: 0.96rem;
 }
 
 .kpi-waarde{
-    font-size: 3rem;
+    font-size: 2.15rem;
     line-height: 1;
     margin: 0;
     font-weight: 800;
@@ -567,9 +570,9 @@ body {
 }
 
 .kpi-icon{
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
     color: white;
     display: inline-flex;
     align-items: center;
@@ -578,33 +581,34 @@ body {
 }
 
 .kpi-icon svg{
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
 }
 
 .display-bord{
-    margin-top: 28px;
+    margin-top: 20px;
     display: flex;
-    gap: 25px;
-    align-items: stretch;
+    gap: 16px;
+    align-items: flex-start;
 }
 
 .applicationsTable-container{
     background-color: white;
     flex: 1 1 0;
-    border-radius: 20px;
+    border-radius: 16px;
     border: 1px solid #d6dfec;
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
     overflow: hidden;
 }
 
 .applicationsTable-title{
     margin: 0;
-    padding: 22px 24px 18px;
+    padding: 16px 18px 14px;
     color: #16213b;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 800;
     border-bottom: 1px solid #dbe4f0;
+    text-align: left;
 }
 
 .applications-table{
@@ -618,19 +622,19 @@ body {
 }
 
 .applications-table th{
-    padding: 14px 24px 13px;
+    padding: 12px 18px 11px;
     text-align: left;
-    font-size: 0.85rem;
+    font-size: 0.76rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     color: #52627d;
     border-bottom: 1px solid #dbe4f0;
 }
 
 .applications-table td{
-    padding: 18px 24px;
-    font-size: 1.08rem;
+    padding: 14px 18px;
+    font-size: 0.98rem;
     color: #41506a;
     border-bottom: 1px solid #dbe4f0;
     vertical-align: middle;
@@ -682,19 +686,19 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding: 18px 24px 22px;
+    padding: 14px 18px 16px;
     border-top: 1px solid #dbe4f0;
     background: linear-gradient(180deg, #fbfcfe 0%, #f4f7fb 100%);
 }
 
 .applications-pagination-button{
-    min-width: 108px;
+    min-width: 94px;
     border: 1px solid #c9d6e8;
-    border-radius: 12px;
+    border-radius: 11px;
     background-color: #ffffff;
     color: #172036;
-    padding: 10px 16px;
-    font-size: 0.95rem;
+    padding: 9px 14px;
+    font-size: 0.9rem;
     font-weight: 700;
     line-height: 1;
     cursor: pointer;
@@ -725,58 +729,61 @@ body {
 
 .applications-pagination-status{
     color: #52627d;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 700;
     text-align: center;
 }
 
 .upcoming-interviews-panel{
-    width: min(360px, 100%);
-    flex: 0 0 360px;
+    width: min(312px, 100%);
+    flex: 0 0 312px;
     background-color: #ffffff;
     border: 1px solid #d6dfec;
-    border-radius: 20px;
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+    border-radius: 16px;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
     overflow: hidden;
     align-self: stretch;
 }
 
 .upcoming-interviews-title{
     margin: 0;
-    padding: 22px 24px 18px;
+    padding: 16px 18px 14px;
     color: #16213b;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 800;
     border-bottom: 1px solid #dbe4f0;
+    text-align: left;
 }
 
 .upcoming-interviews-list{
     list-style: none;
     margin: 0;
-    padding: 16px;
+    padding: 12px;
     display: grid;
-    gap: 16px;
+    gap: 12px;
 }
 
 .upcoming-interview-card{
     border: 1px solid #dbe4f0;
-    border-radius: 14px;
+    border-radius: 12px;
     background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
-    padding: 16px;
+    padding: 14px;
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
 }
 
 .upcoming-interview-company{
     margin: 0;
-    font-size: 1.05rem;
+    font-size: 0.98rem;
     font-weight: 800;
     color: #172036;
+    text-align: left;
 }
 
 .upcoming-interview-role{
-    margin: 8px 0 14px;
-    font-size: 0.98rem;
+    margin: 6px 0 10px;
+    font-size: 0.9rem;
     color: #5c6f8c;
+    text-align: left;
 }
 
 .upcoming-interview-detail{
@@ -791,7 +798,7 @@ body {
 }
 
 .upcoming-interview-detail-label{
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -799,7 +806,7 @@ body {
 }
 
 .upcoming-interview-detail-value{
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: #4b6284;
 }
@@ -808,10 +815,10 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 74px;
-    padding: 6px 12px;
+    min-width: 68px;
+    padding: 5px 10px;
     border-radius: 999px;
-    font-size: 0.95rem;
+    font-size: 0.82rem;
     font-weight: 700;
     line-height: 1;
 }
@@ -837,12 +844,12 @@ body {
     }
 
     .dashboard-title{
-        font-size: 2.4rem;
+        font-size: 2rem;
     }
 
     .dashboard-subtitle{
-        font-size: 1.1rem;
-        margin-bottom: 24px;
+        font-size: 0.98rem;
+        margin-bottom: 20px;
     }
 
     .page-header{
@@ -893,7 +900,7 @@ body {
     }
 
     .upcoming-interviews-list{
-        padding: 16px;
+        padding: 14px;
     }
 }
 

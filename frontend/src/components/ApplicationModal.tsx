@@ -20,7 +20,7 @@ import type { DashboardOverviewItem } from "../types/dashboard.ts";
 type ApplicationModalProps = {
     mode: "create" | "edit";
     initialApplication: ApplicationDetailResponse | null;
-    onClose: () => void;
+    onClose: () => void; 
     onCreated?: (createdOverviewItem: DashboardOverviewItem) => void;
     onUpdated?: (updatedOverviewItem: DashboardOverviewItem) => void;
 };

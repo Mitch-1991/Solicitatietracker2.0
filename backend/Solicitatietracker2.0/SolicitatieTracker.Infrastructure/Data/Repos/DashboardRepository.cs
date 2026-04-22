@@ -45,12 +45,12 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
 
         public async Task<int> GetGesprekkenGeplandCountAsync()
         {
-            return await _context.Interviews.CountAsync(i => i.ScheduledStart > DateTime.Now);
+            return await _context.Applications.CountAsync(a => a.Status == Status.Gesprek);
         }
 
         public async Task<int> GetLopendeSollicitatiesCountAsync()
         {
-            return await _context.Applications.CountAsync(a => a.Status != Status.Afgewezen && a.Status != Status.Aanbieding);
+            return await _context.Applications.CountAsync(a => a.Status == Status.Verzonden);
         }
     }
 }

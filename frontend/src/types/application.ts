@@ -1,4 +1,4 @@
-import type { ApplicationStatus, PriorityStatus } from "./common";
+import type { ApiApplicationStatus, ApplicationStatus, PriorityStatus } from "./common";
 
 export interface ApplicationFormData {
     companyName: string;
@@ -21,7 +21,7 @@ export interface createApplicationDto {
     companyName: string;
     jobTitle: string;
     jobUrl: string | null;
-    status: ApplicationStatus;
+    status: ApiApplicationStatus;
     appliedDate: string | null;
     priority: PriorityStatus | null;
     location: string | null;
@@ -52,7 +52,7 @@ export interface updateApplicationDto {
     companyName: string;
     jobTitle: string;
     jobUrl: string | null;
-    status: ApplicationStatus;
+    status: ApiApplicationStatus;
     appliedDate: string | null;
     priority: PriorityStatus | null;
     location: string | null;

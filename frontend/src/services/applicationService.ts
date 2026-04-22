@@ -7,6 +7,96 @@ import type {
 
 const API_URL = "http://localhost:5158/api/application"
 
+function normalizeValidationMessage(field: string, message: string): string | null {
+    const trimmedMessage = message.trim()
+
+    if (!trimmedMessage) {
+        return null
+    }
+
+    if (field === "createApplicationDto" && trimmedMessage.includes("field is required")) {
+        return null
+    }
+
+    if (field === "$.status" && trimmedMessage.includes("could not be converted to Status")) {
+        return "Status heeft een ongeldige waarde."
+    }
+
+    return trimmedMessage
+}
+
+function extractErrorMessage(errorData: unknown): string | null {
+    if (!errorData || typeof errorData !== "object") {
+        return null
+    }
+
+    if ("message" in errorData && typeof errorData.message === "string" && errorData.message.trim()) {
+        return errorData.message
+    }
+
+    if ("errors" in errorData && errorData.errors && typeof errorData.errors === "object") {
+        const messages = Object.entries(errorData.errors)
+            .flatMap(([field, value]) => {
+                if (!Array.isArray(value)) {
+                    return []
+                }
+
+                return value
+                    .filter((item): item is string => typeof item === "string")
+                    .map((item) => normalizeValidationMessage(field, item))
+                    .filter((item): item is string => Boolean(item))
+            })
+
+        const uniqueMessages = [...new Set(messages)]
+
+        if (uniqueMessages.length > 0) {
+            return uniqueMessages.join(" ")
+        }
+    }
+
+    if ("title" in errorData && typeof errorData.title === "string" && errorData.title.trim()) {
+        return errorData.title
+    }
+
+    return null
+}
+
+async function readErrorMessage(response: Response, fallbackMessage: string): Promise<string> {
+    try {
+        const contentType = response.headers.get("content-type") ?? ""
+
+        if (contentType.includes("json")) {
+            const errorData = await response.json()
+            const parsedMessage = extractErrorMessage(errorData)
+            if (parsedMessage) {
+                return parsedMessage
+            }
+        }
+
+        const errorText = await response.text()
+        if (errorText.trim().startsWith("{")) {
+            try {
+                const errorData = JSON.parse(errorText)
+                const parsedMessage = extractErrorMessage(errorData)
+
+                if (parsedMessage) {
+                    return parsedMessage
+                }
+            } catch {
+                // Ignore invalid JSON in text responses.
+            }
+        }
+
+        if (errorText.trim()) {
+            return errorText
+        }
+    } catch {
+        // Ignore parsing errors and fall back to the default message.
+    }
+
+    return fallbackMessage
+}
+
 export async function createApplication(applicationData: createApplicationDto): Promise<createdApplicationResponse> {
     const response: Response = await fetch (API_URL, {
         method: "POST",
@@ -16,15 +106,7 @@ export async function createApplication(applicationData: createApplicationDto): 
         body: JSON.stringify(applicationData)
     })
     if(!response.ok) {
-        let errorMessage: string = "Fout bij het aanmaken van de sollicitatie."
-        try{
-            const errorData = await response.json()
-            if(errorData?.message) {
-                errorMessage = errorData.message
-            }
-        } catch {
-            // Ignore JSON parse errors
-        }
+        const errorMessage = await readErrorMessage(response, "Fout bij het aanmaken van de sollicitatie.")
         throw new Error(errorMessage)
     }
     return await response.json()
@@ -39,15 +121,7 @@ export async function updateApplication(id: number, applicationData: updateAppli
     });
 
     if (!response.ok) {
-        let errorMessage: string = "Fout bij het bewerken van de sollicitatie.";
-        try {
-            const errorData = await response.json();
-            if (errorData?.message) {
-                errorMessage = errorData.message;
-            }
-        } catch {
-            // Ignore JSON parse errors
-        }
+        const errorMessage = await readErrorMessage(response, "Fout bij het bewerken van de sollicitatie.");
         throw new Error(errorMessage);
     }
 
@@ -58,15 +132,7 @@ export async function getApplicationById(id: number): Promise<ApplicationDetailR
     const response: Response = await fetch(`${API_URL}/${id}`);
 
     if (!response.ok) {
-        let errorMessage = "Fout bij het ophalen van de sollicitatie.";
-        try {
-            const errorData = await response.json();
-            if (errorData?.message) {
-                errorMessage = errorData.message;
-            }
-        } catch {
-            // ignore
-        }
+        const errorMessage = await readErrorMessage(response, "Fout bij het ophalen van de sollicitatie.");
         throw new Error(errorMessage);
     }
 

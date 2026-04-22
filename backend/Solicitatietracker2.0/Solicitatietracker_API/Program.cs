@@ -1,4 +1,4 @@
-
+using System.Text.Json.Serialization;
 using SollicitatieTracker.App.DTOs;
 using SollicitatieTracker.App.Services;
 using SollicitatieTracker.Dependency;
@@ -15,7 +15,12 @@ builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IApplicationNoteRepository, ApplicationNoteRepository>();
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>

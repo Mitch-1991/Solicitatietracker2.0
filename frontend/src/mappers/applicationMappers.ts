@@ -5,6 +5,7 @@ import type {
     ApplicationDetailResponse,
     createdApplicationResponse
 } from "../types/application";
+import { applicationStatusToApiStatusMap } from "../types/common";
 import type { ApplicationStatus, PriorityStatus } from "../types/common";
 import type { DashboardOverviewItem } from "../types/dashboard";
 
@@ -25,13 +26,15 @@ export const emptyFormData: ApplicationFormData = {
 };
 
 export function mapFormDataToCreateDto(data: ApplicationFormData): createApplicationDto {
+    const trimmedStatus = data.status.trim() as ApplicationStatus
+
     return {
         userId: 1,
         companyName: data.companyName.trim(),
         jobTitle: data.jobTitle.trim(),
         jobUrl: data.jobUrl?.trim() || null,
         location: data.location?.trim() || null,
-        status: (data.status.trim()) as ApplicationStatus,
+        status: applicationStatusToApiStatusMap[trimmedStatus],
         priority: (data.priority?.trim()) as PriorityStatus || null,
         appliedDate: data.date || null,
         nextStep: data.nextStep.trim() || null,
@@ -41,12 +44,14 @@ export function mapFormDataToCreateDto(data: ApplicationFormData): createApplica
     };
 }
 export function mapFormDataToUpdateDto(data: ApplicationFormData): updateApplicationDto {
+    const trimmedStatus = data.status.trim() as ApplicationStatus
+
     return {
         companyName: data.companyName.trim(),
         jobTitle: data.jobTitle.trim(),
         jobUrl: data.jobUrl?.trim() || null,
         location: data.location?.trim() || null,
-        status: (data.status.trim()) as ApplicationStatus,
+        status: applicationStatusToApiStatusMap[trimmedStatus],
         priority: (data.priority?.trim()) as PriorityStatus || null,
         appliedDate: data.date || null,
         nextStep: data.nextStep.trim() || null,

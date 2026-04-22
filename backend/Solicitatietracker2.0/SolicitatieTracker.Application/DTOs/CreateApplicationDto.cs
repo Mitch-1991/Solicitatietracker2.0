@@ -10,7 +10,7 @@ namespace SollicitatieTracker.App.DTOs
     {
         // For simplicity, we are using default values for CompanyId, UserId, and ApplicationNoteId.
         public int UserId { get; set; } = 1;
-        public string Bedrijf { get; set; } = string.Empty;
+        public string companyName { get; set; } = string.Empty;
         public string JobTitle { get; set; } = string.Empty;
         public string? JobUrl { get; set; }
         public string? Location { get; set; }
@@ -20,6 +20,6 @@ namespace SollicitatieTracker.App.DTOs
         public string? NextStep { get; set; }
         public decimal? SalaryMin { get; set; }
         public decimal? SalaryMax { get; set; }
-        public string? Omschrijving { get; set; }
+        public string? Notes { get; set; }
     }
 }

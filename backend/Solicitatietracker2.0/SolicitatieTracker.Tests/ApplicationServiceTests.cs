@@ -17,7 +17,7 @@ public class ApplicationServiceTests
 
         var dto = new CreateApplicationDto
         {
-            Bedrijf = " ",
+            companyName = " ",
             JobTitle = "Backend Developer",
             Status = Status.Verzonden
         };
@@ -46,7 +46,7 @@ public class ApplicationServiceTests
         var dto = new CreateApplicationDto
         {
             UserId = 1,
-            Bedrijf = " OpenAl ",
+            companyName = " OpenAl ",
             JobTitle = "Frontend Developer",
             Status = Status.Gesprek,
             AppliedDate = new DateOnly(2026, 3, 31),
@@ -73,7 +73,7 @@ public class ApplicationServiceTests
         var dto = new CreateApplicationDto
         {
             UserId = 7,
-            Bedrijf = "  Acme  ",
+            companyName = "  Acme  ",
             JobTitle = "QA Engineer",
             JobUrl = "https://example.com/jobs/qa",
             Location = "Antwerpen",
@@ -83,7 +83,7 @@ public class ApplicationServiceTests
             NextStep = "Contract bespreken",
             SalaryMin = 3500,
             SalaryMax = 4200,
-            Omschrijving = "  Eerste intake afgerond.  "
+            Notes = "  Eerste intake afgerond.  "
         };
 
         var result = await service.CreateAsync(dto);

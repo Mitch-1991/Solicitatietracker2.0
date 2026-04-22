@@ -24,20 +24,20 @@ namespace SollicitatieTracker.App.Services
 
         public async Task<ApplicationDto> CreateAsync(CreateApplicationDto dto)
         {
-            if (string.IsNullOrWhiteSpace(dto.Bedrijf)){
+            if (string.IsNullOrWhiteSpace(dto.companyName)){
                 throw new ArgumentException("Bedrijf is verplicht");
             }
             if(string.IsNullOrWhiteSpace(dto.JobTitle))
             {
                 throw new ArgumentException("JobTitle is verplicht");
             }
-            Company? company = await FindMatchingCompanyAsync(dto.Bedrijf);
+            Company? company = await FindMatchingCompanyAsync(dto.companyName);
 
             if (company == null)
             {
                 company = new Company
                 {
-                    Name = dto.Bedrijf.Trim(),
+                    Name = dto.companyName.Trim(),
                     Location = dto.Location,
                     CreatedAt = DateTime.UtcNow,
                     UserId = dto.UserId
@@ -63,12 +63,12 @@ namespace SollicitatieTracker.App.Services
             var createdApplication = await _applicationRepository.AddApplicationAsync(application);
 
             ApplicationNote? createdNote = null;
-            if (!string.IsNullOrWhiteSpace(dto.Omschrijving))
+            if (!string.IsNullOrWhiteSpace(dto.Notes))
             {
                 var note = new ApplicationNote
                 {
                     ApplicationId = createdApplication.Id,
-                    NoteText = dto.Omschrijving.Trim(),
+                    NoteText = dto.Notes.Trim(),
                     CreatedAt = DateTime.UtcNow
                 };
                 createdNote = await _applicationNoteRepository.AddApplicationNoteAsync(note);
@@ -226,7 +226,7 @@ namespace SollicitatieTracker.App.Services
                 Id = application.Id,
                 CompanyId = application.CompanyId,
                 UserId = application.UserId,
-                Bedrijf = application.Company?.Name ?? string.Empty,
+                CompanyName = application.Company?.Name ?? string.Empty,
                 JobTitle = application.JobTitle,
                 JobUrl = application.JobUrl,
                 Location = application.Company?.Location,
@@ -236,7 +236,7 @@ namespace SollicitatieTracker.App.Services
                 NextStep = application.NextStep,
                 SalaryMin = application.SalaryMin,
                 SalaryMax = application.SalaryMax,
-                Omschrijving = latestNote?.NoteText,
+                Notes = latestNote?.NoteText,
                 CreatedAt = application.CreatedAt,
                 UpdatedAt = application.UpdatedAt
             };

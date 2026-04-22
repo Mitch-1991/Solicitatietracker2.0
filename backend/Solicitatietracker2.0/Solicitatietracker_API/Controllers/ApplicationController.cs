@@ -39,15 +39,15 @@ namespace Sollicitatietracker_API.Controllers
             {
                 var createdApplication = await _applicationService.CreateAsync(createApplicationDto);
 
-                return CreatedAtAction(
-                    nameof(FindByIdAsync),
-                    new { id = createdApplication.Id },
-                    createdApplication
-                );
+                return Created($"/api/application/{createdApplication.Id}", createdApplication);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while creating the application.");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An error occurred while creating the application." });
 
             }
         }

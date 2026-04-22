@@ -16,7 +16,7 @@ export interface DashboardOverviewResponse {
     jobTitle: string;
     status: ApplicationStatus;
     appliedDate: string | null;
-    nextStep: string;
+    nextStep: string | null;
 }
 
 export interface UpcomingInterview {

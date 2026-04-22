@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { createApplication, updateApplication } from "../services/applicationService.ts";
 import {
     emptyFormData,
@@ -39,13 +39,6 @@ export default function ApplicationModal(props: ApplicationModalProps) {
     const [serverError, setServerError] = useState("");
     const [createdApplication, setCreatedApplication] = useState<ApplicationFormData | null>(null);
 
-    useEffect(() => {
-        setFormData(mapApplicationToFormData(props.initialApplication));
-        setErrors({});
-        setServerError("");
-        setCreatedApplication(null);
-        setIsSubmitting(false);
-    }, [props.initialApplication, props.mode]);
 
     function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
         const { name, value } = event.target;

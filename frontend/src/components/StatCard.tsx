@@ -1,4 +1,3 @@
-import type { MappedKpi } from "../types/dashboard";
 import type { LucideIcon } from "lucide-react";
 import type { JSX } from "react";
 

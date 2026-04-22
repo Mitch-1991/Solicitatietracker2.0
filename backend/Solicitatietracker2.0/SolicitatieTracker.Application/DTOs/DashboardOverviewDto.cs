@@ -9,10 +9,10 @@ namespace SollicitatieTracker.App.DTOs
     public class DashboardOverviewDto
     {
         public int Id { get; set; }
-        public string Bedrijf {  get; set; } = string.Empty;
-        public string Functie { get; set; } = string.Empty;
+        public string CompanyName { get; set; } = string.Empty;
+        public string JobTitle { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public DateOnly AppliedDate { get; set; }
-        public string? nextStep { get; set; }
+        public string? NextStep { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 import Header from "./components/Header.tsx"
-// import Dashboard from "./pages/Dashboard.tsx"
+import Dashboard from "./pages/Dashboard.tsx"
 import SideBar from "./components/SideBar.tsx"
-import Application from "./pages/Application.tsx"
+// import Application from "./pages/Application.tsx"
 import { useState, useEffect } from "react"
 import { MapOverview } from "./mappers/dashboardMappers.ts"
 import { getDashboardOverview } from "./services/dashboardService.ts"
@@ -28,8 +28,8 @@ export default function App() {
       <Header />
       <section className="main-content">
         <SideBar />
-       <Application overview={overview} setOverview={setOverview} />
-        {/* <Dashboard overview={overview} />  */}
+       {/* <Application overview={overview} setOverview={setOverview} /> */}
+        <Dashboard overview={overview} /> 
       </section>
     </>
 

@@ -30,11 +30,11 @@ namespace SollicitatieTracker.App.Services
                 overzicht.Add(new DashboardOverviewDto
                 {
                     Id = sollicitatie.Id,
-                    Bedrijf = sollicitatie.Company.Name,
-                    Functie = sollicitatie.JobTitle,
+                    CompanyName = sollicitatie.Company.Name,
+                    JobTitle = sollicitatie.JobTitle,
                     Status = sollicitatie.Status.ToString(),
                     AppliedDate = (DateOnly)sollicitatie.AppliedDate,
-                    nextStep = sollicitatie.NextStep
+                    NextStep = sollicitatie.NextStep
                 });
             }
             return overzicht;
@@ -66,10 +66,10 @@ namespace SollicitatieTracker.App.Services
                 upcomingInterviews.Add(new UpcomingInterviewDto
                 {
                     Id = interview.Id,
-                    Bedrijf = interview.Application.Company.Name,
-                    Functie = interview.Application.JobTitle,
-                    Datum = interview.ScheduledStart.ToString("dd MM yyyy", new CultureInfo("nl-BE")),
-                    Tijd = interview.ScheduledStart.ToString("HH:mm")
+                    CompanyName = interview.Application.Company.Name,
+                    JobTitle = interview.Application.JobTitle,
+                    InterviewDate = interview.ScheduledStart.ToString("dd MM yyyy", new CultureInfo("nl-BE")),
+                    Hour = interview.ScheduledStart.ToString("HH:mm")
                 });
             }
             return upcomingInterviews;

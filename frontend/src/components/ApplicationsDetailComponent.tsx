@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { mapApplicationToFormData } from "../mappers/applicationMappers.ts";
 import type {ApplicationFormData, ApplicationDetailResponse} from "../types/application.ts";
 
@@ -8,12 +7,9 @@ type ApplicationDetailProps = {
 };
 export default function ApplicationDetail(props: ApplicationDetailProps) {
 
-    const [formData, setFormData] = useState<ApplicationFormData>(() => mapApplicationToFormData(props.initialApplication));
+    const formData: ApplicationFormData = mapApplicationToFormData(props.initialApplication);
 
-    useEffect(() => {
-        setFormData(mapApplicationToFormData(props.initialApplication));
-    }, [props.initialApplication]);
-
+  
     function handleClose(): void {
         props.onClose();
     }

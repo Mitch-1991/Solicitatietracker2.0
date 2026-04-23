@@ -136,5 +136,6 @@ export async function getApplicationById(id: number): Promise<ApplicationDetailR
         throw new Error(errorMessage);
     }
 
-    return await response.json();
+    const application: ApplicationDetailResponse = await response.json();
+    return application;
 }

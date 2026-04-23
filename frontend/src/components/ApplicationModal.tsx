@@ -49,7 +49,6 @@ export default function ApplicationModal(props: ApplicationModalProps) {
     const showReadonlyCompanyFields: boolean = selectedCompany !== "" && !isNewCompany && !isEditMode;
     const showEditableCompanyFields: boolean = isEditMode || isNewCompany;
 
-
     function handleCompanyChange(event: React.ChangeEvent<HTMLSelectElement>) {
         const value = event.target.value;
         setSelectedCompany(value);

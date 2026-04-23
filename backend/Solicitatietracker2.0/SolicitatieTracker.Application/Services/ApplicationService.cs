@@ -149,7 +149,7 @@ namespace SollicitatieTracker.App.Services
 
         public async Task<ApplicationDto?> UpdateAsync(int id, UpdateApplicationDto dto)
         {
-            if (string.IsNullOrWhiteSpace(dto.Bedrijf))
+            if (string.IsNullOrWhiteSpace(dto.CompanyName))
             {
                 throw new ArgumentException("Bedrijf is verplicht");
             }
@@ -180,14 +180,14 @@ namespace SollicitatieTracker.App.Services
             application.SalaryMax = dto.SalaryMax;
             application.UpdatedAt = DateTime.UtcNow;
 
-            application.Company.Name = dto.Bedrijf.Trim();
+            application.Company.Name = dto.CompanyName.Trim();
             application.Company.Location = string.IsNullOrWhiteSpace(dto.Location) ? null : dto.Location.Trim();
 
             var existingNote = application.ApplicationNotes?
                 .OrderByDescending(n => n.CreatedAt)
                 .FirstOrDefault();
 
-            if (string.IsNullOrWhiteSpace(dto.Omschrijving))
+            if (string.IsNullOrWhiteSpace(dto.Notes))
             {
                 if (existingNote != null)
                 {
@@ -201,13 +201,13 @@ namespace SollicitatieTracker.App.Services
                     application.ApplicationNotes.Add(new ApplicationNote
                     {
                         ApplicationId = application.Id,
-                        NoteText = dto.Omschrijving.Trim(),
+                        NoteText = dto.Notes.Trim(),
                         CreatedAt = DateTime.UtcNow
                     });
                 }
                 else
                 {
-                    existingNote.NoteText = dto.Omschrijving.Trim();
+                    existingNote.NoteText = dto.Notes.Trim();
                 }
             }
 

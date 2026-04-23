@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using SolicitatieTracker.App.Services;
 using SollicitatieTracker.App.DTOs;
 using SollicitatieTracker.App.Services;
 using SollicitatieTracker.Dependency;
@@ -14,6 +15,7 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IApplicationNoteRepository, ApplicationNoteRepository>();
 builder.Services
     .AddControllers()

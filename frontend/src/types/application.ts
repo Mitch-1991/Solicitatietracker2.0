@@ -79,3 +79,4 @@ export interface ApplicationDetailResponse {
     contactEmail: string | null;
     nextStep: string | null;
 }
+

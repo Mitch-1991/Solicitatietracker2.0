@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { createApplication, updateApplication } from "../services/applicationService.ts";
 import {
     emptyFormData,
@@ -7,15 +7,18 @@ import {
     mapFormDataToUpdateDto,
     mapApplicationToFormData,
 } from "../mappers/applicationMappers";
+import { getCompanies } from "../services/companyService.ts";
+
+
 import type {
     ApplicationDetailResponse,
     ApplicationFormData,
     createdApplicationResponse,
     updateApplicationDto,
-    createApplicationDto
+    createApplicationDto,
 } from "../types/application.ts";
-import { Companies } from "../dummy.ts";
-import type { DummyCompany } from "../dummy.ts";
+import type { companyDetailResponse } from "../types/company.ts";
+
 
 
 import type { DashboardOverviewItem } from "../types/dashboard.ts";
@@ -38,6 +41,7 @@ export default function ApplicationModal(props: ApplicationModalProps) {
     const [serverError, setServerError] = useState("");
     const [createdApplication, setCreatedApplication] = useState<ApplicationFormData | null>(null);
     const [selectedCompany, setSelectedCompany] = useState<string>("");
+    const [companies, setCompanies] = useState<companyDetailResponse[]>([]);
 
     const formTopRef = useRef<HTMLDivElement | null>(null);
     const isEditMode: boolean = props.mode === "edit";
@@ -45,10 +49,18 @@ export default function ApplicationModal(props: ApplicationModalProps) {
     const submitLabel: string = isEditMode ? "Wijzigingen opslaan" : "Opslaan";
     const submittingLabel: string = isEditMode ? "Opslaan..." : "Verwerken...";
     const isNewCompany: boolean = selectedCompany === "new";
-    const companies: DummyCompany[] = Companies;
     const showReadonlyCompanyFields: boolean = selectedCompany !== "" && !isNewCompany && !isEditMode;
     const showEditableCompanyFields: boolean = isEditMode || isNewCompany;
 
+    useEffect(() => {
+        async function fetchCompanies(): Promise<void> {
+            const companies: companyDetailResponse[] = await getCompanies();
+            setCompanies(companies);
+        }
+        fetchCompanies();
+    }, []);
+
+    console.log("Available companies for selection:", companies);
     function handleCompanyChange(event: React.ChangeEvent<HTMLSelectElement>) {
         const value = event.target.value;
         setSelectedCompany(value);

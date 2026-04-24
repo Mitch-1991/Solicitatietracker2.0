@@ -10,6 +10,6 @@ namespace SolicitatieTracker.App.Services
 {
     public interface ICompanyService
     {
-        Task<List<CompanyDto>> GetAllCompaniesAsync();
+        Task<List<CompanyDto>> GetAllCompaniesAsync(int userId);
     }
 }

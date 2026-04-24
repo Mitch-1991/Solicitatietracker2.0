@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SolicitatieTracker.Infrastructure.Data.Repos.Auth
 {
-    public interface IAuthRepository
+    public interface IUserRepository
     {
         Task<User?> GetByEmailAsync(string email);
         Task<User?> GetByIdAsync(int id);

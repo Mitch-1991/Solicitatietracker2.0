@@ -25,12 +25,13 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
             return application;
         }
 
-        public async Task<Application> GetApplicationByIdAsync(int id) =>
-            await _context.Applications.FindAsync(id);
+        public async Task<Application> GetApplicationByIdAsync(int id, int userId) =>
+            await _context.Applications.Where(a => a.UserId == userId).FirstOrDefaultAsync(a => a.Id == id);
 
-        public async Task<Application?> GetApplicationByIdWithDetailsAsync(int id)
+        public async Task<Application?> GetApplicationByIdWithDetailsAsync(int id, int userId)
         {
             return await _context.Applications
+                .Where(a => a.UserId == userId)
                 .Include(a => a.Company)
                 .Include(a => a.ApplicationNotes)
                 .FirstOrDefaultAsync(a => a.Id == id);

@@ -19,9 +19,9 @@ namespace SollicitatieTracker.App.Services
             _dashboardRepo = dashboardRepository;
         }
 
-        public async Task<List<DashboardOverviewDto>> GetDashboardOverview()
+        public async Task<List<DashboardOverviewDto>> GetDashboardOverview(int userId)
         {
-            var Sollicitaties = await _dashboardRepo.GetAllLopendeSollicitatiesAsync();
+            var Sollicitaties = await _dashboardRepo.GetAllLopendeSollicitatiesAsync(userId);
             var overzicht = new List<DashboardOverviewDto>();
 
             foreach (var sollicitatie in Sollicitaties)
@@ -40,12 +40,12 @@ namespace SollicitatieTracker.App.Services
             return overzicht;
         }
 
-        public async Task<DashboardKPIDto> GetKPIAsync()
+        public async Task<DashboardKPIDto> GetKPIAsync(int userId)
         {
-           var afgewezen = await _dashboardRepo.GetAfgewezenCountAsync();
-           var lopende = await _dashboardRepo.GetLopendeSollicitatiesCountAsync();
-           var geplandeGesprekken = await _dashboardRepo.GetGesprekkenGeplandCountAsync();
-           var aanbiedingen = await _dashboardRepo.GetAanbiedingenCountAsync();
+           var afgewezen = await _dashboardRepo.GetAfgewezenCountAsync(userId);
+           var lopende = await _dashboardRepo.GetLopendeSollicitatiesCountAsync(userId);
+           var geplandeGesprekken = await _dashboardRepo.GetGesprekkenGeplandCountAsync(userId);
+           var aanbiedingen = await _dashboardRepo.GetAanbiedingenCountAsync(userId);
 
             return new DashboardKPIDto
             {
@@ -56,9 +56,9 @@ namespace SollicitatieTracker.App.Services
             };
         }
 
-        public async Task<List<UpcomingInterviewDto>> GetUpcomingInterviews()
+        public async Task<List<UpcomingInterviewDto>> GetUpcomingInterviews(int userId)
         {
-            var interviews = await _dashboardRepo.GetAllIntervieuwApplicationsAsync();
+            var interviews = await _dashboardRepo.GetAllIntervieuwApplicationsAsync(userId);
             var upcomingInterviews = new List<UpcomingInterviewDto>();
 
             foreach (var interview in interviews)

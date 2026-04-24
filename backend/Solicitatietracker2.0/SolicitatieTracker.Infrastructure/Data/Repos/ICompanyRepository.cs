@@ -9,7 +9,7 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
 {
     public interface ICompanyRepository
     {
-        Task<List<Company>> GetAllCompaniesAsync();
+        Task<List<Company>> GetAllCompaniesAsync(int userId);
         Task<Company> AddAsync(Company company);
     }
 }

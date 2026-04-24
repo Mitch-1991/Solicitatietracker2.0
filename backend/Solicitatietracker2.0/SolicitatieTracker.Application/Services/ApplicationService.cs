@@ -22,7 +22,7 @@ namespace SollicitatieTracker.App.Services
             _applicationNoteRepository = applicationNoteRepository;
         }
 
-        public async Task<ApplicationDto> CreateAsync(CreateApplicationDto dto)
+        public async Task<ApplicationDto> CreateAsync(CreateApplicationDto dto, int userId)
         {
             if (string.IsNullOrWhiteSpace(dto.companyName)){
                 throw new ArgumentException("Bedrijf is verplicht");
@@ -31,7 +31,7 @@ namespace SollicitatieTracker.App.Services
             {
                 throw new ArgumentException("JobTitle is verplicht");
             }
-            Company? company = await FindMatchingCompanyAsync(dto.companyName);
+            Company? company = await FindMatchingCompanyAsync(dto.companyName, userId);
 
             if (company == null)
             {
@@ -40,14 +40,14 @@ namespace SollicitatieTracker.App.Services
                     Name = dto.companyName.Trim(),
                     Location = dto.Location,
                     CreatedAt = DateTime.UtcNow,
-                    UserId = dto.UserId
+                    UserId = userId
                 };
                 company = await _companyRepository.AddAsync(company);
             }
             var application = new Application
             {
                 CompanyId = company.Id,
-                UserId = dto.UserId,
+                UserId = userId,
                 JobTitle = dto.JobTitle,
                 JobUrl = dto.JobUrl,
                 Status = dto.Status,
@@ -73,7 +73,7 @@ namespace SollicitatieTracker.App.Services
                 };
                 createdNote = await _applicationNoteRepository.AddApplicationNoteAsync(note);
             }
-            var newApplication = await _applicationRepository.GetApplicationByIdWithDetailsAsync(createdApplication.Id);
+            var newApplication = await _applicationRepository.GetApplicationByIdWithDetailsAsync(createdApplication.Id, userId);
 
             if (newApplication == null)
             {
@@ -83,9 +83,9 @@ namespace SollicitatieTracker.App.Services
             return MapToDto(newApplication);
         }
 
-        public async Task<ApplicationDto?> FindByIdAsync(int id)
+        public async Task<ApplicationDto?> FindByIdAsync(int id, int userId)
         {
-            var application = await _applicationRepository.GetApplicationByIdWithDetailsAsync(id);
+            var application = await _applicationRepository.GetApplicationByIdWithDetailsAsync(id, userId);
 
             if (application == null)
             {
@@ -95,9 +95,9 @@ namespace SollicitatieTracker.App.Services
             return MapToDto(application);
         }
 
-        private async Task<Company?> FindMatchingCompanyAsync(string companyName)
+        private async Task<Company?> FindMatchingCompanyAsync(string companyName, int userId)
         {
-            var companies = await _companyRepository.GetAllCompaniesAsync();
+            var companies = await _companyRepository.GetAllCompaniesAsync(userId);
             var normalizedInput = companyName.Trim().ToLower();
 
             foreach (var company in companies)
@@ -147,7 +147,7 @@ namespace SollicitatieTracker.App.Services
             return d[s.Length, t.Length];
         }
 
-        public async Task<ApplicationDto?> UpdateAsync(int id, UpdateApplicationDto dto)
+        public async Task<ApplicationDto?> UpdateAsync(int id, UpdateApplicationDto dto, int userId)
         {
             if (string.IsNullOrWhiteSpace(dto.CompanyName))
             {
@@ -159,7 +159,7 @@ namespace SollicitatieTracker.App.Services
                 throw new ArgumentException("JobTitle is verplicht");
             }
 
-            var application = await _applicationRepository.GetApplicationByIdWithDetailsAsync(id);
+            var application = await _applicationRepository.GetApplicationByIdWithDetailsAsync(id, userId);
 
             if (application == null)
             {

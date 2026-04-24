@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SollicitatieTracker.App.DTOs;
 using SollicitatieTracker.App.Services;
-using SollicitatieTracker.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Sollicitatietracker_API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ApplicationController : ControllerBase
@@ -21,7 +23,13 @@ namespace Sollicitatietracker_API.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ApplicationDto>> FindByIdAsync(int id)
         {
-            var application = await _applicationService.FindByIdAsync(id);
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized(new { message = "Invalid token" });
+            }
+            var application = await _applicationService.FindByIdAsync(id, userId.Value);
 
             if(application == null)
             {
@@ -35,9 +43,15 @@ namespace Sollicitatietracker_API.Controllers
         [HttpPost]
         public async Task<ActionResult<ApplicationDto>> CreateApplication([FromBody]CreateApplicationDto createApplicationDto)
         {
+            var userId = GetCurrentUserId();
+
+            if(userId == null)
+            {
+                return Unauthorized(new { message = "Invalid token" });
+            }
             try
             {
-                var createdApplication = await _applicationService.CreateAsync(createApplicationDto);
+                var createdApplication = await _applicationService.CreateAsync(createApplicationDto, userId.Value);
 
                 return Created($"/api/application/{createdApplication.Id}", createdApplication);
             }
@@ -54,9 +68,15 @@ namespace Sollicitatietracker_API.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ApplicationDto>> UpdateApplication(int id, [FromBody] UpdateApplicationDto updateApplicationDto)
         {
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized(new { message = "Invalid token" });
+            }
             try
             {
-                var updatedApplication = await _applicationService.UpdateAsync(id, updateApplicationDto);
+                var updatedApplication = await _applicationService.UpdateAsync(id, updateApplicationDto, userId.Value);
 
                 if (updatedApplication == null)
                 {
@@ -73,6 +93,15 @@ namespace Sollicitatietracker_API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while updating the application.");
             }
+        }
+        private int? GetCurrentUserId()
+        {
+            var userIdClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+
+            if(string.IsNullOrWhiteSpace(userIdClaim) || !int.TryParse(userIdClaim, out int userId)){
+                return null;
+            }
+            return userId;
         }
     }
 }

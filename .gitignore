@@ -31,3 +31,10 @@ dist-ssr
 **/obj/
 *.user
 *.rsuser
+
+# App settings (environment-specific)
+appsettings.*.json
+!appsettings.json
+
+# Secrets
+secrets.json

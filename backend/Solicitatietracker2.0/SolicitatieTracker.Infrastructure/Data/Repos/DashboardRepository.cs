@@ -14,43 +14,51 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
 
         public DashboardRepository(SollicitatietrackerDbContext context) { _context = context; }
 
-        public async Task<int> GetAanbiedingenCountAsync()
+        public async Task<int> GetAanbiedingenCountAsync(int userId)
         {
-            return await _context.Applications.CountAsync(a => a.Status == Status.Aanbieding);
+            return await _context.Applications.Where(a => a.UserId == userId).CountAsync(a => a.Status == Status.Aanbieding);
         }
 
-        public async Task<int> GetAfgewezenCountAsync()
+        public async Task<int> GetAfgewezenCountAsync(int userId)
         {
-            return await _context.Applications.CountAsync(a => a.Status == Status.Afgewezen);
+            return await _context.Applications.Where(a => a.UserId == userId).CountAsync(a => a.Status == Status.Afgewezen);
         }
 
-        public async Task<IEnumerable<Interview>> GetAllIntervieuwApplicationsAsync()
+        public async Task<IEnumerable<Interview>> GetAllIntervieuwApplicationsAsync(int userId)
         {
-            return await _context.Interviews
-                .Where(i => i.ScheduledStart > DateTime.Now)
-                .Include(i => i.Application)
-                    .ThenInclude(a => a.Company)
-                .ToListAsync();
+            var applicationsWithInterviews = await _context.Applications
+                                                                .Where(a => a.UserId == userId && a.Interviews != null)
+                                                                .Include(a => a.Interviews)
+                                                                .ToListAsync();
+            var Interviews = new List<Interview>();
 
+            foreach(var application in applicationsWithInterviews)
+            {
+                foreach (var interview in application.Interviews)
+                {
+                    Interviews.Add(interview);
+                }
+            }
+            return Interviews;
 
         }
 
-        public async Task<IEnumerable<Application>> GetAllLopendeSollicitatiesAsync()
+        public async Task<IEnumerable<Application>> GetAllLopendeSollicitatiesAsync(int userId)
         {
             return await _context.Applications
-                .Where(a =>  a.Status != Status.Aanbieding)
+                .Where(a => a.UserId == userId &&  a.Status != Status.Aanbieding)
                 .Include(a => a.Company)
                 .ToListAsync();
         }
 
-        public async Task<int> GetGesprekkenGeplandCountAsync()
+        public async Task<int> GetGesprekkenGeplandCountAsync(int userId)
         {
-            return await _context.Applications.CountAsync(a => a.Status == Status.Gesprek);
+            return await _context.Applications.Where(a => a.UserId == userId).CountAsync(a => a.Status == Status.Gesprek);
         }
 
-        public async Task<int> GetLopendeSollicitatiesCountAsync()
+        public async Task<int> GetLopendeSollicitatiesCountAsync(int userId)
         {
-            return await _context.Applications.CountAsync(a => a.Status == Status.Verzonden);
+            return await _context.Applications.Where(a => a.UserId == userId).CountAsync(a => a.Status == Status.Verzonden);
         }
     }
 }

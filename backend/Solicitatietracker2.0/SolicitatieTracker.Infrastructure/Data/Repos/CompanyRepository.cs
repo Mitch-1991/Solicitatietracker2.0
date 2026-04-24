@@ -24,9 +24,9 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
             return company;
         }
 
-        public async Task<List<Company>> GetAllCompaniesAsync()
+        public async Task<List<Company>> GetAllCompaniesAsync(int userId)
         {
-           return await _context.Companies.ToListAsync();
+           return await _context.Companies.Where(c => c.UserId == userId).ToListAsync();
         }
     }
 }

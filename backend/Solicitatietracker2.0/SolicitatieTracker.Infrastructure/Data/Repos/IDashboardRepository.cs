@@ -9,11 +9,11 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
 {
     public interface IDashboardRepository
     {
-        Task<int> GetLopendeSollicitatiesCountAsync();
-        Task<int> GetGesprekkenGeplandCountAsync();
-        Task<int> GetAfgewezenCountAsync();
-        Task<int> GetAanbiedingenCountAsync();
-        Task<IEnumerable<Application>> GetAllLopendeSollicitatiesAsync();
-        Task<IEnumerable<Interview>> GetAllIntervieuwApplicationsAsync();
+        Task<int> GetLopendeSollicitatiesCountAsync(int userId);
+        Task<int> GetGesprekkenGeplandCountAsync(int userId);
+        Task<int> GetAfgewezenCountAsync(int userId);
+        Task<int> GetAanbiedingenCountAsync(int userId);
+        Task<IEnumerable<Application>> GetAllLopendeSollicitatiesAsync(int userId);
+        Task<IEnumerable<Interview>> GetAllIntervieuwApplicationsAsync(int userId);
     }
 }

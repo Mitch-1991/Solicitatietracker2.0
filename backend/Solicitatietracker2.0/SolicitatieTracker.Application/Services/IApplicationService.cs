@@ -9,8 +9,8 @@ namespace SollicitatieTracker.App.Services
 {
     public interface IApplicationService
     {
-        Task<ApplicationDto> CreateAsync(CreateApplicationDto createApplicationDto);
-        Task<ApplicationDto?> FindByIdAsync(int id);
-        Task<ApplicationDto?> UpdateAsync(int id, UpdateApplicationDto updateApplicationDto);
+        Task<ApplicationDto> CreateAsync(CreateApplicationDto createApplicationDto, int userId);
+        Task<ApplicationDto?> FindByIdAsync(int id, int userId);
+        Task<ApplicationDto?> UpdateAsync(int id, UpdateApplicationDto updateApplicationDto, int userId);
     }
 }

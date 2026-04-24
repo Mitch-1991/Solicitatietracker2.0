@@ -9,8 +9,8 @@ namespace SollicitatieTracker.App.Services
 {
     public interface IDashboardService
     {
-        Task<DashboardKPIDto> GetKPIAsync();
-        Task<List<DashboardOverviewDto>> GetDashboardOverview();
-        Task<List<UpcomingInterviewDto>> GetUpcomingInterviews();
+        Task<DashboardKPIDto> GetKPIAsync(int userId);
+        Task<List<DashboardOverviewDto>> GetDashboardOverview(int userId);
+        Task<List<UpcomingInterviewDto>> GetUpcomingInterviews(int userId);
     }
 }

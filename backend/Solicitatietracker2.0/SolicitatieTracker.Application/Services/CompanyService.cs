@@ -18,9 +18,10 @@ namespace SolicitatieTracker.App.Services
             _companyRepository = companyRepository;
         }
 
-        public async Task<List<CompanyDto>> GetAllCompaniesAsync()
+
+        public async Task<List<CompanyDto>> GetAllCompaniesAsync(int userId)
         {
-            var companies = await _companyRepository.GetAllCompaniesAsync();
+            var companies = await _companyRepository.GetAllCompaniesAsync(userId);
 
             var dtos = new List<CompanyDto>();
 
@@ -35,7 +36,7 @@ namespace SolicitatieTracker.App.Services
                     Notes = company.Notes
                 });
             }
-            
+
             return dtos;
         }
     }

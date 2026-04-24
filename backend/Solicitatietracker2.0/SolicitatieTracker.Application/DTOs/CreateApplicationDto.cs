@@ -8,8 +8,7 @@ namespace SollicitatieTracker.App.DTOs
 {
     public class CreateApplicationDto
     {
-        // For simplicity, we are using default values for CompanyId, UserId, and ApplicationNoteId.
-        public int UserId { get; set; } = 1;
+        
         public string companyName { get; set; } = string.Empty;
         public string JobTitle { get; set; } = string.Empty;
         public string? JobUrl { get; set; }

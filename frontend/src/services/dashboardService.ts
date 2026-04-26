@@ -1,3 +1,5 @@
+import { apiFetch } from "./apiClient";
+
 import type {
     DashboardKpiResponse,
     DashboardOverviewResponse,
@@ -7,7 +9,7 @@ import type {
 const API_URL = "http://localhost:5158/api/dashboard"
 
 export const getDashboardKpis = async (): Promise<DashboardKpiResponse> => {
-    const response: Response = await fetch(`${API_URL}/kpis`);
+    const response: Response = await apiFetch(`${API_URL}/kpis`);
 
     if (!response.ok) {
         throw new Error("fout bij het ophalen van KPI's")
@@ -17,7 +19,7 @@ export const getDashboardKpis = async (): Promise<DashboardKpiResponse> => {
     return data
 }
 export const getDashboardOverview = async (): Promise<DashboardOverviewResponse[]> => {
-    const response: Response = await fetch(`${API_URL}/overview`);
+    const response: Response = await apiFetch(`${API_URL}/overview`);
 
     if (!response.ok) {
         throw new Error("fout bij het ophalen van overzicht")
@@ -26,7 +28,7 @@ export const getDashboardOverview = async (): Promise<DashboardOverviewResponse[
     return data
 }
 export const getUpcomingInterviews = async (): Promise<UpcomingInterviewResponse[]> => {
-    const response: Response = await fetch(`${API_URL}/upcoming-interviews`);
+    const response: Response = await apiFetch(`${API_URL}/upcoming-interviews`);
 
     if (!response.ok) {
         throw new Error("fout bij het ophalen van aankomende interviews")

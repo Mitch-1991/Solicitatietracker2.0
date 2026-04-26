@@ -1,3 +1,5 @@
+import { apiFetch } from "./apiClient";
+
 import type {
     createdApplicationResponse,
     createApplicationDto,
@@ -98,7 +100,7 @@ async function readErrorMessage(response: Response, fallbackMessage: string): Pr
 }
 
 export async function createApplication(applicationData: createApplicationDto): Promise<createdApplicationResponse> {
-    const response: Response = await fetch (API_URL, {
+    const response: Response = await apiFetch (API_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -112,7 +114,7 @@ export async function createApplication(applicationData: createApplicationDto): 
     return await response.json()
 }
 export async function updateApplication(id: number, applicationData: updateApplicationDto): Promise<createdApplicationResponse> {
-    const response: Response = await fetch(`${API_URL}/${id}`, {
+    const response: Response = await apiFetch(`${API_URL}/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -129,7 +131,7 @@ export async function updateApplication(id: number, applicationData: updateAppli
 }
 
 export async function getApplicationById(id: number): Promise<ApplicationDetailResponse> {
-    const response: Response = await fetch(`${API_URL}/${id}`);
+    const response: Response = await apiFetch(`${API_URL}/${id}`);
 
     if (!response.ok) {
         const errorMessage = await readErrorMessage(response, "Fout bij het ophalen van de sollicitatie.");

@@ -2,28 +2,43 @@ import Header from "./components/Header.tsx"
 import Dashboard from "./pages/Dashboard.tsx"
 import SideBar from "./components/SideBar.tsx"
 import Application from "./pages/Application.tsx"
+import Login from "./pages/Login.tsx"
+import Register from "./pages/Register.tsx"
+import ProtectedRoute from "./components/ProtectedRoute.tsx"
 import { useState, useEffect } from "react"
 import { MapOverview } from "./mappers/dashboardMappers.ts"
 import { getDashboardOverview } from "./services/dashboardService.ts"
-import {Routes, Route, Navigate} from "react-router-dom"
+import {Routes, Route, Navigate, useLocation} from "react-router-dom"
+import { useAuth } from "./context/AuthContext.tsx"
 
 import type { DashboardOverviewItem, DashboardOverviewResponse } from "./types/dashboard.ts"
 
-
-
-
 export default function App() {
-
+  const { isAuthenticated } = useAuth()
+  const location = useLocation()
+  const isAuthRoute = location.pathname === "/login" || location.pathname === "/register"
   const [overview, setOverview] = useState<DashboardOverviewItem[]>([])
 
   useEffect(() => {
+    if(!isAuthenticated){
+      return
+    }
     const fetchOverview = async (): Promise<void> => {
       const data: DashboardOverviewResponse[] = await getDashboardOverview()
       const mappedOverview: DashboardOverviewItem[] = MapOverview(data)
       setOverview(mappedOverview)
     };
     fetchOverview()
-  }, [])
+  }, [isAuthenticated])
+
+  if (isAuthRoute){
+    return (
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    )
+  }
 
   return (
     <>
@@ -33,8 +48,17 @@ export default function App() {
 
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" replace/>} />
-          <Route path="/dashboard" element={<Dashboard overview={overview} />} />
-          <Route path="/applications" element={<Application overview={overview} setOverview={setOverview}/>} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <Dashboard overview={overview} />
+            </ProtectedRoute>
+          } />
+          <Route path="/applications" element={
+            <ProtectedRoute>
+              <Application overview={overview} setOverview={setOverview}/>
+            </ProtectedRoute>
+          } />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
 
       </section>

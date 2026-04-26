@@ -1,6 +1,5 @@
 import { Briefcase, Lock, Mail, User } from "lucide-react"
-import { useState } from "react"
-import type { FormEvent } from "react"
+import React, { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 
@@ -16,7 +15,7 @@ export default function Register() {
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError("")
 

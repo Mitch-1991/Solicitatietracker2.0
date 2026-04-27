@@ -8,6 +8,7 @@ export interface CurrentUser {
 export interface LoginRequest {
     email: string;
     password: string;
+    rememberMe: boolean;
 }
 
 export interface RegisterRequest {
@@ -21,6 +22,28 @@ export interface AuthResponse {
     token: string;
     user: CurrentUser;
     expiresAt: string;
+}
+
+export interface ForgotPasswordRequest {
+    email: string;
+}
+
+export interface ForgotPasswordResponse {
+    message: string;
+    resetToken?: string;
+    resetUrl?: string;
+}
+
+export interface ResetPasswordRequest {
+    token: string;
+    newPassword: string;
+    confirmPassword: string;
+}
+
+export interface ChangePasswordRequest {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
 }
 
 export interface AuthContextType {

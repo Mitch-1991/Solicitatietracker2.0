@@ -12,5 +12,6 @@ namespace SolicitatieTracker.Domain.Entities
         public string Issuer { get; set; } = string.Empty;
         public string Audience { get; set; } = string.Empty;
         public int ExpirationMinutes { get; set; }
+        public int RememberMeExpirationDays { get; set; } = 30;
     }
 }

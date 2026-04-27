@@ -15,6 +15,10 @@ public partial class User
 
     public string PasswordHash { get; set; } = null!;
 
+    public string? PasswordResetTokenHash { get; set; }
+
+    public DateTime? PasswordResetTokenExpiresAt { get; set; }
+
     public DateTime CreatedAt { get; set; }
 
     public virtual ICollection<Application> Applications { get; set; } = new List<Application>();

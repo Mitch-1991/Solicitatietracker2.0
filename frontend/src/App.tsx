@@ -4,6 +4,9 @@ import SideBar from "./components/SideBar.tsx"
 import Application from "./pages/Application.tsx"
 import Login from "./pages/Login.tsx"
 import Register from "./pages/Register.tsx"
+import ForgotPassword from "./pages/ForgotPassword.tsx"
+import ResetPassword from "./pages/ResetPassword.tsx"
+import Settings from "./pages/Settings.tsx"
 import ProtectedRoute from "./components/ProtectedRoute.tsx"
 import { useState, useEffect } from "react"
 import { MapOverview } from "./mappers/dashboardMappers.ts"
@@ -16,7 +19,7 @@ import type { DashboardOverviewItem, DashboardOverviewResponse } from "./types/d
 export default function App() {
   const { isAuthenticated } = useAuth()
   const location = useLocation()
-  const isAuthRoute = location.pathname === "/login" || location.pathname === "/register"
+  const isAuthRoute = location.pathname === "/login" || location.pathname === "/register" || location.pathname === "/forgot-password" || location.pathname === "/reset-password"
   const [overview, setOverview] = useState<DashboardOverviewItem[]>([])
 
   useEffect(() => {
@@ -36,6 +39,8 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     )
   }
@@ -56,6 +61,11 @@ export default function App() {
           <Route path="/applications" element={
             <ProtectedRoute>
               <Application overview={overview} setOverview={setOverview}/>
+            </ProtectedRoute>
+          } />
+          <Route path="/settings" element={
+            <ProtectedRoute>
+              <Settings />
             </ProtectedRoute>
           } />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

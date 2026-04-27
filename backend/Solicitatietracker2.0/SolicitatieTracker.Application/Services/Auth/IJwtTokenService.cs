@@ -9,7 +9,7 @@ namespace SolicitatieTracker.App.Services.Auth
 {
     public interface IJwtTokenService
     {
-        string GenerateToken(User user);
-        DateTime GetExpiration();
+        string GenerateToken(User user, bool rememberMe);
+        DateTime GetExpiration(bool rememberMe);
     }
 }

@@ -10,6 +10,7 @@ public static class DatabaseSeeder
     public static async TaskSystem SeedAsync(SollicitatietrackerDbContext context)
     {
         await context.Database.EnsureCreatedAsync();
+        await EnsureAuthColumnsAsync(context);
 
         const string seedEmail = "dummy.user@sollicitatietracker.local";
 
@@ -133,5 +134,20 @@ public static class DatabaseSeeder
             await context.Interviews.AddRangeAsync(missingInterviews);
             await context.SaveChangesAsync();
         }
+    }
+
+    private static async TaskSystem EnsureAuthColumnsAsync(SollicitatietrackerDbContext context)
+    {
+        await context.Database.ExecuteSqlRawAsync("""
+            IF COL_LENGTH('users', 'password_reset_token_hash') IS NULL
+            BEGIN
+                ALTER TABLE users ADD password_reset_token_hash nvarchar(500) NULL;
+            END
+
+            IF COL_LENGTH('users', 'password_reset_token_expires_at') IS NULL
+            BEGIN
+                ALTER TABLE users ADD password_reset_token_expires_at datetime2 NULL;
+            END
+            """);
     }
 }

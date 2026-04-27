@@ -299,6 +299,11 @@ public partial class SollicitatietrackerDbContext : DbContext
             entity.Property(e => e.PasswordHash)
                 .HasMaxLength(500)
                 .HasColumnName("password_hash");
+            entity.Property(e => e.PasswordResetTokenExpiresAt)
+                .HasColumnName("password_reset_token_expires_at");
+            entity.Property(e => e.PasswordResetTokenHash)
+                .HasMaxLength(500)
+                .HasColumnName("password_reset_token_hash");
         });
 
         OnModelCreatingPartial(modelBuilder);

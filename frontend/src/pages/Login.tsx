@@ -19,7 +19,7 @@ export default function Login() {
     setError(null)
 
     try {
-      await login({ email, password })
+      await login({ email, password, rememberMe })
       navigate("/dashboard")
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login mislukt.")
@@ -82,7 +82,7 @@ export default function Login() {
                 />
                 <span>Onthoud mij</span>
               </label>
-              <a href="#" className="auth-link">Wachtwoord vergeten?</a>
+              <Link to="/forgot-password" className="auth-link">Wachtwoord vergeten?</Link>
             </div>
 
             {error && <p className="auth-error">{error}</p>}

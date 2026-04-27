@@ -1,6 +1,7 @@
 import { 
     LayoutDashboard,
-    FileText
+    FileText,
+    Settings
 
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
@@ -27,6 +28,12 @@ const navigationItems: NavigationItem[] = [
         label: "Sollicitaties",
         icon: FileText,
         to: "/applications",
+    },
+    {
+        id: "settings",
+        label: "Instellingen",
+        icon: Settings,
+        to: "/settings",
     }
 ];
 

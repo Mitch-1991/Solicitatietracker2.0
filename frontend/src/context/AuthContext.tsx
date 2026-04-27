@@ -51,14 +51,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const login = async (data: LoginRequest): Promise<void> => {
         const response = await loginRequest(data);
-        storeToken(response.token);
+        storeToken(response.token, data.rememberMe);
         setToken(response.token);
         setUser(response.user);
     }
 
     const register = async (data: RegisterRequest): Promise<void> => {
         const response = await registerRequest(data);
-        storeToken(response.token);
+        storeToken(response.token, true);
         setToken(response.token);
         setUser(response.user);
     }

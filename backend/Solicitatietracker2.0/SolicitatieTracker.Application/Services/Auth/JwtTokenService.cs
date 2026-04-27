@@ -18,7 +18,7 @@ namespace SolicitatieTracker.App.Services.Auth
         {
             _jwtSettings = jwtSettings.Value;
         }
-        public string GenerateToken(User user)
+        public string GenerateToken(User user, bool rememberMe)
         {
             if(user == null)
             {
@@ -36,7 +36,7 @@ namespace SolicitatieTracker.App.Services.Auth
 
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var expires = GetExpiration();
+            var expires = GetExpiration(rememberMe);
 
             var Token = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
@@ -50,9 +50,11 @@ namespace SolicitatieTracker.App.Services.Auth
         }
 
 
-        public DateTime GetExpiration()
+        public DateTime GetExpiration(bool rememberMe)
         {
-            return DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes);
+            return rememberMe
+                ? DateTime.UtcNow.AddDays(_jwtSettings.RememberMeExpirationDays)
+                : DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes);
         }
     }
 }

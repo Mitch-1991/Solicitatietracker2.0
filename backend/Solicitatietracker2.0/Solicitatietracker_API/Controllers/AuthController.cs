@@ -45,6 +45,65 @@ namespace Solicitatietracker_API.Controllers
                 return BadRequest(new {message = ex.Message});
             }
         }
+
+        [HttpPost("forgot-password")]
+        public async Task<ActionResult<ForgotPasswordResponseDto>> ForgotPassword([FromBody] ForgotPasswordRequestDto dto)
+        {
+            try
+            {
+                var result = await _authService.ForgotPasswordAsync(dto);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto dto)
+        {
+            try
+            {
+                await _authService.ResetPasswordAsync(dto);
+                return Ok(new { message = "Wachtwoord is gewijzigd." });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto dto)
+        {
+            var userIdClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+
+            if (string.IsNullOrWhiteSpace(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized(new { message = "Invalid token" });
+            }
+
+            try
+            {
+                await _authService.ChangePasswordAsync(userId, dto);
+                return Ok(new { message = "Wachtwoord is gewijzigd." });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [Authorize]
         [HttpGet("me")]
         public async Task<ActionResult<CurrentUserDto>> GetCurrentUser()

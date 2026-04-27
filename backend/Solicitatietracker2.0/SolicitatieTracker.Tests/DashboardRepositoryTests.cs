@@ -29,12 +29,12 @@ public class DashboardRepositoryTests
 
         var repository = new DashboardRepository(context);
 
-        var lopende = await repository.GetLopendeSollicitatiesCountAsync();
-        var gesprekkenGepland = await repository.GetGesprekkenGeplandCountAsync();
-        var afgewezen = await repository.GetAfgewezenCountAsync();
-        var aanbiedingen = await repository.GetAanbiedingenCountAsync();
+        var lopende = await repository.GetLopendeSollicitatiesCountAsync(userId: 1);
+        var gesprekkenGepland = await repository.GetGesprekkenGeplandCountAsync(userId: 1);
+        var afgewezen = await repository.GetAfgewezenCountAsync(userId: 1);
+        var aanbiedingen = await repository.GetAanbiedingenCountAsync(userId: 1);
 
-        Assert.Equal(2, lopende);
+        Assert.Equal(1, lopende);
         Assert.Equal(1, gesprekkenGepland);
         Assert.Equal(1, afgewezen);
         Assert.Equal(1, aanbiedingen);

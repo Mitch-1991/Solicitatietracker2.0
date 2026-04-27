@@ -21,7 +21,7 @@ public class DashboardServiceTests
 
         var service = new DashboardService(repository);
 
-        var result = await service.GetKPIAsync();
+        var result = await service.GetKPIAsync(userId: 1);
 
         Assert.Equal(5, result.LopendeSollicitaties);
         Assert.Equal(2, result.GesprekkenGepland);
@@ -36,20 +36,20 @@ public class DashboardServiceTests
         public int Afgewezen { get; init; }
         public int Aanbiedingen { get; init; }
 
-        public Task<int> GetLopendeSollicitatiesCountAsync() => Task.FromResult(LopendeSollicitaties);
+        public Task<int> GetLopendeSollicitatiesCountAsync(int userId) => Task.FromResult(LopendeSollicitaties);
 
-        public Task<int> GetGesprekkenGeplandCountAsync() => Task.FromResult(GesprekkenGepland);
+        public Task<int> GetGesprekkenGeplandCountAsync(int userId) => Task.FromResult(GesprekkenGepland);
 
-        public Task<int> GetAfgewezenCountAsync() => Task.FromResult(Afgewezen);
+        public Task<int> GetAfgewezenCountAsync(int userId) => Task.FromResult(Afgewezen);
 
-        public Task<int> GetAanbiedingenCountAsync() => Task.FromResult(Aanbiedingen);
+        public Task<int> GetAanbiedingenCountAsync(int userId) => Task.FromResult(Aanbiedingen);
 
-        public Task<IEnumerable<Domain.Entities.Application>> GetAllLopendeSollicitatiesAsync()
+        public Task<IEnumerable<Domain.Entities.Application>> GetAllLopendeSollicitatiesAsync(int userId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<InterviewEntity>> GetAllIntervieuwApplicationsAsync()
+        public Task<IEnumerable<InterviewEntity>> GetAllIntervieuwApplicationsAsync(int userId)
         {
             throw new NotImplementedException();
         }

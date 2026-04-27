@@ -22,7 +22,7 @@ public class ApplicationServiceTests
             Status = Status.Verzonden
         };
 
-        var exception = await Assert.ThrowsAsync<ArgumentException>(() => service.CreateAsync(dto));
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => service.CreateAsync(dto, userId: 1));
 
         Assert.Equal("Bedrijf is verplicht", exception.Message);
     }
@@ -45,7 +45,6 @@ public class ApplicationServiceTests
 
         var dto = new CreateApplicationDto
         {
-            UserId = 1,
             companyName = " OpenAl ",
             JobTitle = "Frontend Developer",
             Status = Status.Gesprek,
@@ -53,7 +52,7 @@ public class ApplicationServiceTests
             NextStep = "Technisch gesprek"
         };
 
-        var result = await service.CreateAsync(dto);
+        var result = await service.CreateAsync(dto, userId: 1);
 
         Assert.Equal(existingCompany.Id, result.CompanyId);
         Assert.Empty(companyRepository.AddedCompanies);
@@ -72,7 +71,6 @@ public class ApplicationServiceTests
 
         var dto = new CreateApplicationDto
         {
-            UserId = 7,
             companyName = "  Acme  ",
             JobTitle = "QA Engineer",
             JobUrl = "https://example.com/jobs/qa",
@@ -86,11 +84,11 @@ public class ApplicationServiceTests
             Notes = "  Eerste intake afgerond.  "
         };
 
-        var result = await service.CreateAsync(dto);
+        var result = await service.CreateAsync(dto, userId: 7);
 
         var addedCompany = Assert.Single(companyRepository.AddedCompanies);
         Assert.Equal("Acme", addedCompany.Name);
-        Assert.Equal(dto.UserId, addedCompany.UserId);
+        Assert.Equal(7, addedCompany.UserId);
         Assert.Equal(dto.Location, addedCompany.Location);
 
         var addedApplication = Assert.Single(applicationRepository.AddedApplications);
@@ -105,7 +103,7 @@ public class ApplicationServiceTests
 
         Assert.Equal(101, result.Id);
         Assert.Equal(addedCompany.Id, result.CompanyId);
-        Assert.Equal(dto.UserId, result.UserId);
+        Assert.Equal(7, result.UserId);
         Assert.Equal(dto.JobTitle, result.JobTitle);
         Assert.Equal(nameof(Status.Aanbieding), result.Status);
         Assert.Equal(dto.Priority, result.Priority);
@@ -137,7 +135,7 @@ public class ApplicationServiceTests
 
         var service = CreateService(applicationRepository);
 
-        var result = await service.FindByIdAsync(8);
+        var result = await service.FindByIdAsync(8, userId: 4);
 
         Assert.NotNull(result);
         Assert.Equal(8, result!.Id);
@@ -175,9 +173,19 @@ public class ApplicationServiceTests
             return Task.FromResult(application);
         }
 
-        public Task<ApplicationEntity> GetApplicationByIdAsync(int id)
+        public Task<ApplicationEntity> GetApplicationByIdAsync(int id, int userId)
         {
             return Task.FromResult(ApplicationById!);
+        }
+
+        public Task<ApplicationEntity?> GetApplicationByIdWithDetailsAsync(int id, int userId)
+        {
+            return Task.FromResult(ApplicationById ?? AddedApplications.FirstOrDefault(application => application.Id == id));
+        }
+
+        public Task<ApplicationEntity> UpdateApplicationAsync(ApplicationEntity application)
+        {
+            return Task.FromResult(application);
         }
     }
 
@@ -192,7 +200,7 @@ public class ApplicationServiceTests
 
         public List<CompanyEntity> AddedCompanies { get; } = [];
 
-        public Task<List<CompanyEntity>> GetAllCompaniesAsync()
+        public Task<List<CompanyEntity>> GetAllCompaniesAsync(int userId)
         {
             return Task.FromResult(_companies.ToList());
         }

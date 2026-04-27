@@ -11,6 +11,7 @@ using SolicitatieTracker.App.Services.Auth;
 using System.Text;
 using SolicitatieTracker.Infrastructure.Data.Repos.Auth;
 using Microsoft.OpenApi.Models;
+using Solicitatietracker_API.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +37,7 @@ builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IApplicationNoteRepository, ApplicationNoteRepository>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IResetTokenResponsePolicy, DevelopmentResetTokenResponsePolicy>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services
     .AddControllers()

@@ -29,6 +29,10 @@ public partial class Application
 
     public string? Source { get; set; }
 
+    public bool IsArchived { get; set; }
+
+    public DateTime? ArchivedAt { get; set; }
+
     public DateTime CreatedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }

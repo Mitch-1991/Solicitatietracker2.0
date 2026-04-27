@@ -44,11 +44,13 @@ public partial class SollicitatietrackerDbContext : DbContext
             entity.HasIndex(e => e.UserId, "IX_applications_user_id");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.ArchivedAt).HasColumnName("archived_at");
             entity.Property(e => e.AppliedDate).HasColumnName("applied_date");
             entity.Property(e => e.CompanyId).HasColumnName("company_id");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(sysutcdatetime())")
                 .HasColumnName("created_at");
+            entity.Property(e => e.IsArchived).HasColumnName("is_archived");
             entity.Property(e => e.JobTitle)
                 .HasMaxLength(200)
                 .HasColumnName("job_title");

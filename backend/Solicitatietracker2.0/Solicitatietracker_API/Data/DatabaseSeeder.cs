@@ -11,6 +11,7 @@ public static class DatabaseSeeder
     {
         await context.Database.EnsureCreatedAsync();
         await EnsureAuthColumnsAsync(context);
+        await EnsureApplicationArchiveColumnsAsync(context);
 
         const string seedEmail = "dummy.user@sollicitatietracker.local";
 
@@ -147,6 +148,21 @@ public static class DatabaseSeeder
             IF COL_LENGTH('users', 'password_reset_token_expires_at') IS NULL
             BEGIN
                 ALTER TABLE users ADD password_reset_token_expires_at datetime2 NULL;
+            END
+            """);
+    }
+
+    private static async TaskSystem EnsureApplicationArchiveColumnsAsync(SollicitatietrackerDbContext context)
+    {
+        await context.Database.ExecuteSqlRawAsync("""
+            IF COL_LENGTH('applications', 'is_archived') IS NULL
+            BEGIN
+                ALTER TABLE applications ADD is_archived bit NOT NULL CONSTRAINT DF_applications_is_archived DEFAULT 0;
+            END
+
+            IF COL_LENGTH('applications', 'archived_at') IS NULL
+            BEGIN
+                ALTER TABLE applications ADD archived_at datetime2 NULL;
             END
             """);
     }

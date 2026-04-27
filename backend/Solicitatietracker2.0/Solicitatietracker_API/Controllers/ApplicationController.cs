@@ -19,6 +19,40 @@ namespace Sollicitatietracker_API.Controllers
         }
 
 
+        [HttpGet("archive")]
+        public async Task<ActionResult<List<ApplicationDto>>> GetArchive()
+        {
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized(new { message = "Invalid token" });
+            }
+
+            var applications = await _applicationService.GetArchivedAsync(userId.Value);
+            return Ok(applications);
+        }
+
+        [HttpGet("archive/{id:int}")]
+        public async Task<ActionResult<ApplicationDto>> GetArchivedById(int id)
+        {
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized(new { message = "Invalid token" });
+            }
+
+            var application = await _applicationService.GetArchivedByIdAsync(id, userId.Value);
+
+            if (application == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(application);
+        }
+
         [ActionName("FindByIdAsync")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ApplicationDto>> FindByIdAsync(int id)
@@ -94,6 +128,27 @@ namespace Sollicitatietracker_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while updating the application.");
             }
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> ArchiveApplication(int id)
+        {
+            var userId = GetCurrentUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized(new { message = "Invalid token" });
+            }
+
+            var archived = await _applicationService.ArchiveAsync(id, userId.Value);
+
+            if (!archived)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
         private int? GetCurrentUserId()
         {
             var userIdClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;

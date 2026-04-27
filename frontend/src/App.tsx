@@ -8,6 +8,7 @@ import ForgotPassword from "./pages/ForgotPassword.tsx"
 import ResetPassword from "./pages/ResetPassword.tsx"
 import Settings from "./pages/Settings.tsx"
 import Calendar from "./pages/Calendar.tsx"
+import ArchivedApplications from "./pages/ArchivedApplications.tsx"
 import ProtectedRoute from "./components/ProtectedRoute.tsx"
 import { useState, useEffect } from "react"
 import { MapOverview } from "./mappers/dashboardMappers.ts"
@@ -62,6 +63,11 @@ export default function App() {
           <Route path="/applications" element={
             <ProtectedRoute>
               <Application overview={overview} setOverview={setOverview}/>
+            </ProtectedRoute>
+          } />
+          <Route path="/applications/archive" element={
+            <ProtectedRoute>
+              <ArchivedApplications />
             </ProtectedRoute>
           } />
           <Route path="/settings" element={

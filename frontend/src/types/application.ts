@@ -71,6 +71,8 @@ export interface createdApplicationResponse {
     notes: string | null;
     nextStep: string | null;
     interview: InterviewDto | null;
+    isArchived: boolean;
+    archivedAt: string | null;
 }
 
 export interface updateApplicationDto {
@@ -104,5 +106,7 @@ export interface ApplicationDetailResponse {
     contactPerson: string | null;
     contactEmail: string | null;
     nextStep: string | null;
+    isArchived: boolean;
+    archivedAt: string | null;
 }
 

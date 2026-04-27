@@ -219,6 +219,40 @@ namespace SollicitatieTracker.App.Services
 
            return MapToDto(updatedApplication);
         }
+
+        public async Task<bool> ArchiveAsync(int id, int userId)
+        {
+            var application = await _applicationRepository.GetApplicationByIdWithDetailsAsync(id, userId);
+
+            if (application == null)
+            {
+                return false;
+            }
+
+            application.IsArchived = true;
+            application.ArchivedAt = DateTime.UtcNow;
+            application.UpdatedAt = DateTime.UtcNow;
+
+            await _applicationRepository.UpdateApplicationAsync(application);
+            return true;
+        }
+
+        public async Task<List<ApplicationDto>> GetArchivedAsync(int userId)
+        {
+            var applications = await _applicationRepository.GetArchivedApplicationsAsync(userId);
+
+            return applications
+                .Select(MapToDto)
+                .ToList();
+        }
+
+        public async Task<ApplicationDto?> GetArchivedByIdAsync(int id, int userId)
+        {
+            var application = await _applicationRepository.GetArchivedApplicationByIdWithDetailsAsync(id, userId);
+
+            return application == null ? null : MapToDto(application);
+        }
+
         private static ApplicationDto MapToDto(Application application)
         {
             var latestNote = application.ApplicationNotes?
@@ -245,6 +279,8 @@ namespace SollicitatieTracker.App.Services
                 SalaryMax = application.SalaryMax,
                 Notes = latestNote?.NoteText,
                 Interview = interview == null ? null : MapInterviewToDto(interview),
+                IsArchived = application.IsArchived,
+                ArchivedAt = application.ArchivedAt,
                 CreatedAt = application.CreatedAt,
                 UpdatedAt = application.UpdatedAt
             };

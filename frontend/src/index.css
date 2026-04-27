@@ -1160,6 +1160,30 @@ body {
     box-shadow: 0 10px 18px rgba(79, 70, 229, 0.2);
 }
 
+.applications-page-actions{
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.applications-archive-link{
+    color: #4f46e5;
+    font-size: 0.92rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.applications-archive-link:hover{
+    color: #362fc7;
+    text-decoration: underline;
+}
+
+.archive-back-link{
+    align-self: center;
+}
+
 .application-modal-overlay{
     position: fixed;
     inset: 0;
@@ -1326,6 +1350,30 @@ body {
     gap: 10px;
 }
 
+.application-detail-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 18px;
+}
+
+.application-detail-grid p{
+    margin: 0;
+    color: #41506a;
+    overflow-wrap: anywhere;
+}
+
+.application-detail-grid strong{
+    color: #172036;
+}
+
+.application-detail-section{
+    margin-top: 18px;
+}
+
+.application-detail-section .application-modal-section-title{
+    margin-bottom: 14px;
+}
+
 .application-modal-button{
     border-radius: 12px;
     padding: 11px 18px;
@@ -1455,6 +1503,41 @@ body {
     font-weight: 800;
     border-bottom: 1px solid #dbe4f0;
     text-align: left;
+}
+
+.archive-state{
+    margin: 0;
+    padding: 18px;
+    color: #52627d;
+    font-weight: 700;
+}
+
+.archive-state-error{
+    color: #c72f3a;
+}
+
+.archive-empty-state{
+    display: grid;
+    place-items: center;
+    gap: 10px;
+    padding: 38px 18px;
+    color: #52627d;
+}
+
+.archive-empty-state svg{
+    width: 30px;
+    height: 30px;
+    color: #7787a1;
+}
+
+.archive-empty-state p{
+    margin: 0;
+    font-weight: 800;
+}
+
+.archive-table th:last-child,
+.archive-table td:last-child{
+    width: 94px;
 }
 
 .applications-table{
@@ -1708,6 +1791,10 @@ body {
         align-self: flex-start;
     }
 
+    .applications-page-actions{
+        align-items: flex-start;
+    }
+
     .application-modal-overlay{
         padding: 18px;
     }
@@ -1817,6 +1904,15 @@ body {
         padding: 13px 16px;
     }
 
+    .applications-page-actions{
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .applications-archive-link{
+        align-self: flex-start;
+    }
+
     .application-modal-overlay{
         align-items: flex-start;
         padding: 12px;
@@ -1836,6 +1932,10 @@ body {
     .application-modal-grid{
         grid-template-columns: 1fr;
         gap: 14px;
+    }
+
+    .application-detail-grid{
+        grid-template-columns: 1fr;
     }
 
     .application-modal-field-full{

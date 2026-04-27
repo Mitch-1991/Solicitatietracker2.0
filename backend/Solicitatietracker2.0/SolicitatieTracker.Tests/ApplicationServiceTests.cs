@@ -297,6 +297,106 @@ public class ApplicationServiceTests
     }
 
     [Fact]
+    public async TaskSystem ArchiveAsync_ArchivesActiveApplicationAndKeepsDetails()
+    {
+        var existingInterview = new InterviewEntity
+        {
+            Id = 5,
+            ApplicationId = 8,
+            InterviewType = "Online",
+            ScheduledStart = new DateTime(2026, 4, 10, 9, 0, 0),
+            MeetingLink = "https://meet.example.com/old",
+            CreatedAt = DateTime.UtcNow.AddDays(-1)
+        };
+        var application = ExistingApplication(status: Status.Gesprek, existingInterview);
+        application.ApplicationNotes.Add(new ApplicationNoteEntity
+        {
+            Id = 4,
+            ApplicationId = application.Id,
+            NoteText = "Bewaar deze notitie",
+            CreatedAt = DateTime.UtcNow
+        });
+        var applicationRepository = new FakeApplicationRepository
+        {
+            ApplicationById = application
+        };
+        var service = CreateService(applicationRepository);
+
+        var result = await service.ArchiveAsync(8, userId: 3);
+
+        Assert.True(result);
+        Assert.True(application.IsArchived);
+        Assert.NotNull(application.ArchivedAt);
+        Assert.Single(application.Interviews);
+        Assert.Single(application.ApplicationNotes);
+    }
+
+    [Fact]
+    public async TaskSystem ArchiveAsync_ReturnsFalseForOtherUsersApplication()
+    {
+        var applicationRepository = new FakeApplicationRepository
+        {
+            ApplicationById = ExistingApplication(status: Status.Verzonden)
+        };
+        var service = CreateService(applicationRepository);
+
+        var result = await service.ArchiveAsync(8, userId: 99);
+
+        Assert.False(result);
+        Assert.False(applicationRepository.ApplicationById!.IsArchived);
+        Assert.Null(applicationRepository.ApplicationById.ArchivedAt);
+    }
+
+    [Fact]
+    public async TaskSystem GetArchivedAsync_ReturnsOnlyArchivedApplications()
+    {
+        var archivedApplication = ExistingApplication(status: Status.Verzonden);
+        archivedApplication.IsArchived = true;
+        archivedApplication.ArchivedAt = new DateTime(2026, 4, 20, 10, 0, 0);
+        var applicationRepository = new FakeApplicationRepository
+        {
+            ApplicationById = archivedApplication
+        };
+        var service = CreateService(applicationRepository);
+
+        var result = await service.GetArchivedAsync(userId: 3);
+
+        var archived = Assert.Single(result);
+        Assert.True(archived.IsArchived);
+        Assert.Equal(archivedApplication.ArchivedAt, archived.ArchivedAt);
+        Assert.Equal("Acme", archived.CompanyName);
+    }
+
+    [Fact]
+    public async TaskSystem GetArchivedByIdAsync_ReturnsArchivedDetailsWithInterview()
+    {
+        var archivedApplication = ExistingApplication(
+            Status.Gesprek,
+            new InterviewEntity
+            {
+                Id = 6,
+                ApplicationId = 8,
+                InterviewType = "Op locatie",
+                ScheduledStart = new DateTime(2026, 4, 18, 10, 0, 0),
+                Location = "Gent",
+                CreatedAt = DateTime.UtcNow
+            });
+        archivedApplication.IsArchived = true;
+        archivedApplication.ArchivedAt = new DateTime(2026, 4, 20, 10, 0, 0);
+        var service = CreateService(new FakeApplicationRepository
+        {
+            ApplicationById = archivedApplication
+        });
+
+        var result = await service.GetArchivedByIdAsync(8, userId: 3);
+
+        Assert.NotNull(result);
+        Assert.True(result!.IsArchived);
+        Assert.Equal("Op locatie", result.Interview!.InterviewType);
+        Assert.Equal("Gent", result.Interview.Location);
+    }
+
+    [Fact]
     public async TaskSystem CreateAsync_ThrowsWhenOnlineInterviewHasInvalidMeetingLink()
     {
         var service = CreateService();
@@ -390,12 +490,30 @@ public class ApplicationServiceTests
 
         public Task<ApplicationEntity> GetApplicationByIdAsync(int id, int userId)
         {
-            return Task.FromResult(ApplicationById!);
+            return Task.FromResult(ApplicationById is { IsArchived: false } && ApplicationById.UserId == userId ? ApplicationById : null!);
         }
 
         public Task<ApplicationEntity?> GetApplicationByIdWithDetailsAsync(int id, int userId)
         {
-            return Task.FromResult(ApplicationById ?? AddedApplications.FirstOrDefault(application => application.Id == id));
+            var application = ApplicationById ?? AddedApplications.FirstOrDefault(application => application.Id == id);
+            return Task.FromResult(application is { IsArchived: false } && application.UserId == userId ? application : null);
+        }
+
+        public Task<ApplicationEntity?> GetArchivedApplicationByIdWithDetailsAsync(int id, int userId)
+        {
+            var application = ApplicationById ?? AddedApplications.FirstOrDefault(application => application.Id == id);
+            return Task.FromResult(application is { IsArchived: true } && application.UserId == userId ? application : null);
+        }
+
+        public Task<List<ApplicationEntity>> GetArchivedApplicationsAsync(int userId)
+        {
+            var applications = new[] { ApplicationById }
+                .Where(application => application is { IsArchived: true } && application.UserId == userId)
+                .Cast<ApplicationEntity>()
+                .Concat(AddedApplications.Where(application => application.IsArchived && application.UserId == userId))
+                .ToList();
+
+            return Task.FromResult(applications);
         }
 
         public Task<ApplicationEntity> UpdateApplicationAsync(ApplicationEntity application)

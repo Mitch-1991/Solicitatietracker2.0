@@ -17,6 +17,7 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
             return await _context.Interviews
                 .Where(i =>
                     i.Application.UserId == userId &&
+                    !i.Application.IsArchived &&
                     i.ScheduledStart >= from &&
                     i.ScheduledStart < toExclusive)
                 .Include(i => i.Application)

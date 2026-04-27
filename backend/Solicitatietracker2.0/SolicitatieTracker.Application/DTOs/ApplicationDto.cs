@@ -23,6 +23,8 @@ namespace SollicitatieTracker.App.DTOs
         public decimal? SalaryMax { get; set; }
         public string? Notes { get; set; }
         public InterviewDto? Interview { get; set; }
+        public bool IsArchived { get; set; }
+        public DateTime? ArchivedAt { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

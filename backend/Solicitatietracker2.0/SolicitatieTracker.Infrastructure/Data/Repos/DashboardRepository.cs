@@ -16,18 +16,22 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
 
         public async Task<int> GetAanbiedingenCountAsync(int userId)
         {
-            return await _context.Applications.Where(a => a.UserId == userId).CountAsync(a => a.Status == Status.Aanbieding);
+            return await _context.Applications
+                .Where(a => a.UserId == userId && !a.IsArchived)
+                .CountAsync(a => a.Status == Status.Aanbieding);
         }
 
         public async Task<int> GetAfgewezenCountAsync(int userId)
         {
-            return await _context.Applications.Where(a => a.UserId == userId).CountAsync(a => a.Status == Status.Afgewezen);
+            return await _context.Applications
+                .Where(a => a.UserId == userId && !a.IsArchived)
+                .CountAsync(a => a.Status == Status.Afgewezen);
         }
 
         public async Task<IEnumerable<Interview>> GetAllIntervieuwApplicationsAsync(int userId)
         {
             return await _context.Interviews
-                .Where(i => i.Application.UserId == userId && i.ScheduledStart >= DateTime.Now)
+                .Where(i => i.Application.UserId == userId && !i.Application.IsArchived && i.ScheduledStart >= DateTime.Now)
                 .Include(i => i.Application)
                     .ThenInclude(a => a.Company)
                 .OrderBy(i => i.ScheduledStart)
@@ -37,7 +41,7 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
         public async Task<IEnumerable<Application>> GetAllLopendeSollicitatiesAsync(int userId)
         {
             return await _context.Applications
-                .Where(a => a.UserId == userId &&  a.Status != Status.Aanbieding)
+                .Where(a => a.UserId == userId && !a.IsArchived &&  a.Status != Status.Aanbieding)
                 .Include(a => a.Company)
                 .ToListAsync();
         }
@@ -45,12 +49,14 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
         public async Task<int> GetGesprekkenGeplandCountAsync(int userId)
         {
             return await _context.Interviews
-                .CountAsync(i => i.Application.UserId == userId && i.ScheduledStart >= DateTime.Now);
+                .CountAsync(i => i.Application.UserId == userId && !i.Application.IsArchived && i.ScheduledStart >= DateTime.Now);
         }
 
         public async Task<int> GetLopendeSollicitatiesCountAsync(int userId)
         {
-            return await _context.Applications.Where(a => a.UserId == userId).CountAsync(a => a.Status == Status.Verzonden);
+            return await _context.Applications
+                .Where(a => a.UserId == userId && !a.IsArchived)
+                .CountAsync(a => a.Status == Status.Verzonden);
         }
     }
 }

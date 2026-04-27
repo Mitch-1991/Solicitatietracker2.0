@@ -1,8 +1,9 @@
 import ApplicationsTable from "../components/ApplicationsTable.tsx";
 import { useState, type JSX } from "react";
+import { Link } from "react-router-dom";
 import ApplicationModal from "../components/ApplicationModal.tsx";
 import ApplicationDetail from "../components/ApplicationsDetailComponent.tsx"
-import { getApplicationById } from "../services/applicationService.ts";
+import { archiveApplication, getApplicationById } from "../services/applicationService.ts";
 import type { DashboardOverviewItem } from "../types/dashboard.ts";
 import type { ApplicationDetailResponse } from "../types/application.ts";
 
@@ -42,6 +43,23 @@ export default function Application(props: ApplicationProps): JSX.Element {
 
     }
 
+    async function handleArchiveClick(application: DashboardOverviewItem): Promise<void> {
+        const confirmed = window.confirm(`Sollicitatie archiveren?\n\n${application.jobTitle} bij ${application.companyName}`);
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            await archiveApplication(application.id);
+            props.setOverview((prev: DashboardOverviewItem[]) =>
+                prev.filter((item) => item.id !== application.id)
+            );
+        } catch (error) {
+            window.alert(error instanceof Error ? error.message : "Fout bij het archiveren van de sollicitatie.");
+        }
+    }
+
     function handleCloseModal() {
         setShowModal(false);
         setSelectedApplication(null);
@@ -58,10 +76,15 @@ export default function Application(props: ApplicationProps): JSX.Element {
                     <h1 className="dashboard-title">Sollicitaties</h1>
                     <p className="dashboard-subtitle">Beheer al je sollicitaties</p>
                 </div>
-                <button type="button" className="new-application-button"
-                    onClick={handleCreateClick}>
-                    + Nieuwe sollicitatie
-                </button>
+                <div className="applications-page-actions">
+                    <button type="button" className="new-application-button"
+                        onClick={handleCreateClick}>
+                        + Nieuwe sollicitatie
+                    </button>
+                    <Link className="applications-archive-link" to="/applications/archive">
+                        Archief
+                    </Link>
+                </div>
             </div>
             <>
                 <div className="applicationsTable-container">
@@ -71,6 +94,7 @@ export default function Application(props: ApplicationProps): JSX.Element {
                         opSollicitatiePagina={true}
                         onEdit={handleEditClick}
                         onDetail={handleDetailClick}
+                        onDelete={handleArchiveClick}
                     />
                 </div>
 

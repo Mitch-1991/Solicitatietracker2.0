@@ -141,3 +141,36 @@ export async function getApplicationById(id: number): Promise<ApplicationDetailR
     const application: ApplicationDetailResponse = await response.json();
     return application;
 }
+
+export async function archiveApplication(id: number): Promise<void> {
+    const response: Response = await apiFetch(`${API_URL}/${id}`, {
+        method: "DELETE"
+    });
+
+    if (!response.ok) {
+        const errorMessage = await readErrorMessage(response, "Fout bij het archiveren van de sollicitatie.");
+        throw new Error(errorMessage);
+    }
+}
+
+export async function getArchivedApplications(): Promise<ApplicationDetailResponse[]> {
+    const response: Response = await apiFetch(`${API_URL}/archive`);
+
+    if (!response.ok) {
+        const errorMessage = await readErrorMessage(response, "Fout bij het ophalen van het archief.");
+        throw new Error(errorMessage);
+    }
+
+    return await response.json();
+}
+
+export async function getArchivedApplicationById(id: number): Promise<ApplicationDetailResponse> {
+    const response: Response = await apiFetch(`${API_URL}/archive/${id}`);
+
+    if (!response.ok) {
+        const errorMessage = await readErrorMessage(response, "Fout bij het ophalen van de gearchiveerde sollicitatie.");
+        throw new Error(errorMessage);
+    }
+
+    return await response.json();
+}

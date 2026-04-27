@@ -26,16 +26,40 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
         }
 
         public async Task<Application> GetApplicationByIdAsync(int id, int userId) =>
-            await _context.Applications.Where(a => a.UserId == userId).FirstOrDefaultAsync(a => a.Id == id);
+            await _context.Applications
+                .Where(a => a.UserId == userId && !a.IsArchived)
+                .FirstOrDefaultAsync(a => a.Id == id);
 
         public async Task<Application?> GetApplicationByIdWithDetailsAsync(int id, int userId)
         {
             return await _context.Applications
-                .Where(a => a.UserId == userId)
+                .Where(a => a.UserId == userId && !a.IsArchived)
                 .Include(a => a.Company)
                 .Include(a => a.ApplicationNotes)
                 .Include(a => a.Interviews)
                 .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task<Application?> GetArchivedApplicationByIdWithDetailsAsync(int id, int userId)
+        {
+            return await _context.Applications
+                .Where(a => a.UserId == userId && a.IsArchived)
+                .Include(a => a.Company)
+                .Include(a => a.ApplicationNotes)
+                .Include(a => a.Interviews)
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task<List<Application>> GetArchivedApplicationsAsync(int userId)
+        {
+            return await _context.Applications
+                .Where(a => a.UserId == userId && a.IsArchived)
+                .Include(a => a.Company)
+                .Include(a => a.ApplicationNotes)
+                .Include(a => a.Interviews)
+                .OrderByDescending(a => a.ArchivedAt)
+                .ThenByDescending(a => a.UpdatedAt)
+                .ToListAsync();
         }
 
         public async Task<Application> UpdateApplicationAsync(Application application)

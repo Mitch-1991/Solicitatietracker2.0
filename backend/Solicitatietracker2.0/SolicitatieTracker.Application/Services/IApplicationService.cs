@@ -12,5 +12,8 @@ namespace SollicitatieTracker.App.Services
         Task<ApplicationDto> CreateAsync(CreateApplicationDto createApplicationDto, int userId);
         Task<ApplicationDto?> FindByIdAsync(int id, int userId);
         Task<ApplicationDto?> UpdateAsync(int id, UpdateApplicationDto updateApplicationDto, int userId);
+        Task<bool> ArchiveAsync(int id, int userId);
+        Task<List<ApplicationDto>> GetArchivedAsync(int userId);
+        Task<ApplicationDto?> GetArchivedByIdAsync(int id, int userId);
     }
 }

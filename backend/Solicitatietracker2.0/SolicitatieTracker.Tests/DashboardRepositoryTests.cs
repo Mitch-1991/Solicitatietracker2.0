@@ -14,15 +14,18 @@ public class DashboardRepositoryTests
         await using var context = CreateContext();
 
         context.Applications.AddRange(
-            new Application { UserId = 1, CompanyId = 1, JobTitle = "Backend Developer", Status = Status.Verzonden, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new Application { UserId = 1, CompanyId = 1, JobTitle = "Frontend Developer", Status = Status.Gesprek, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new Application { UserId = 1, CompanyId = 1, JobTitle = "Cloud Engineer", Status = Status.Afgewezen, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-            new Application { UserId = 1, CompanyId = 1, JobTitle = "API Developer", Status = Status.Aanbieding, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
+            new Application { Id = 1, UserId = 1, CompanyId = 1, JobTitle = "Backend Developer", Status = Status.Verzonden, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new Application { Id = 2, UserId = 1, CompanyId = 1, JobTitle = "Frontend Developer", Status = Status.Gesprek, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new Application { Id = 3, UserId = 1, CompanyId = 1, JobTitle = "Cloud Engineer", Status = Status.Afgewezen, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new Application { Id = 4, UserId = 1, CompanyId = 1, JobTitle = "API Developer", Status = Status.Aanbieding, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new Application { Id = 5, UserId = 1, CompanyId = 1, JobTitle = "Archived Developer", Status = Status.Verzonden, IsArchived = true, ArchivedAt = DateTime.UtcNow, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new Application { Id = 6, UserId = 1, CompanyId = 1, JobTitle = "Archived Interview", Status = Status.Gesprek, IsArchived = true, ArchivedAt = DateTime.UtcNow, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
         );
 
         context.Interviews.AddRange(
             new Interview { ApplicationId = 1, InterviewType = "HR", ScheduledStart = DateTime.Now.AddDays(2), CreatedAt = DateTime.UtcNow },
-            new Interview { ApplicationId = 2, InterviewType = "Technisch", ScheduledStart = DateTime.Now.AddDays(-2), CreatedAt = DateTime.UtcNow }
+            new Interview { ApplicationId = 2, InterviewType = "Technisch", ScheduledStart = DateTime.Now.AddDays(-2), CreatedAt = DateTime.UtcNow },
+            new Interview { ApplicationId = 6, InterviewType = "Technisch", ScheduledStart = DateTime.Now.AddDays(3), CreatedAt = DateTime.UtcNow }
         );
 
         await context.SaveChangesAsync();
@@ -38,6 +41,28 @@ public class DashboardRepositoryTests
         Assert.Equal(1, gesprekkenGepland);
         Assert.Equal(1, afgewezen);
         Assert.Equal(1, aanbiedingen);
+    }
+
+    [Fact]
+    public async TaskSystem RepositoryActiveQueriesExcludeArchivedApplications()
+    {
+        await using var context = CreateContext();
+
+        var company = new Company { Id = 1, UserId = 1, Name = "Acme", CreatedAt = DateTime.UtcNow };
+        context.Companies.Add(company);
+        context.Applications.AddRange(
+            new Application { Id = 1, UserId = 1, CompanyId = 1, Company = company, JobTitle = "Active", Status = Status.Verzonden, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new Application { Id = 2, UserId = 1, CompanyId = 1, Company = company, JobTitle = "Archived", Status = Status.Verzonden, IsArchived = true, ArchivedAt = DateTime.UtcNow, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
+        );
+
+        await context.SaveChangesAsync();
+
+        var repository = new DashboardRepository(context);
+
+        var applications = await repository.GetAllLopendeSollicitatiesAsync(userId: 1);
+
+        var application = Assert.Single(applications);
+        Assert.Equal("Active", application.JobTitle);
     }
 
     [Fact]

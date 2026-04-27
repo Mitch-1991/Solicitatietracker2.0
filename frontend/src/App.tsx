@@ -7,6 +7,7 @@ import Register from "./pages/Register.tsx"
 import ForgotPassword from "./pages/ForgotPassword.tsx"
 import ResetPassword from "./pages/ResetPassword.tsx"
 import Settings from "./pages/Settings.tsx"
+import Calendar from "./pages/Calendar.tsx"
 import ProtectedRoute from "./components/ProtectedRoute.tsx"
 import { useState, useEffect } from "react"
 import { MapOverview } from "./mappers/dashboardMappers.ts"
@@ -66,6 +67,11 @@ export default function App() {
           <Route path="/settings" element={
             <ProtectedRoute>
               <Settings />
+            </ProtectedRoute>
+          } />
+          <Route path="/calendar" element={
+            <ProtectedRoute>
+              <Calendar />
             </ProtectedRoute>
           } />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

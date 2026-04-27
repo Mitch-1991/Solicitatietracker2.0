@@ -30,6 +30,8 @@ if (jwtSettings == null || string.IsNullOrEmpty(jwtSettings.Key))
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<ICalendarRepository, CalendarRepository>();
+builder.Services.AddScoped<ICalendarService, CalendarService>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();

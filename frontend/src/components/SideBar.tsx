@@ -1,6 +1,7 @@
 import { 
     LayoutDashboard,
     FileText,
+    CalendarDays,
     Settings
 
 } from "lucide-react";
@@ -28,6 +29,12 @@ const navigationItems: NavigationItem[] = [
         label: "Sollicitaties",
         icon: FileText,
         to: "/applications",
+    },
+    {
+        id: "calendar",
+        label: "Kalender",
+        icon: CalendarDays,
+        to: "/calendar",
     },
     {
         id: "settings",

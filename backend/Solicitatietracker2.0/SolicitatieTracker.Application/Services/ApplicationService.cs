@@ -254,6 +254,7 @@ namespace SollicitatieTracker.App.Services
         {
             if (status != Status.Gesprek)
             {
+                application.Interviews.Clear();
                 return;
             }
 

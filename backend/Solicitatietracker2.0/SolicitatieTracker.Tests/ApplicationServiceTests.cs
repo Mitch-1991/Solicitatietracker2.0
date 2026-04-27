@@ -266,6 +266,37 @@ public class ApplicationServiceTests
     }
 
     [Fact]
+    public async TaskSystem UpdateAsync_RemovesExistingInterviewWhenStatusLeavesGesprek()
+    {
+        var existingInterview = new InterviewEntity
+        {
+            Id = 5,
+            ApplicationId = 8,
+            InterviewType = "Online",
+            ScheduledStart = new DateTime(2026, 4, 10, 9, 0, 0),
+            MeetingLink = "https://meet.example.com/old",
+            CreatedAt = DateTime.UtcNow.AddDays(-1)
+        };
+        var applicationRepository = new FakeApplicationRepository
+        {
+            ApplicationById = ExistingApplication(status: Status.Gesprek, existingInterview)
+        };
+        var service = CreateService(applicationRepository);
+
+        var result = await service.UpdateAsync(8, new UpdateApplicationDto
+        {
+            CompanyName = "Acme",
+            JobTitle = "Backend Developer",
+            Status = Status.Verzonden,
+            AppliedDate = new DateOnly(2026, 4, 1),
+            Interview = null
+        }, userId: 3);
+
+        Assert.Null(result!.Interview);
+        Assert.Empty(applicationRepository.ApplicationById!.Interviews);
+    }
+
+    [Fact]
     public async TaskSystem CreateAsync_ThrowsWhenOnlineInterviewHasInvalidMeetingLink()
     {
         var service = CreateService();

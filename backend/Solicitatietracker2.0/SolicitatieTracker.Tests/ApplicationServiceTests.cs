@@ -4,6 +4,7 @@ using SollicitatieTracker.Infrastructure.Data.Repos;
 using ApplicationEntity = SollicitatieTracker.Domain.Entities.Application;
 using ApplicationNoteEntity = SollicitatieTracker.Domain.Entities.ApplicationNote;
 using CompanyEntity = SollicitatieTracker.Domain.Entities.Company;
+using InterviewEntity = SollicitatieTracker.Domain.Entities.Interview;
 using TaskSystem = System.Threading.Tasks.Task;
 
 namespace SollicitatieTracker.Tests;
@@ -47,7 +48,7 @@ public class ApplicationServiceTests
         {
             companyName = " OpenAl ",
             JobTitle = "Frontend Developer",
-            Status = Status.Gesprek,
+            Status = Status.Verzonden,
             AppliedDate = new DateOnly(2026, 3, 31),
             NextStep = "Technisch gesprek"
         };
@@ -150,6 +151,138 @@ public class ApplicationServiceTests
         Assert.Equal(updatedAt, result.UpdatedAt);
     }
 
+    [Fact]
+    public async TaskSystem CreateAsync_CreatesInterviewWhenStatusIsGesprek()
+    {
+        var applicationRepository = new FakeApplicationRepository();
+        var service = CreateService(applicationRepository);
+        var interviewStart = new DateTime(2026, 4, 12, 14, 30, 0);
+
+        var result = await service.CreateAsync(new CreateApplicationDto
+        {
+            companyName = "Acme",
+            JobTitle = "Backend Developer",
+            Status = Status.Gesprek,
+            Interview = ValidOnlineInterview(interviewStart)
+        }, userId: 3);
+
+        var addedApplication = Assert.Single(applicationRepository.AddedApplications);
+        var addedInterview = Assert.Single(addedApplication.Interviews);
+        Assert.Equal("Online", addedInterview.InterviewType);
+        Assert.Equal(interviewStart, addedInterview.ScheduledStart);
+        Assert.Equal("https://meet.example.com/interview", addedInterview.MeetingLink);
+        Assert.NotNull(result.Interview);
+        Assert.Equal("Online", result.Interview!.InterviewType);
+    }
+
+    [Fact]
+    public async TaskSystem CreateAsync_ThrowsWhenGesprekHasNoInterview()
+    {
+        var service = CreateService();
+
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => service.CreateAsync(new CreateApplicationDto
+        {
+            companyName = "Acme",
+            JobTitle = "Backend Developer",
+            Status = Status.Gesprek
+        }, userId: 3));
+
+        Assert.Equal("Interviewgegevens zijn verplicht wanneer de status Gesprek is.", exception.Message);
+    }
+
+    [Fact]
+    public async TaskSystem CreateAsync_IgnoresInterviewWhenStatusIsNotGesprek()
+    {
+        var applicationRepository = new FakeApplicationRepository();
+        var service = CreateService(applicationRepository);
+
+        await service.CreateAsync(new CreateApplicationDto
+        {
+            companyName = "Acme",
+            JobTitle = "Backend Developer",
+            Status = Status.Verzonden,
+            Interview = ValidOnlineInterview(new DateTime(2026, 4, 12, 14, 30, 0))
+        }, userId: 3);
+
+        Assert.Empty(applicationRepository.AddedApplications.Single().Interviews);
+    }
+
+    [Fact]
+    public async TaskSystem UpdateAsync_CreatesInterviewWhenStatusBecomesGesprek()
+    {
+        var applicationRepository = new FakeApplicationRepository
+        {
+            ApplicationById = ExistingApplication(status: Status.Verzonden)
+        };
+        var service = CreateService(applicationRepository);
+
+        var result = await service.UpdateAsync(8, new UpdateApplicationDto
+        {
+            CompanyName = "Acme",
+            JobTitle = "Backend Developer",
+            Status = Status.Gesprek,
+            AppliedDate = new DateOnly(2026, 4, 1),
+            Interview = ValidLocationInterview(new DateTime(2026, 4, 12, 10, 0, 0))
+        }, userId: 3);
+
+        Assert.NotNull(result!.Interview);
+        Assert.Equal("Op locatie", result.Interview!.InterviewType);
+        Assert.Equal("Antwerpen", result.Interview.Location);
+        Assert.Single(applicationRepository.ApplicationById!.Interviews);
+    }
+
+    [Fact]
+    public async TaskSystem UpdateAsync_UpdatesExistingInterviewWhenStatusStaysGesprek()
+    {
+        var existingInterview = new InterviewEntity
+        {
+            Id = 5,
+            ApplicationId = 8,
+            InterviewType = "Online",
+            ScheduledStart = new DateTime(2026, 4, 10, 9, 0, 0),
+            MeetingLink = "https://meet.example.com/old",
+            CreatedAt = DateTime.UtcNow.AddDays(-1)
+        };
+        var applicationRepository = new FakeApplicationRepository
+        {
+            ApplicationById = ExistingApplication(status: Status.Gesprek, existingInterview)
+        };
+        var service = CreateService(applicationRepository);
+        var newStart = new DateTime(2026, 4, 12, 11, 0, 0);
+
+        var result = await service.UpdateAsync(8, new UpdateApplicationDto
+        {
+            CompanyName = "Acme",
+            JobTitle = "Backend Developer",
+            Status = Status.Gesprek,
+            AppliedDate = new DateOnly(2026, 4, 1),
+            Interview = ValidOnlineInterview(newStart)
+        }, userId: 3);
+
+        Assert.Single(applicationRepository.ApplicationById!.Interviews);
+        Assert.Equal(newStart, existingInterview.ScheduledStart);
+        Assert.Equal("https://meet.example.com/interview", existingInterview.MeetingLink);
+        Assert.Equal(newStart, result!.Interview!.ScheduledStart);
+    }
+
+    [Fact]
+    public async TaskSystem CreateAsync_ThrowsWhenOnlineInterviewHasInvalidMeetingLink()
+    {
+        var service = CreateService();
+        var interview = ValidOnlineInterview(new DateTime(2026, 4, 12, 14, 30, 0));
+        interview.MeetingLink = "geen-link";
+
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => service.CreateAsync(new CreateApplicationDto
+        {
+            companyName = "Acme",
+            JobTitle = "Backend Developer",
+            Status = Status.Gesprek,
+            Interview = interview
+        }, userId: 3));
+
+        Assert.Equal("Meeting link moet een geldige URL zijn.", exception.Message);
+    }
+
     private static ApplicationService CreateService(
         FakeApplicationRepository? applicationRepository = null,
         FakeCompanyRepository? companyRepository = null,
@@ -159,6 +292,57 @@ public class ApplicationServiceTests
             applicationRepository ?? new FakeApplicationRepository(),
             companyRepository ?? new FakeCompanyRepository(),
             noteRepository ?? new FakeApplicationNoteRepository());
+    }
+
+    private static InterviewDto ValidOnlineInterview(DateTime scheduledStart)
+    {
+        return new InterviewDto
+        {
+            InterviewType = "Online",
+            ScheduledStart = scheduledStart,
+            ScheduledEnd = scheduledStart.AddHours(1),
+            MeetingLink = "https://meet.example.com/interview",
+            ContactPerson = "Sofie Janssens",
+            ContactEmail = "sofie@example.com",
+            Notes = "Technische intake"
+        };
+    }
+
+    private static InterviewDto ValidLocationInterview(DateTime scheduledStart)
+    {
+        return new InterviewDto
+        {
+            InterviewType = "Op locatie",
+            ScheduledStart = scheduledStart,
+            ScheduledEnd = scheduledStart.AddHours(1),
+            Location = "Antwerpen",
+            ContactPerson = "Sofie Janssens",
+            ContactEmail = "sofie@example.com",
+            Notes = "Gesprek op kantoor"
+        };
+    }
+
+    private static ApplicationEntity ExistingApplication(Status status, params InterviewEntity[] interviews)
+    {
+        return new ApplicationEntity
+        {
+            Id = 8,
+            CompanyId = 11,
+            UserId = 3,
+            Company = new CompanyEntity
+            {
+                Id = 11,
+                Name = "Acme",
+                UserId = 3,
+                CreatedAt = DateTime.UtcNow
+            },
+            JobTitle = "Backend Developer",
+            Status = status,
+            AppliedDate = new DateOnly(2026, 4, 1),
+            CreatedAt = DateTime.UtcNow.AddDays(-5),
+            UpdatedAt = DateTime.UtcNow.AddDays(-2),
+            Interviews = interviews.ToList()
+        };
     }
 
     private sealed class FakeApplicationRepository : IApplicationRepository

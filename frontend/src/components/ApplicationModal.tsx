@@ -51,6 +51,9 @@ export default function ApplicationModal(props: ApplicationModalProps) {
     const isNewCompany: boolean = selectedCompany === "new";
     const showReadonlyCompanyFields: boolean = selectedCompany !== "" && !isNewCompany && !isEditMode;
     const showEditableCompanyFields: boolean = isEditMode || isNewCompany;
+    const showInterviewFields: boolean = formData.status === "Gesprek";
+    const isOnlineInterview: boolean = formData.interviewType === "Online";
+    const isLocationInterview: boolean = formData.interviewType === "Op locatie";
 
     useEffect(() => {
         async function fetchCompanies(): Promise<void> {
@@ -124,8 +127,36 @@ export default function ApplicationModal(props: ApplicationModalProps) {
         if (formData.jobUrl?.trim() && !isValidUrl(formData.jobUrl.trim())) {
             newErrors.jobUrl = "Voer een geldige URL in.";
         }
-        if (formData.contactEmail.trim() && !isValidEmail(formData.contactEmail.trim())) {
-            newErrors.contactEmail = "Voer een geldig e-mailadres in.";
+        if (showInterviewFields) {
+            if (formData.interviewType !== "Online" && formData.interviewType !== "Op locatie") {
+                newErrors.interviewType = "Interviewtype is verplicht.";
+            }
+            if (!formData.interviewDate.trim()) {
+                newErrors.interviewDate = "Interviewdatum is verplicht.";
+            }
+            if (!formData.interviewStartTime.trim()) {
+                newErrors.interviewStartTime = "Startuur is verplicht.";
+            }
+            if (
+                formData.interviewStartTime.trim() &&
+                formData.interviewEndTime.trim() &&
+                formData.interviewEndTime < formData.interviewStartTime
+            ) {
+                newErrors.interviewEndTime = "Einduur mag niet voor het startuur liggen.";
+            }
+            if (isOnlineInterview) {
+                if (!formData.meetingLink.trim()) {
+                    newErrors.meetingLink = "Meeting link is verplicht.";
+                } else if (!isValidUrl(formData.meetingLink.trim())) {
+                    newErrors.meetingLink = "Voer een geldige meeting link in.";
+                }
+            }
+            if (isLocationInterview && !formData.interviewLocation.trim()) {
+                newErrors.interviewLocation = "Locatie is verplicht.";
+            }
+            if (formData.interviewContactEmail.trim() && !isValidEmail(formData.interviewContactEmail.trim())) {
+                newErrors.interviewContactEmail = "Voer een geldig e-mailadres in.";
+            }
         }
 
         return newErrors;
@@ -467,6 +498,123 @@ export default function ApplicationModal(props: ApplicationModalProps) {
                                 placeholder="bijv. Wachten op reactie"
                             />
                         </div>
+
+                        {showInterviewFields && (
+                            <>
+                                <h3 className="application-modal-section-title">Interview inplannen</h3>
+
+                                <div className="application-modal-field">
+                                    <label>Type *</label>
+                                    <select
+                                        name="interviewType"
+                                        value={formData.interviewType}
+                                        onChange={handleChange}
+                                        className={errors.interviewType ? "input-error" : ""}
+                                    >
+                                        <option value="">Selecteer type</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Op locatie">Op locatie</option>
+                                    </select>
+                                    {errors.interviewType && <p className="field-error">{errors.interviewType}</p>}
+                                </div>
+
+                                <div className="application-modal-field">
+                                    <label>Interviewdatum *</label>
+                                    <input
+                                        type="date"
+                                        name="interviewDate"
+                                        value={formData.interviewDate}
+                                        onChange={handleChange}
+                                        className={errors.interviewDate ? "input-error" : ""}
+                                    />
+                                    {errors.interviewDate && <p className="field-error">{errors.interviewDate}</p>}
+                                </div>
+
+                                <div className="application-modal-field">
+                                    <label>Startuur *</label>
+                                    <input
+                                        type="time"
+                                        name="interviewStartTime"
+                                        value={formData.interviewStartTime}
+                                        onChange={handleChange}
+                                        className={errors.interviewStartTime ? "input-error" : ""}
+                                    />
+                                    {errors.interviewStartTime && <p className="field-error">{errors.interviewStartTime}</p>}
+                                </div>
+
+                                <div className="application-modal-field">
+                                    <label>Einduur</label>
+                                    <input
+                                        type="time"
+                                        name="interviewEndTime"
+                                        value={formData.interviewEndTime}
+                                        onChange={handleChange}
+                                        className={errors.interviewEndTime ? "input-error" : ""}
+                                    />
+                                    {errors.interviewEndTime && <p className="field-error">{errors.interviewEndTime}</p>}
+                                </div>
+
+                                {isOnlineInterview && (
+                                    <div className="application-modal-field application-modal-field-full">
+                                        <label>Meeting link *</label>
+                                        <input
+                                            type="text"
+                                            name="meetingLink"
+                                            value={formData.meetingLink}
+                                            onChange={handleChange}
+                                            className={errors.meetingLink ? "input-error" : ""}
+                                        />
+                                        {errors.meetingLink && <p className="field-error">{errors.meetingLink}</p>}
+                                    </div>
+                                )}
+
+                                {isLocationInterview && (
+                                    <div className="application-modal-field application-modal-field-full">
+                                        <label>Locatie *</label>
+                                        <input
+                                            type="text"
+                                            name="interviewLocation"
+                                            value={formData.interviewLocation}
+                                            onChange={handleChange}
+                                            className={errors.interviewLocation ? "input-error" : ""}
+                                        />
+                                        {errors.interviewLocation && <p className="field-error">{errors.interviewLocation}</p>}
+                                    </div>
+                                )}
+
+                                <div className="application-modal-field">
+                                    <label>Contactpersoon</label>
+                                    <input
+                                        type="text"
+                                        name="interviewContactPerson"
+                                        value={formData.interviewContactPerson}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+
+                                <div className="application-modal-field">
+                                    <label>Contact e-mail</label>
+                                    <input
+                                        type="email"
+                                        name="interviewContactEmail"
+                                        value={formData.interviewContactEmail}
+                                        onChange={handleChange}
+                                        className={errors.interviewContactEmail ? "input-error" : ""}
+                                    />
+                                    {errors.interviewContactEmail && <p className="field-error">{errors.interviewContactEmail}</p>}
+                                </div>
+
+                                <div className="application-modal-field application-modal-field-full">
+                                    <label>Interviewnotities</label>
+                                    <textarea
+                                        name="interviewNotes"
+                                        value={formData.interviewNotes}
+                                        onChange={handleChange}
+                                        rows={3}
+                                    />
+                                </div>
+                            </>
+                        )}
 
                         <div className="application-modal-field application-modal-field-full">
                             <label>Beschrijving</label>

@@ -60,6 +60,8 @@ namespace SollicitatieTracker.App.Services
                 UpdatedAt = DateTime.UtcNow
             };
 
+            ApplyInterviewData(dto.Status, dto.Interview, application);
+
             var createdApplication = await _applicationRepository.AddApplicationAsync(application);
 
             ApplicationNote? createdNote = null;
@@ -183,6 +185,8 @@ namespace SollicitatieTracker.App.Services
             application.Company.Name = dto.CompanyName.Trim();
             application.Company.Location = string.IsNullOrWhiteSpace(dto.Location) ? null : dto.Location.Trim();
 
+            ApplyInterviewData(dto.Status, dto.Interview, application);
+
             var existingNote = application.ApplicationNotes?
                 .OrderByDescending(n => n.CreatedAt)
                 .FirstOrDefault();
@@ -220,6 +224,9 @@ namespace SollicitatieTracker.App.Services
             var latestNote = application.ApplicationNotes?
                 .OrderByDescending(n => n.CreatedAt)
                 .FirstOrDefault();
+            var interview = application.Interviews?
+                .OrderBy(i => i.ScheduledStart)
+                .FirstOrDefault();
 
             return new ApplicationDto
             {
@@ -237,9 +244,130 @@ namespace SollicitatieTracker.App.Services
                 SalaryMin = application.SalaryMin,
                 SalaryMax = application.SalaryMax,
                 Notes = latestNote?.NoteText,
+                Interview = interview == null ? null : MapInterviewToDto(interview),
                 CreatedAt = application.CreatedAt,
                 UpdatedAt = application.UpdatedAt
             };
+        }
+
+        private static void ApplyInterviewData(Status status, InterviewDto? dto, Application application)
+        {
+            if (status != Status.Gesprek)
+            {
+                return;
+            }
+
+            ValidateInterview(dto);
+
+            var existingInterview = application.Interviews
+                .OrderBy(i => i.Id)
+                .ThenBy(i => i.CreatedAt)
+                .FirstOrDefault();
+
+            if (existingInterview == null)
+            {
+                existingInterview = new Interview
+                {
+                    ApplicationId = application.Id,
+                    CreatedAt = DateTime.UtcNow
+                };
+                application.Interviews.Add(existingInterview);
+            }
+
+            UpdateInterviewEntity(existingInterview, dto!);
+        }
+
+        private static void UpdateInterviewEntity(Interview interview, InterviewDto dto)
+        {
+            var interviewType = dto.InterviewType.Trim();
+            var isOnline = IsOnlineInterview(interviewType);
+
+            interview.InterviewType = interviewType;
+            interview.ScheduledStart = dto.ScheduledStart;
+            interview.ScheduledEnd = dto.ScheduledEnd;
+            interview.Location = isOnline ? null : dto.Location?.Trim();
+            interview.MeetingLink = isOnline ? dto.MeetingLink?.Trim() : null;
+            interview.ContactPerson = string.IsNullOrWhiteSpace(dto.ContactPerson) ? null : dto.ContactPerson.Trim();
+            interview.ContactEmail = string.IsNullOrWhiteSpace(dto.ContactEmail) ? null : dto.ContactEmail.Trim();
+            interview.Notes = string.IsNullOrWhiteSpace(dto.Notes) ? null : dto.Notes.Trim();
+        }
+
+        private static void ValidateInterview(InterviewDto? dto)
+        {
+            if (dto == null)
+            {
+                throw new ArgumentException("Interviewgegevens zijn verplicht wanneer de status Gesprek is.");
+            }
+
+            var interviewType = dto.InterviewType?.Trim();
+            if (!IsOnlineInterview(interviewType) && !IsLocationInterview(interviewType))
+            {
+                throw new ArgumentException("Interviewtype moet Online of Op locatie zijn.");
+            }
+
+            if (dto.ScheduledStart == default)
+            {
+                throw new ArgumentException("Starttijd van het interview is verplicht.");
+            }
+
+            if (dto.ScheduledEnd.HasValue && dto.ScheduledEnd.Value < dto.ScheduledStart)
+            {
+                throw new ArgumentException("Eindtijd mag niet voor de starttijd liggen.");
+            }
+
+            if (IsOnlineInterview(interviewType))
+            {
+                if (string.IsNullOrWhiteSpace(dto.MeetingLink))
+                {
+                    throw new ArgumentException("Meeting link is verplicht voor een online interview.");
+                }
+
+                if (!Uri.TryCreate(dto.MeetingLink.Trim(), UriKind.Absolute, out var meetingUri) ||
+                    (meetingUri.Scheme != Uri.UriSchemeHttp && meetingUri.Scheme != Uri.UriSchemeHttps))
+                {
+                    throw new ArgumentException("Meeting link moet een geldige URL zijn.");
+                }
+            }
+
+            if (IsLocationInterview(interviewType) && string.IsNullOrWhiteSpace(dto.Location))
+            {
+                throw new ArgumentException("Locatie is verplicht voor een interview op locatie.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.ContactEmail) && !IsValidEmail(dto.ContactEmail.Trim()))
+            {
+                throw new ArgumentException("Contact e-mail is ongeldig.");
+            }
+        }
+
+        private static InterviewDto MapInterviewToDto(Interview interview)
+        {
+            return new InterviewDto
+            {
+                InterviewType = interview.InterviewType,
+                ScheduledStart = interview.ScheduledStart,
+                ScheduledEnd = interview.ScheduledEnd,
+                Location = interview.Location,
+                MeetingLink = interview.MeetingLink,
+                ContactPerson = interview.ContactPerson,
+                ContactEmail = interview.ContactEmail,
+                Notes = interview.Notes
+            };
+        }
+
+        private static bool IsOnlineInterview(string? interviewType)
+        {
+            return string.Equals(interviewType, "Online", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsLocationInterview(string? interviewType)
+        {
+            return string.Equals(interviewType, "Op locatie", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsValidEmail(string email)
+        {
+            return email.Contains('@') && email.Contains('.');
         }
     }
 

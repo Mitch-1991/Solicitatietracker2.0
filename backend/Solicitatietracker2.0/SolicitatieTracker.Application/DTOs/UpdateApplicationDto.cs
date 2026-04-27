@@ -19,5 +19,6 @@ namespace SollicitatieTracker.App.DTOs
         public decimal? SalaryMin { get; set; }
         public decimal? SalaryMax { get; set; }
         public string? Notes { get; set; }
+        public InterviewDto? Interview { get; set; }
     }
 }

@@ -58,7 +58,7 @@ export const MapOverview = (data: DashboardOverviewResponse[] = []): DashboardOv
 
 export const MapUpcomingInterviews = (data: UpcomingInterviewResponse[] = []): UpcomingInterview[] =>
     data.map((item: UpcomingInterviewResponse): UpcomingInterview => ({
-        id:2,
+        id: item.id,
         companyName: item.companyName,
         jobTitle: item.jobTitle,
         interviewDate: item.interviewDate,

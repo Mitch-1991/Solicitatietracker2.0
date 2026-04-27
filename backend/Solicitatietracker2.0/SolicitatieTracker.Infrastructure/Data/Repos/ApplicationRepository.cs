@@ -34,6 +34,7 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
                 .Where(a => a.UserId == userId)
                 .Include(a => a.Company)
                 .Include(a => a.ApplicationNotes)
+                .Include(a => a.Interviews)
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
 

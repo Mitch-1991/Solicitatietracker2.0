@@ -26,21 +26,12 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
 
         public async Task<IEnumerable<Interview>> GetAllIntervieuwApplicationsAsync(int userId)
         {
-            var applicationsWithInterviews = await _context.Applications
-                                                                .Where(a => a.UserId == userId && a.Interviews != null)
-                                                                .Include(a => a.Interviews)
-                                                                .ToListAsync();
-            var Interviews = new List<Interview>();
-
-            foreach(var application in applicationsWithInterviews)
-            {
-                foreach (var interview in application.Interviews)
-                {
-                    Interviews.Add(interview);
-                }
-            }
-            return Interviews;
-
+            return await _context.Interviews
+                .Where(i => i.Application.UserId == userId && i.ScheduledStart >= DateTime.Now)
+                .Include(i => i.Application)
+                    .ThenInclude(a => a.Company)
+                .OrderBy(i => i.ScheduledStart)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Application>> GetAllLopendeSollicitatiesAsync(int userId)
@@ -53,7 +44,8 @@ namespace SollicitatieTracker.Infrastructure.Data.Repos
 
         public async Task<int> GetGesprekkenGeplandCountAsync(int userId)
         {
-            return await _context.Applications.Where(a => a.UserId == userId).CountAsync(a => a.Status == Status.Gesprek);
+            return await _context.Interviews
+                .CountAsync(i => i.Application.UserId == userId && i.ScheduledStart >= DateTime.Now);
         }
 
         public async Task<int> GetLopendeSollicitatiesCountAsync(int userId)

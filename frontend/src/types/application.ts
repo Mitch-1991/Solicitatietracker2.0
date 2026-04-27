@@ -1,5 +1,18 @@
 import type { ApiApplicationStatus, ApplicationStatus, PriorityStatus } from "./common";
 
+export type InterviewType = "Online" | "Op locatie";
+
+export interface InterviewDto {
+    interviewType: InterviewType;
+    scheduledStart: string;
+    scheduledEnd: string | null;
+    location: string | null;
+    meetingLink: string | null;
+    contactPerson: string | null;
+    contactEmail: string | null;
+    notes: string | null;
+}
+
 export interface ApplicationFormData {
     companyName: string;
     jobTitle: string;
@@ -15,6 +28,15 @@ export interface ApplicationFormData {
     contactEmail: string;
     nextStep: string;
     websiteURL: string | null;
+    interviewType: InterviewType | "";
+    interviewDate: string;
+    interviewStartTime: string;
+    interviewEndTime: string;
+    interviewLocation: string;
+    meetingLink: string;
+    interviewContactPerson: string;
+    interviewContactEmail: string;
+    interviewNotes: string;
 }
 
 export interface createApplicationDto {
@@ -30,6 +52,7 @@ export interface createApplicationDto {
     salaryMax: number | null;
     notes: string | null;
     nextStep: string | null;
+    interview: InterviewDto | null;
 }
 
 export interface createdApplicationResponse {
@@ -47,6 +70,7 @@ export interface createdApplicationResponse {
     contactEmail: string | null;
     notes: string | null;
     nextStep: string | null;
+    interview: InterviewDto | null;
 }
 
 export interface updateApplicationDto {
@@ -61,6 +85,7 @@ export interface updateApplicationDto {
     salaryMax: number | null;
     notes: string | null;
     nextStep: string | null;
+    interview: InterviewDto | null;
 }
 
 export interface ApplicationDetailResponse {
@@ -75,6 +100,7 @@ export interface ApplicationDetailResponse {
     salaryMin: number | null;
     salaryMax: number | null;
     notes: string | null;
+    interview: InterviewDto | null;
     contactPerson: string | null;
     contactEmail: string | null;
     nextStep: string | null;

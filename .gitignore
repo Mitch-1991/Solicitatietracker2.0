@@ -38,3 +38,6 @@ appsettings.*.json
 
 # Secrets
 secrets.json
+
+# Local planning/review docs
+docs/

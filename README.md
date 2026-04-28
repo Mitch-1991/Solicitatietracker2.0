@@ -10,4 +10,4 @@ Full-stack sollicitatietracker gebouwd met React/TypeScript en ASP.NET Core Web 
 ## Deployment
 
 - Frontend: GitHub Pages
-- Backend: Render/Azure
+- Backend: MonsterASP

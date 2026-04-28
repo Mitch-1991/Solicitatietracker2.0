@@ -1,7 +1,6 @@
-namespace SolicitatieTracker.App.Services.Auth
+namespace SolicitatieTracker.App.Services.Auth;
+
+public interface IResetTokenResponsePolicy
 {
-    public interface IResetTokenResponsePolicy
-    {
-        bool ShouldExposeResetToken();
-    }
+    bool ShouldExposeResetUrl();
 }

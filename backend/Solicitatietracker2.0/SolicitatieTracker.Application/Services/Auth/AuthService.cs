@@ -1,6 +1,8 @@
 using SolicitatieTracker.App.DTOs.Auth;
 using SolicitatieTracker.Infrastructure.Data.Repos.Auth;
+using SolicitatieTracker.Infrastructure.Messaging;
 using SollicitatieTracker.Domain.Entities;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using TaskSystem = System.Threading.Tasks.Task;
@@ -14,15 +16,21 @@ namespace SolicitatieTracker.App.Services.Auth
 
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenService _jwtTokenService;
+        private readonly IEmailMessagePublisher _emailMessagePublisher;
+        private readonly IResetPasswordLinkBuilder _resetPasswordLinkBuilder;
         private readonly IResetTokenResponsePolicy _resetTokenResponsePolicy;
 
         public AuthService(
             IUserRepository authRepository,
             IJwtTokenService jwtTokenService,
+            IEmailMessagePublisher emailMessagePublisher,
+            IResetPasswordLinkBuilder resetPasswordLinkBuilder,
             IResetTokenResponsePolicy resetTokenResponsePolicy)
         {
             _userRepository = authRepository;
             _jwtTokenService = jwtTokenService;
+            _emailMessagePublisher = emailMessagePublisher;
+            _resetPasswordLinkBuilder = resetPasswordLinkBuilder;
             _resetTokenResponsePolicy = resetTokenResponsePolicy;
         }
 
@@ -171,11 +179,10 @@ namespace SolicitatieTracker.App.Services.Auth
             user.PasswordResetTokenExpiresAt = DateTime.UtcNow.AddMinutes(ResetTokenValidityMinutes);
 
             await _userRepository.UpdateAsync(user);
-
-            if (_resetTokenResponsePolicy.ShouldExposeResetToken())
+            var resetUrl = await PublishPasswordResetEmailAsync(user, token);
+            if (_resetTokenResponsePolicy.ShouldExposeResetUrl())
             {
-                response.ResetToken = token;
-                response.ResetUrl = $"/reset-password?token={Uri.EscapeDataString(token)}";
+                response.ResetUrl = resetUrl;
             }
 
             return response;
@@ -257,6 +264,37 @@ namespace SolicitatieTracker.App.Services.Auth
                 LastName = user.LastName,
                 Email = user.Email
             };
+        }
+
+        private async Task<string> PublishPasswordResetEmailAsync(User user, string token)
+        {
+            var resetUrl = _resetPasswordLinkBuilder.BuildResetPasswordLink(token);
+            var encodedResetUrl = WebUtility.HtmlEncode(resetUrl);
+            var encodedName = WebUtility.HtmlEncode(user.FirstName);
+
+            await _emailMessagePublisher.PublishAsync(new EmailMessage
+            {
+                ToEmail = user.Email,
+                Subject = "Wachtwoord resetten - SollicitatieTracker",
+                TextBody = $"""
+                    Hallo {user.FirstName},
+
+                    Gebruik deze link om je wachtwoord opnieuw in te stellen:
+                    {resetUrl}
+
+                    Deze link blijft {ResetTokenValidityMinutes} minuten geldig.
+                    Heb je dit niet aangevraagd? Dan mag je deze e-mail negeren.
+                    """,
+                HtmlBody = $"""
+                    <p>Hallo {encodedName},</p>
+                    <p>Gebruik deze link om je wachtwoord opnieuw in te stellen:</p>
+                    <p><a href="{encodedResetUrl}">{encodedResetUrl}</a></p>
+                    <p>Deze link blijft {ResetTokenValidityMinutes} minuten geldig.</p>
+                    <p>Heb je dit niet aangevraagd? Dan mag je deze e-mail negeren.</p>
+                    """
+            });
+
+            return resetUrl;
         }
 
         private static string GenerateResetToken()

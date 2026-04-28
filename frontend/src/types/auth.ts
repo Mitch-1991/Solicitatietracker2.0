@@ -30,7 +30,6 @@ export interface ForgotPasswordRequest {
 
 export interface ForgotPasswordResponse {
     message: string;
-    resetToken?: string;
     resetUrl?: string;
 }
 

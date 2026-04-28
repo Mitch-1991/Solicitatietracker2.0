@@ -1,6 +1,7 @@
 using SolicitatieTracker.App.DTOs.Auth;
 using SolicitatieTracker.App.Services.Auth;
 using SolicitatieTracker.Infrastructure.Data.Repos.Auth;
+using SolicitatieTracker.Infrastructure.Messaging;
 using SollicitatieTracker.Domain.Entities;
 using TaskSystem = System.Threading.Tasks.Task;
 
@@ -48,49 +49,59 @@ public class AuthServiceTests
     public async TaskSystem ForgotPasswordAsync_DoesNotRevealUnknownEmail()
     {
         var repository = new FakeUserRepository();
-        var service = CreateService(repository);
+        var emailPublisher = new FakeEmailMessagePublisher();
+        var service = CreateService(repository, emailPublisher: emailPublisher);
 
         var result = await service.ForgotPasswordAsync(new ForgotPasswordRequestDto
         {
             Email = "missing@example.com"
         });
 
-        Assert.Null(result.ResetToken);
-        Assert.Null(result.ResetUrl);
+        Assert.Equal("Als dit e-mailadres bestaat, ontvang je zo meteen een resetlink.", result.Message);
         Assert.Equal(0, repository.UpdateCount);
+        Assert.Empty(emailPublisher.Messages);
     }
 
     [Fact]
-    public async TaskSystem ForgotPasswordAsync_DoesNotExposeTokenOutsideDevelopment()
+    public async TaskSystem ForgotPasswordAsync_QueuesResetEmailWithoutExposingToken()
     {
         var user = CreateUser(password: "old-password");
         var repository = new FakeUserRepository(user);
-        var service = CreateService(repository);
+        var emailPublisher = new FakeEmailMessagePublisher();
+        var service = CreateService(repository, emailPublisher: emailPublisher);
 
         var result = await service.ForgotPasswordAsync(new ForgotPasswordRequestDto
         {
             Email = user.Email
         });
 
-        Assert.Null(result.ResetToken);
+        Assert.Equal("Als dit e-mailadres bestaat, ontvang je zo meteen een resetlink.", result.Message);
         Assert.Null(result.ResetUrl);
         Assert.Equal(1, repository.UpdateCount);
         Assert.NotNull(user.PasswordResetTokenHash);
+        var message = Assert.Single(emailPublisher.Messages);
+        Assert.Equal(user.Email, message.ToEmail);
+        Assert.Contains("/reset-password?token=", message.TextBody);
     }
 
     [Fact]
-    public async TaskSystem ForgotPasswordAsync_ExposesTokenInDevelopment()
+    public async TaskSystem ForgotPasswordAsync_ExposesResetUrlWhenPolicyAllowsIt()
     {
         var user = CreateUser(password: "old-password");
-        var service = CreateService(new FakeUserRepository(user), exposeResetToken: true);
+        var emailPublisher = new FakeEmailMessagePublisher();
+        var service = CreateService(
+            new FakeUserRepository(user),
+            emailPublisher: emailPublisher,
+            exposeResetUrl: true);
 
         var result = await service.ForgotPasswordAsync(new ForgotPasswordRequestDto
         {
             Email = user.Email
         });
 
-        Assert.NotNull(result.ResetToken);
         Assert.Contains("/reset-password?token=", result.ResetUrl);
+        var message = Assert.Single(emailPublisher.Messages);
+        Assert.Contains(result.ResetUrl!, message.TextBody);
     }
 
     [Fact]
@@ -98,12 +109,14 @@ public class AuthServiceTests
     {
         var user = CreateUser(password: "old-password");
         var repository = new FakeUserRepository(user);
-        var service = CreateService(repository, exposeResetToken: true);
-        var forgotResult = await service.ForgotPasswordAsync(new ForgotPasswordRequestDto { Email = user.Email });
+        var emailPublisher = new FakeEmailMessagePublisher();
+        var service = CreateService(repository, emailPublisher: emailPublisher);
+        await service.ForgotPasswordAsync(new ForgotPasswordRequestDto { Email = user.Email });
+        var resetToken = ExtractResetToken(emailPublisher);
 
         await service.ResetPasswordAsync(new ResetPasswordRequestDto
         {
-            Token = forgotResult.ResetToken!,
+            Token = resetToken,
             NewPassword = "new-password",
             ConfirmPassword = "new-password"
         });
@@ -117,13 +130,15 @@ public class AuthServiceTests
     public async TaskSystem ResetPasswordAsync_RejectsExpiredToken()
     {
         var user = CreateUser(password: "old-password");
-        var service = CreateService(new FakeUserRepository(user), exposeResetToken: true);
-        var forgotResult = await service.ForgotPasswordAsync(new ForgotPasswordRequestDto { Email = user.Email });
+        var emailPublisher = new FakeEmailMessagePublisher();
+        var service = CreateService(new FakeUserRepository(user), emailPublisher: emailPublisher);
+        await service.ForgotPasswordAsync(new ForgotPasswordRequestDto { Email = user.Email });
+        var resetToken = ExtractResetToken(emailPublisher);
         user.PasswordResetTokenExpiresAt = DateTime.UtcNow.AddMinutes(-1);
 
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => service.ResetPasswordAsync(new ResetPasswordRequestDto
         {
-            Token = forgotResult.ResetToken!,
+            Token = resetToken,
             NewPassword = "new-password",
             ConfirmPassword = "new-password"
         }));
@@ -162,12 +177,33 @@ public class AuthServiceTests
     private static AuthService CreateService(
         FakeUserRepository repository,
         FakeJwtTokenService? jwtTokenService = null,
-        bool exposeResetToken = false)
+        FakeEmailMessagePublisher? emailPublisher = null,
+        FakeResetPasswordLinkBuilder? resetPasswordLinkBuilder = null,
+        bool exposeResetUrl = false)
     {
         return new AuthService(
             repository,
             jwtTokenService ?? new FakeJwtTokenService(),
-            new FakeResetTokenResponsePolicy(exposeResetToken));
+            emailPublisher ?? new FakeEmailMessagePublisher(),
+            resetPasswordLinkBuilder ?? new FakeResetPasswordLinkBuilder(),
+            new FakeResetTokenResponsePolicy(exposeResetUrl));
+    }
+
+    private static string ExtractResetToken(FakeEmailMessagePublisher emailPublisher)
+    {
+        var message = Assert.Single(emailPublisher.Messages);
+        const string marker = "/reset-password?token=";
+        var markerIndex = message.TextBody.IndexOf(marker, StringComparison.Ordinal);
+        Assert.True(markerIndex >= 0);
+
+        var tokenStart = markerIndex + marker.Length;
+        var tokenEnd = message.TextBody.IndexOfAny(['\r', '\n', ' ', '<'], tokenStart);
+        if (tokenEnd < 0)
+        {
+            tokenEnd = message.TextBody.Length;
+        }
+
+        return Uri.UnescapeDataString(message.TextBody[tokenStart..tokenEnd].Trim());
     }
 
     private static User CreateUser(string password)
@@ -201,18 +237,37 @@ public class AuthServiceTests
         }
     }
 
+    private sealed class FakeEmailMessagePublisher : IEmailMessagePublisher
+    {
+        public List<EmailMessage> Messages { get; } = new();
+
+        public TaskSystem PublishAsync(EmailMessage message, CancellationToken cancellationToken = default)
+        {
+            Messages.Add(message);
+            return TaskSystem.CompletedTask;
+        }
+    }
+
+    private sealed class FakeResetPasswordLinkBuilder : IResetPasswordLinkBuilder
+    {
+        public string BuildResetPasswordLink(string token)
+        {
+            return $"https://app.example/reset-password?token={Uri.EscapeDataString(token)}";
+        }
+    }
+
     private sealed class FakeResetTokenResponsePolicy : IResetTokenResponsePolicy
     {
-        private readonly bool _exposeResetToken;
+        private readonly bool _exposeResetUrl;
 
-        public FakeResetTokenResponsePolicy(bool exposeResetToken)
+        public FakeResetTokenResponsePolicy(bool exposeResetUrl)
         {
-            _exposeResetToken = exposeResetToken;
+            _exposeResetUrl = exposeResetUrl;
         }
 
-        public bool ShouldExposeResetToken()
+        public bool ShouldExposeResetUrl()
         {
-            return _exposeResetToken;
+            return _exposeResetUrl;
         }
     }
 

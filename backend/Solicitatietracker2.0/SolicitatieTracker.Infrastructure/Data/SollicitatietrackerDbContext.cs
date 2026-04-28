@@ -21,6 +21,8 @@ public partial class SollicitatietrackerDbContext : DbContext
 
     public virtual DbSet<Document> Documents { get; set; }
 
+    public virtual DbSet<EmailOutboxMessage> EmailOutboxMessages { get; set; }
+
     public virtual DbSet<Interview> Interviews { get; set; }
 
     public virtual DbSet<StatusHistory> StatusHistories { get; set; }
@@ -176,6 +178,36 @@ public partial class SollicitatietrackerDbContext : DbContext
             entity.HasOne(d => d.Application).WithMany(p => p.Documents)
                 .HasForeignKey(d => d.ApplicationId)
                 .HasConstraintName("FK_documents_applications");
+        });
+
+        modelBuilder.Entity<EmailOutboxMessage>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_email_outbox_messages");
+
+            entity.ToTable("email_outbox_messages");
+
+            entity.HasIndex(e => new { e.Status, e.NextAttemptAt }, "IX_email_outbox_messages_status_next_attempt_at");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Attempts).HasColumnName("attempts");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(sysutcdatetime())")
+                .HasColumnName("created_at");
+            entity.Property(e => e.HtmlBody).HasColumnName("html_body");
+            entity.Property(e => e.LastError).HasColumnName("last_error");
+            entity.Property(e => e.NextAttemptAt).HasColumnName("next_attempt_at");
+            entity.Property(e => e.SentAt).HasColumnName("sent_at");
+            entity.Property(e => e.Status)
+                .HasConversion<string>()
+                .HasMaxLength(30)
+                .HasColumnName("status");
+            entity.Property(e => e.Subject)
+                .HasMaxLength(255)
+                .HasColumnName("subject");
+            entity.Property(e => e.TextBody).HasColumnName("text_body");
+            entity.Property(e => e.ToEmail)
+                .HasMaxLength(255)
+                .HasColumnName("to_email");
         });
 
         modelBuilder.Entity<Interview>(entity =>

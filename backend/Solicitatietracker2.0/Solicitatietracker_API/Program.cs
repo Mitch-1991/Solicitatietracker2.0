@@ -10,13 +10,18 @@ using SolicitatieTracker.Domain.Entities;
 using SolicitatieTracker.App.Services.Auth;
 using System.Text;
 using SolicitatieTracker.Infrastructure.Data.Repos.Auth;
+using SolicitatieTracker.Infrastructure.Data.Repos.Messaging;
+using SolicitatieTracker.Infrastructure.Messaging;
 using Microsoft.OpenApi.Models;
-using Solicitatietracker_API.Services;
+using Solicitatietracker_API.Services.Messaging;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+builder.Services.Configure<FrontendSettings>(builder.Configuration.GetSection("Frontend"));
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Email:Smtp"));
+builder.Services.Configure<EmailOutboxSettings>(builder.Configuration.GetSection("Email:Outbox"));
 
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
 
@@ -39,8 +44,14 @@ builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IApplicationNoteRepository, ApplicationNoteRepository>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IResetTokenResponsePolicy, DevelopmentResetTokenResponsePolicy>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IEmailOutboxRepository, EmailOutboxRepository>();
+builder.Services.AddScoped<IEmailMessagePublisher, EmailMessagePublisher>();
+builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
+builder.Services.AddScoped<IResetPasswordLinkBuilder, ConfiguredResetPasswordLinkBuilder>();
+builder.Services.AddScoped<IResetTokenResponsePolicy, DevelopmentResetTokenResponsePolicy>();
+builder.Services.AddScoped<EmailOutboxProcessor>();
+builder.Services.AddHostedService<EmailOutboxWorker>();
 builder.Services
     .AddControllers()
     .AddJsonOptions(options =>

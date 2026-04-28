@@ -156,4 +156,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/", () => "SolicitatieTracker API is running");
 app.Run();

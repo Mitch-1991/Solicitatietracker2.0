@@ -1,6 +1,10 @@
+const rawApiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
+if (!rawApiBaseUrl) {
+  throw new Error("VITE_API_BASE_URL is niet ingesteld. Controleer frontend/.env.production of GitHub Actions env.");
+}
 
-export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL)
+export const API_BASE_URL = rawApiBaseUrl
   .trim()
   .replace(/\/+$/, "");
 

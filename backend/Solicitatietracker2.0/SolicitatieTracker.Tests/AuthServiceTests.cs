@@ -57,7 +57,7 @@ public class AuthServiceTests
             Email = "missing@example.com"
         });
 
-        Assert.Equal("Als dit e-mailadres bestaat, ontvang je zo meteen een resetlink.", result.Message);
+        Assert.Equal("E-mail verzonden.", result.Message);
         Assert.Equal(0, repository.UpdateCount);
         Assert.Empty(emailPublisher.Messages);
     }
@@ -75,7 +75,7 @@ public class AuthServiceTests
             Email = user.Email
         });
 
-        Assert.Equal("Als dit e-mailadres bestaat, ontvang je zo meteen een resetlink.", result.Message);
+        Assert.Equal("E-mail verzonden.", result.Message);
         Assert.Null(result.ResetUrl);
         Assert.Equal(1, repository.UpdateCount);
         Assert.NotNull(user.PasswordResetTokenHash);

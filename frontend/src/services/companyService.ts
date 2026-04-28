@@ -1,8 +1,9 @@
 import { apiFetch } from "./apiClient";
+import { apiUrl } from "../config/api";
 
 import type {companyDetailResponse} from "../types/company.ts";
 
-const API_URL = "http://localhost:5158/api/company"
+const API_URL = apiUrl("/company")
 
 export async function getCompanies(): Promise<companyDetailResponse[]> {
     const response = await apiFetch(`${API_URL}/companies`);

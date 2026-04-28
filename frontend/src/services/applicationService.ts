@@ -1,4 +1,5 @@
 import { apiFetch } from "./apiClient";
+import { apiUrl } from "../config/api";
 
 import type {
     createdApplicationResponse,
@@ -7,7 +8,7 @@ import type {
     ApplicationDetailResponse
 } from "../types/application";
 
-const API_URL = "http://localhost:5158/api/application"
+const API_URL = apiUrl("/application")
 
 function normalizeValidationMessage(field: string, message: string): string | null {
     const trimmedMessage = message.trim()

@@ -1,7 +1,7 @@
 import { Briefcase, LogOut } from "lucide-react"
 import type { JSX } from "react"
 import { useNavigate } from "react-router-dom"
-import { useAuth } from "../context/AuthContext"
+import { useAuth } from "../context/authContextValue"
 
 export default function Header(): JSX.Element {
   const { user, logout, isAuthenticated } = useAuth()

@@ -12,7 +12,16 @@ dist
 dist-ssr
 .vite
 .vite-temp
+.turbo/
+.next/
+coverage/
 *.local
+
+# Environment files / local overrides
+.env
+.env.*
+!.env.example
+!.env.*.example
 
 # Editor directories and files
 .vs/
@@ -23,21 +32,39 @@ dist-ssr
 *.suo
 *.ntvs*
 *.njsproj
-*.sln
 *.sw?
+**/.vs/
 
 # .NET build output
 **/bin/
 **/obj/
+**/TestResults/
+**/coverage/
+**/publish/
+*.nupkg
+*.snupkg
 *.user
 *.rsuser
 
 # App settings (environment-specific)
 appsettings.*.json
 !appsettings.json
+!appsettings.*.example.json
 
 # Secrets
 secrets.json
+*.pfx
+*.p12
+*.pem
+*.key
+*.cer
+*.crt
+*.jks
+*.keystore
+*.pubxml
+*.pubxml.user
+service-account*.json
+firebase-adminsdk*.json
 
 # Local planning/review docs
 docs/

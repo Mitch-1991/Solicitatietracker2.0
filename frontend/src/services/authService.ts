@@ -8,8 +8,9 @@ import type {
     RegisterRequest,
     ResetPasswordRequest,
 } from '../types/auth';
+import { apiUrl } from '../config/api';
 
-const API_URL = "http://localhost:5158/api/auth";
+const API_URL = apiUrl("/auth");
 const TOKEN_KEY = "authToken"
 
 export function getStoredToken(): string | null {

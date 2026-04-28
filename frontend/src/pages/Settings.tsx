@@ -1,6 +1,6 @@
 import { Lock, UserRound } from "lucide-react"
 import { useState } from "react"
-import { useAuth } from "../context/AuthContext"
+import { useAuth } from "../context/authContextValue"
 import { changePassword } from "../services/authService"
 
 export default function Settings() {

@@ -1,7 +1,13 @@
-# Solicitatietracker 2.0
+# Sollicitatietracker
 
-Repository layout:
+Full-stack sollicitatietracker gebouwd met React/TypeScript en ASP.NET Core Web API.
 
-- `frontend/`: React + Vite frontend application
+## Projectstructuur
 
-Run frontend commands from `frontend/`, for example `npm run dev` or `npm run build`.
+- `/frontend` — React/TypeScript frontend
+- `/backend` — ASP.NET Core Web API backend
+
+## Deployment
+
+- Frontend: GitHub Pages
+- Backend: Render/Azure

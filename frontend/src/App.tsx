@@ -14,7 +14,7 @@ import { useState, useEffect } from "react"
 import { MapOverview } from "./mappers/dashboardMappers.ts"
 import { getDashboardOverview } from "./services/dashboardService.ts"
 import {Routes, Route, Navigate, useLocation} from "react-router-dom"
-import { useAuth } from "./context/AuthContext.tsx"
+import { useAuth } from "./context/authContextValue"
 
 import type { DashboardOverviewItem, DashboardOverviewResponse } from "./types/dashboard.ts"
 

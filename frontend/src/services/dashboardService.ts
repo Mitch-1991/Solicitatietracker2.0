@@ -1,4 +1,5 @@
 import { apiFetch } from "./apiClient";
+import { apiUrl } from "../config/api";
 
 import type {
     DashboardKpiResponse,
@@ -6,7 +7,7 @@ import type {
     UpcomingInterviewResponse
 } from "../types/dashboard";
 
-const API_URL = "http://localhost:5158/api/dashboard"
+const API_URL = apiUrl("/dashboard")
 
 export const getDashboardKpis = async (): Promise<DashboardKpiResponse> => {
     const response: Response = await apiFetch(`${API_URL}/kpis`);

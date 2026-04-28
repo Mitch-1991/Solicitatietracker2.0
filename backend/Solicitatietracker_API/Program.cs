@@ -27,7 +27,7 @@ var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
 
 if (jwtSettings == null || string.IsNullOrEmpty(jwtSettings.Key))
 {
-    throw new Exception("JWT Key is NULL — config wordt niet geladen.");
+    throw new Exception("JWT Key is missing. Configure Jwt:Key through user secrets or environment variables.");
 }
 
 
@@ -62,7 +62,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        var frontendBaseUrl = builder.Configuration["Frontend:BaseUrl"];
+        var allowedOrigin = string.IsNullOrWhiteSpace(frontendBaseUrl)
+            ? "http://localhost:5173"
+            : frontendBaseUrl.Trim().TrimEnd('/');
+
+        policy.WithOrigins(allowedOrigin)
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -130,7 +135,7 @@ Console.WriteLine($"Jwt key length: {jwtSettings.Key.Length}");
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<SollicitatieTracker.Infrastructure.Data.SollicitatietrackerDbContext>();
-    await DatabaseSeeder.SeedAsync(dbContext);
+    await DatabaseInitializer.InitializeAsync(dbContext);
 }
 
 // Configure the HTTP request pipeline.

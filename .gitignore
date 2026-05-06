@@ -34,6 +34,7 @@ coverage/
 *.njsproj
 *.sw?
 **/.vs/
+Figma_exmpl/
 
 # .NET build output
 **/bin/

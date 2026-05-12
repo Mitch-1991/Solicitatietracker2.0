@@ -9,7 +9,8 @@
       "Bash(dotnet build *)",
       "Bash(npx ecc-agentshield *)",
       "WebFetch(domain:developer.vdab.be)",
-      "WebFetch(domain:api.vdab.be)"
+      "WebFetch(domain:api.vdab.be)",
+      "Bash(git *)"
     ]
   }
 }

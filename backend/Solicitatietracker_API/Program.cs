@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
 using SolicitatieTracker.App.Services;
 using SollicitatieTracker.App.Services;
 using SollicitatieTracker.Dependency;
@@ -6,6 +7,8 @@ using SollicitatieTracker.Infrastructure.Data.Repos;
 using Sollicitatietracker_API.Data;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.RateLimiting;
 using SolicitatieTracker.Domain.Entities;
 using SolicitatieTracker.App.Services.Auth;
 using System.Text;
@@ -17,6 +20,13 @@ using Solicitatietracker_API.Services.Messaging;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.Configure<FrontendSettings>(builder.Configuration.GetSection("Frontend"));
@@ -126,11 +136,39 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddAuthorization();
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    // Login and reset-password: 5 attempts per minute per IP
+    options.AddPolicy("auth-strict", context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: $"{context.Connection.RemoteIpAddress}|{context.Request.Headers.UserAgent}",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                Window = TimeSpan.FromMinutes(1),
+                PermitLimit = 5,
+                QueueLimit = 0,
+                AutoReplenishment = true
+            }));
+
+    // Register and forgot-password: 3 attempts per hour per IP (these trigger emails/account creation)
+    options.AddPolicy("auth-email", context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: $"{context.Connection.RemoteIpAddress}|{context.Request.Headers.UserAgent}",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                Window = TimeSpan.FromHours(1),
+                PermitLimit = 3,
+                QueueLimit = 0,
+                AutoReplenishment = true
+            }));
+});
+
 var app = builder.Build();
 Console.WriteLine($"Environment: {app.Environment.EnvironmentName}");
 Console.WriteLine($"Jwt issuer: {jwtSettings.Issuer}");
 Console.WriteLine($"Jwt audience: {jwtSettings.Audience}");
-Console.WriteLine($"Jwt key length: {jwtSettings.Key.Length}");
 
 using (var scope = app.Services.CreateScope())
 {
@@ -149,10 +187,12 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseForwardedHeaders();
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRateLimiter();
 
 app.MapControllers();
 

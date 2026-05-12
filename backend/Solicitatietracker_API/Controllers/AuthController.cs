@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using SolicitatieTracker.App.DTOs.Auth;
 using SolicitatieTracker.App.Services.Auth;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,6 +20,7 @@ namespace Solicitatietracker_API.Controllers
         }
 
         [HttpPost("register")]
+        [EnableRateLimiting("auth-email")]
         public async Task<ActionResult<AuthResponseDto>> Register([FromBody] RegisterRequestDto dto)
         {
             try
@@ -31,6 +33,7 @@ namespace Solicitatietracker_API.Controllers
             }
         }
         [HttpPost("login")]
+        [EnableRateLimiting("auth-strict")]
         public async Task<ActionResult<AuthResponseDto>> Login([FromBody] LoginRequestDto dto)
         {
             try
@@ -47,6 +50,7 @@ namespace Solicitatietracker_API.Controllers
         }
 
         [HttpPost("forgot-password")]
+        [EnableRateLimiting("auth-email")]
         public async Task<ActionResult<ForgotPasswordResponseDto>> ForgotPassword([FromBody] ForgotPasswordRequestDto dto)
         {
             try
@@ -61,6 +65,7 @@ namespace Solicitatietracker_API.Controllers
         }
 
         [HttpPost("reset-password")]
+        [EnableRateLimiting("auth-strict")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto dto)
         {
             try
@@ -80,6 +85,7 @@ namespace Solicitatietracker_API.Controllers
 
         [Authorize]
         [HttpPost("change-password")]
+        [EnableRateLimiting("auth-strict")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto dto)
         {
             var userIdClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;

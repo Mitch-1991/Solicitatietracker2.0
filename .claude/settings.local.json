@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\User\\\\Desktop\\\\Eigen projecten\\\\Solicitatietracker\\\\Solicitatietracker2.0\" -Force)",
+      "Bash(Select-Object Mode, Name)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\User\\\\Desktop\\\\Eigen projecten\\\\Solicitatietracker\\\\Solicitatietracker2.0\\\\frontend\\\\src\" -Recurse | Select-Object -First 30 FullName, Name | ForEach-Object { $_.FullName })",
+      "Bash(npm run *)",
+      "Bash(npx eslint *)",
+      "Bash(dotnet build *)",
+      "Bash(npx ecc-agentshield *)",
+      "WebFetch(domain:developer.vdab.be)",
+      "WebFetch(domain:api.vdab.be)"
+    ]
+  }
+}

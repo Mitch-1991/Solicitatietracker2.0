@@ -1,5 +1,6 @@
-import { Lock, UserRound } from "lucide-react"
+import { Lock, Moon, UserRound } from "lucide-react"
 import { useState } from "react"
+import ThemeToggle from "../components/ThemeToggle"
 import { useAuth } from "../context/authContextValue"
 import { changePassword } from "../services/authService"
 
@@ -64,7 +65,7 @@ export default function Settings() {
           </dl>
         </article>
 
-        <article className="settings-panel">
+        <article className="settings-panel settings-panel-tall">
           <div className="settings-panel-header">
             <Lock aria-hidden="true" />
             <h2>Wachtwoord wijzigen</h2>
@@ -113,6 +114,20 @@ export default function Settings() {
               {isSubmitting ? "Bezig..." : "Wachtwoord wijzigen"}
             </button>
           </form>
+        </article>
+
+        <article className="settings-panel">
+          <div className="settings-panel-header">
+            <Moon aria-hidden="true" />
+            <h2>Weergave</h2>
+          </div>
+          <div className="settings-appearance-row">
+            <div>
+              <p className="settings-appearance-title">Thema</p>
+              <p className="settings-appearance-desc">Wissel tussen licht en donker thema. Je voorkeur wordt onthouden.</p>
+            </div>
+            <ThemeToggle />
+          </div>
         </article>
       </section>
     </main>

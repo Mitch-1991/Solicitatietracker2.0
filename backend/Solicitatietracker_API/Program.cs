@@ -63,11 +63,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         var frontendBaseUrl = builder.Configuration["Frontend:BaseUrl"];
-        var allowedOrigin = string.IsNullOrWhiteSpace(frontendBaseUrl)
-            ? "http://localhost:5173"
-            : frontendBaseUrl.Trim().TrimEnd('/');
+        var origins = new List<string> { "http://localhost:5173" };
+        if (!string.IsNullOrWhiteSpace(frontendBaseUrl))
+            origins.Add(frontendBaseUrl.Trim().TrimEnd('/'));
 
-        policy.WithOrigins(allowedOrigin)
+        policy.WithOrigins([.. origins])
             .AllowAnyHeader()
             .AllowAnyMethod();
     });

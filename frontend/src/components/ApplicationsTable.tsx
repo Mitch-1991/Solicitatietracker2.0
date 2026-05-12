@@ -34,8 +34,6 @@ export default function ApplicationsTable(props: ApplicationsTableProps) {
         action: TableAction,
         application: DashboardOverviewItem
     ): void {
-        console.log(`${action} sollicitatie`, application);
-
         if (!props.opSollicitatiePagina) return;
 
         switch (action) {

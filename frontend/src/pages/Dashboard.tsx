@@ -3,7 +3,7 @@ import { getDashboardKpis, getUpcomingInterviews } from "../services/dashboardSe
 import { MapKPIs, MapUpcomingInterviews } from "../mappers/dashboardMappers.ts";
 import StatCard from "../components/StatCard.tsx";
 import ApplicationsTable from "../components/ApplicationsTable.tsx";
-import type { 
+import type {
     DashboardOverviewItem,
     MappedKpi,
     DashboardKpiResponse,
@@ -14,22 +14,30 @@ import type {
 export default function Dashboard({overview}: {overview: DashboardOverviewItem[]}): JSX.Element {
     const [kpis, setKpis] = useState<MappedKpi[]>([])
     const [upcomingInterviews, setUpcomingInterviews] = useState<UpcomingInterview[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        const fetchKpis = async (): Promise<void> => {
-            const data: DashboardKpiResponse = await getDashboardKpis()
-            const mappedKpis: MappedKpi[] = MapKPIs(data)
-            setKpis(mappedKpis)
-        };
+        let cancelled = false
 
-        const fetchUpcomingInterviews = async (): Promise<void> => {
-            const data: UpcomingInterviewResponse[] = await getUpcomingInterviews()
-            const mappedInterviews: UpcomingInterview[] = MapUpcomingInterviews(data)
-            setUpcomingInterviews(mappedInterviews)
+        const fetchData = async (): Promise<void> => {
+            try {
+                const [kpiData, interviewData]: [DashboardKpiResponse, UpcomingInterviewResponse[]] = await Promise.all([
+                    getDashboardKpis(),
+                    getUpcomingInterviews()
+                ])
+                if (cancelled) return
+                setKpis(MapKPIs(kpiData))
+                setUpcomingInterviews(MapUpcomingInterviews(interviewData))
+            } catch {
+                if (!cancelled) setError("Dashboard kon niet worden geladen. Probeer de pagina te vernieuwen.")
+            } finally {
+                if (!cancelled) setIsLoading(false)
+            }
         }
 
-        fetchKpis()
-        fetchUpcomingInterviews()
+        fetchData()
+        return () => { cancelled = true }
     }, [])
 
     const KPIElements: JSX.Element[] = kpis.map((kpi: MappedKpi): JSX.Element =>
@@ -63,8 +71,12 @@ export default function Dashboard({overview}: {overview: DashboardOverviewItem[]
         <section className="dashboard-container">
             <h1 className="dashboard-title">Dashboard</h1>
             <p className="dashboard-subtitle">Overzicht van je lopende sollicitaties</p>
+            {error && <p className="dashboard-error" role="alert">{error}</p>}
             <div className="kpi-container">
-                {KPIElements}
+                {isLoading
+                    ? Array.from({ length: 4 }, (_, i) => <div key={i} className="kpi-skeleton" aria-hidden="true" />)
+                    : KPIElements
+                }
             </div>
             <div className="display-bord">
                 <div className="applicationsTable-container">
@@ -74,7 +86,10 @@ export default function Dashboard({overview}: {overview: DashboardOverviewItem[]
                 <aside className="upcoming-interviews-panel">
                     <h2 className="upcoming-interviews-title">Komende gesprekken</h2>
                     <ul className="upcoming-interviews-list">
-                        {upcomingInterviews.length > 0 ? InterviewElements : <p>Geen aankomende gesprekken</p>}
+                        {upcomingInterviews.length > 0
+                            ? InterviewElements
+                            : <li className="upcoming-interviews-empty">Geen aankomende gesprekken</li>
+                        }
                     </ul>
                 </aside>
             </div>

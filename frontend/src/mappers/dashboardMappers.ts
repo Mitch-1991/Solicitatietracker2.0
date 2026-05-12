@@ -21,28 +21,28 @@ export const MapKPIs = (data: DashboardKpiResponse): MappedKpi[] => [
       label: "Lopende sollicitaties",
       value: data.lopendeSollicitaties,
       icon: FileText,
-      color: "#2B7FFF",
+      color: "var(--kpi-blue)",
     },
     {
       id: 2,
       label: "Gesprekken gepland",
       value: data.gesprekkenGepland,
       icon: Calendar,
-      color: "#00C950",
+      color: "var(--kpi-green)",
     },
     {
       id: 3,
       label: "Afgewezen",
       value: data.afgewezen,
       icon: Clock,
-      color: "#FB2C36",
+      color: "var(--kpi-red)",
     },
     {
       id: 4,
       label: "Aanbiedingen",
       value: data.aanbiedingen,
       icon: CheckSquare,
-      color: "#AD46FF",
+      color: "var(--kpi-purple)",
     },
 ]
 

@@ -1,17 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-
-vi.mock('../config/viewOnly', async (importOriginal) => {
-    const actual = await importOriginal<typeof import('./viewOnly')>();
-    return actual;
-});
-
+import { describe, it, expect } from 'vitest';
 import { isViewOnlyEmail } from './viewOnly';
 
 describe('isViewOnlyEmail', () => {
-    beforeEach(() => {
-        vi.stubEnv('VITE_VIEW_ONLY_EMAIL', 'recruiter.demo@sollicitatietracker.be');
-    });
-
     it('returns true for the exact view-only email', () => {
         expect(isViewOnlyEmail('recruiter.demo@sollicitatietracker.be')).toBe(true);
     });
@@ -39,5 +29,10 @@ describe('isViewOnlyEmail', () => {
 
     it('returns false for an empty string', () => {
         expect(isViewOnlyEmail('')).toBe(false);
+    });
+
+    it('works without VITE_VIEW_ONLY_EMAIL env var set (hardcoded fallback)', () => {
+        expect(isViewOnlyEmail('recruiter.demo@sollicitatietracker.be')).toBe(true);
+        expect(isViewOnlyEmail('other@example.com')).toBe(false);
     });
 });

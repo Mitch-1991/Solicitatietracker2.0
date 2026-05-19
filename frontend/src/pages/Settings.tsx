@@ -3,9 +3,11 @@ import { useState } from "react"
 import ThemeToggle from "../components/ThemeToggle"
 import { useAuth } from "../context/authContextValue"
 import { changePassword } from "../services/authService"
+import { useViewOnly } from "../context/ViewOnlyContext"
 
 export default function Settings() {
   const { user } = useAuth()
+  const { requestWrite } = useViewOnly()
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -13,29 +15,32 @@ export default function Settings() {
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setIsSubmitting(true)
-    setMessage(null)
-    setError(null)
+    if (isSubmitting) return
+    requestWrite(async () => {
+      setIsSubmitting(true)
+      setMessage(null)
+      setError(null)
 
-    if (newPassword !== confirmPassword) {
-      setError("Wachtwoorden komen niet overeen.")
-      setIsSubmitting(false)
-      return
-    }
+      if (newPassword !== confirmPassword) {
+        setError("Wachtwoorden komen niet overeen.")
+        setIsSubmitting(false)
+        return
+      }
 
-    try {
-      await changePassword({ currentPassword, newPassword, confirmPassword })
-      setMessage("Je wachtwoord is gewijzigd.")
-      setCurrentPassword("")
-      setNewPassword("")
-      setConfirmPassword("")
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Wachtwoord wijzigen mislukt.")
-    } finally {
-      setIsSubmitting(false)
-    }
+      try {
+        await changePassword({ currentPassword, newPassword, confirmPassword })
+        setMessage("Je wachtwoord is gewijzigd.")
+        setCurrentPassword("")
+        setNewPassword("")
+        setConfirmPassword("")
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Wachtwoord wijzigen mislukt.")
+      } finally {
+        setIsSubmitting(false)
+      }
+    })
   }
 
   return (

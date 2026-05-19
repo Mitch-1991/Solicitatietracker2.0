@@ -17,6 +17,7 @@ import type {
     RegisterRequest,
 } from '../types/auth';
 import { AuthContext } from './authContextValue';
+import { isViewOnlyEmail } from '../config/viewOnly';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<CurrentUser | null>(null);
@@ -72,6 +73,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 user,
                 token,
                 isAuthenticated: Boolean(user && token),
+                isViewOnly: isViewOnlyEmail(user?.email),
                 isLoading,
                 login,
                 register,

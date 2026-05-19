@@ -10,6 +10,8 @@ import Settings from "./pages/Settings.tsx"
 import Calendar from "./pages/Calendar.tsx"
 import ArchivedApplications from "./pages/ArchivedApplications.tsx"
 import ProtectedRoute from "./components/ProtectedRoute.tsx"
+import ViewOnlyModal from "./components/ViewOnlyModal.tsx"
+import { ViewOnlyProvider } from "./context/ViewOnlyContext.tsx"
 import { useState, useEffect } from "react"
 import { MapOverview } from "./mappers/dashboardMappers.ts"
 import { getDashboardOverview } from "./services/dashboardService.ts"
@@ -36,55 +38,55 @@ export default function App() {
     fetchOverview()
   }, [isAuthenticated])
 
-  if (isAuthRoute){
-    return (
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-      </Routes>
-    )
-  }
-
   return (
-    <>
-      <Header />
-      <section className="main-content">
-        <SideBar />
-
+    <ViewOnlyProvider>
+      {isAuthRoute ? (
         <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" replace/>} />
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <Dashboard overview={overview} />
-            </ProtectedRoute>
-          } />
-          <Route path="/applications" element={
-            <ProtectedRoute>
-              <Application overview={overview} setOverview={setOverview}/>
-            </ProtectedRoute>
-          } />
-          <Route path="/applications/archive" element={
-            <ProtectedRoute>
-              <ArchivedApplications />
-            </ProtectedRoute>
-          } />
-          <Route path="/settings" element={
-            <ProtectedRoute>
-              <Settings />
-            </ProtectedRoute>
-          } />
-          <Route path="/calendar" element={
-            <ProtectedRoute>
-              <Calendar />
-            </ProtectedRoute>
-          } />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
+      ) : (
+        <>
+          <Header />
+          <section className="main-content">
+            <SideBar />
 
-      </section>
-    </>
+            <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" replace/>} />
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard overview={overview} />
+                </ProtectedRoute>
+              } />
+              <Route path="/applications" element={
+                <ProtectedRoute>
+                  <Application overview={overview} setOverview={setOverview}/>
+                </ProtectedRoute>
+              } />
+              <Route path="/applications/archive" element={
+                <ProtectedRoute>
+                  <ArchivedApplications />
+                </ProtectedRoute>
+              } />
+              <Route path="/settings" element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              } />
+              <Route path="/calendar" element={
+                <ProtectedRoute>
+                  <Calendar />
+                </ProtectedRoute>
+              } />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
 
+          </section>
+          <ViewOnlyModal />
+        </>
+      )}
+    </ViewOnlyProvider>
   )
 }

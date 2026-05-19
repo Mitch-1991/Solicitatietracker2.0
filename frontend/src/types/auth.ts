@@ -49,6 +49,7 @@ export interface AuthContextType {
     user: CurrentUser | null;
     token: string | null;
     isAuthenticated: boolean;
+    isViewOnly: boolean;
     isLoading: boolean;
     login: (data: LoginRequest) => Promise<void>;
     register: (data: RegisterRequest) => Promise<void>;

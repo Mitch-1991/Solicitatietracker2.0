@@ -6,6 +6,7 @@ import ApplicationDetail from "../components/ApplicationsDetailComponent.tsx"
 import { archiveApplication, getApplicationById } from "../services/applicationService.ts";
 import type { DashboardOverviewItem } from "../types/dashboard.ts";
 import type { ApplicationDetailResponse } from "../types/application.ts";
+import { useViewOnly } from "../context/ViewOnlyContext.tsx";
 
 type ApplicationProps = {
     overview: DashboardOverviewItem[];
@@ -16,22 +17,27 @@ export default function Application(props: ApplicationProps): JSX.Element {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showDetail, setShowDetail] = useState<boolean>(false);
     const [selectedApplication, setSelectedApplication] = useState<ApplicationDetailResponse | null>(null);
+    const { requestWrite } = useViewOnly();
 
     function handleCreateClick() {
-        setSelectedApplication(null);
-        setShowModal(true);
-    }
-
-    async function handleEditClick(application: DashboardOverviewItem): Promise<void> {
-        try {
-            const detail: ApplicationDetailResponse = await getApplicationById(application.id);
-            setSelectedApplication(detail);
+        requestWrite(() => {
+            setSelectedApplication(null);
             setShowModal(true);
-        } catch (error) {
-            console.error("Fout bij het ophalen van sollicitatie details:", error);
-        }
-
+        });
     }
+
+    function handleEditClick(application: DashboardOverviewItem): void {
+        requestWrite(async () => {
+            try {
+                const detail: ApplicationDetailResponse = await getApplicationById(application.id);
+                setSelectedApplication(detail);
+                setShowModal(true);
+            } catch (error) {
+                console.error("Fout bij het ophalen van sollicitatie details:", error);
+            }
+        });
+    }
+
     async function handleDetailClick(application: DashboardOverviewItem): Promise<void> {
         try {
             const detail: ApplicationDetailResponse = await getApplicationById(application.id);
@@ -43,21 +49,23 @@ export default function Application(props: ApplicationProps): JSX.Element {
 
     }
 
-    async function handleArchiveClick(application: DashboardOverviewItem): Promise<void> {
-        const confirmed = window.confirm(`Sollicitatie archiveren?\n\n${application.jobTitle} bij ${application.companyName}`);
+    function handleArchiveClick(application: DashboardOverviewItem): void {
+        requestWrite(async () => {
+            const confirmed = window.confirm(`Sollicitatie archiveren?\n\n${application.jobTitle} bij ${application.companyName}`);
 
-        if (!confirmed) {
-            return;
-        }
+            if (!confirmed) {
+                return;
+            }
 
-        try {
-            await archiveApplication(application.id);
-            props.setOverview((prev: DashboardOverviewItem[]) =>
-                prev.filter((item) => item.id !== application.id)
-            );
-        } catch (error) {
-            window.alert(error instanceof Error ? error.message : "Fout bij het archiveren van de sollicitatie.");
-        }
+            try {
+                await archiveApplication(application.id);
+                props.setOverview((prev: DashboardOverviewItem[]) =>
+                    prev.filter((item) => item.id !== application.id)
+                );
+            } catch (error) {
+                window.alert(error instanceof Error ? error.message : "Fout bij het archiveren van de sollicitatie.");
+            }
+        });
     }
 
     function handleCloseModal() {

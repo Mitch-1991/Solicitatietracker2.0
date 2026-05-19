@@ -2498,3 +2498,67 @@ body {
     gap: 12px;
   }
 }
+
+/* ── View Only Modal ──────────────────────────────────────────────── */
+.view-only-modal {
+  width: min(100%, 480px);
+}
+
+.view-only-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.view-only-icon {
+  color: var(--brand-from);
+  flex-shrink: 0;
+}
+
+.view-only-message {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  color: var(--text-body);
+  line-height: 1.6;
+}
+
+.view-only-hint {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.view-only-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 20px;
+  margin-top: 16px;
+  border-top: 1px solid var(--border-divider);
+}
+
+.view-only-footer .application-modal-button {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Header View Only Badge ───────────────────────────────────────── */
+.header-view-only-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: var(--brand-gradient);
+  color: var(--text-on-brand);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  margin-left: 8px;
+  line-height: 1.6;
+}

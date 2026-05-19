@@ -2,9 +2,10 @@ import { Briefcase, LogOut } from "lucide-react"
 import type { JSX } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../context/authContextValue"
+import { EyeOff } from "lucide-react"
 
 export default function Header(): JSX.Element {
-  const { user, logout, isAuthenticated } = useAuth()
+  const { user, logout, isAuthenticated, isViewOnly } = useAuth()
   const navigate = useNavigate()
 
   const handleLogout = (): void => {
@@ -29,6 +30,12 @@ export default function Header(): JSX.Element {
             <div className="header-user-text">
               <span className="header-user-name">
                 {user.firstName} {user.lastName}
+                {isViewOnly && (
+                  <span className="header-view-only-badge">
+                    <EyeOff size={11} aria-hidden="true" />
+                    View Only
+                  </span>
+                )}
               </span>
               <span className="header-user-email">{user.email}</span>
             </div>

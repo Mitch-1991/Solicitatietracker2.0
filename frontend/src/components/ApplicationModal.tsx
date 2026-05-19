@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { createApplication, updateApplication } from "../services/applicationService.ts";
+import { useAuth } from "../context/authContextValue.ts";
 import {
     emptyFormData,
     mapCreatedApplicationToOverviewItem,
@@ -35,6 +36,7 @@ type ApplicationFormErrors = Partial<Record<keyof ApplicationFormData, string>>;
 
 export default function ApplicationModal(props: ApplicationModalProps) {
 
+    const { isViewOnly } = useAuth();
     const [formData, setFormData] = useState<ApplicationFormData>(() => mapApplicationToFormData(props.initialApplication));
     const [errors, setErrors] = useState<ApplicationFormErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -63,7 +65,6 @@ export default function ApplicationModal(props: ApplicationModalProps) {
         fetchCompanies();
     }, []);
 
-    console.log("Available companies for selection:", companies);
     function handleCompanyChange(event: React.ChangeEvent<HTMLSelectElement>) {
         const value = event.target.value;
         setSelectedCompany(value);
@@ -164,6 +165,8 @@ export default function ApplicationModal(props: ApplicationModalProps) {
 
     async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
+
+        if (isViewOnly) return;
 
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length > 0) {
